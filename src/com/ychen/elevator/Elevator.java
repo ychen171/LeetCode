@@ -6,8 +6,8 @@ public class Elevator {
   private int _maxWeight;
   private int _maxPassengers;
   private int _maxFloors;
-  private LinkedList<Person> _people;
-  private ArrayList<Person> _passengers;
+  private Queue<Person> _people;
+  private List<Person> _passengers;
   
   Elevator(int maxWeight, int maxPassengers, int maxFloors) {
     _maxWeight = maxWeight;
@@ -61,7 +61,7 @@ public class Elevator {
 
   
   public static void main(String[] args) {
-    LinkedList<Person> people = new LinkedList<Person>(){};
+    Queue<Person> people = new LinkedList<Person>(){};
     people.add(new Person(60, 2, 0));
     people.add(new Person(80, 3, 0));
     people.add(new Person(40, 5, 0));
