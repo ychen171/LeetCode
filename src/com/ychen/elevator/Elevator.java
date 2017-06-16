@@ -37,10 +37,10 @@ public class Elevator {
       while (this.isOneMore()) {
         this._passengers.add(this._people.poll());
       }
-      ArrayList<Integer> targetFloors = new ArrayList<>();
+      Set<Integer> targetFloors = new HashSet<>();
       for (Person p: this._passengers) {
         int tf = p.getTargetFloor();
-        if (!targetFloors.contains(tf)) stops++;
+        if (targetFloors.add(tf)) stops++;
       }
       this._passengers.clear();
       stops++;
