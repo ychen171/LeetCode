@@ -1,11 +1,11 @@
-package com.ychen;
+package com.ychen.elevator;
 
-public class Customer {
+public class Person {
   private int _weight;
   private int _targetFloor;
   private int _actualFloor;
 
-  Customer(int weight, int targetFloor, int actualFloor) {
+  Person(int weight, int targetFloor, int actualFloor) {
     _weight = weight;
     _targetFloor = targetFloor;
     _actualFloor = actualFloor;

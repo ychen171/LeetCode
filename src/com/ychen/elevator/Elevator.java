@@ -1,4 +1,4 @@
-package com.ychen;
+package com.ychen.elevator;
 
 import java.util.*;
 
@@ -6,39 +6,39 @@ public class Elevator {
   private int _maxWeight;
   private int _maxPassengers;
   private int _maxFloors;
-  private LinkedList<Customer> _customers;
-  private ArrayList<Customer> _passengers;
+  private LinkedList<Person> _people;
+  private ArrayList<Person> _passengers;
   
   Elevator(int maxWeight, int maxPassengers, int maxFloors) {
     _maxWeight = maxWeight;
     _maxPassengers = maxPassengers;
     _maxFloors = maxFloors;
-    _customers = new LinkedList<Customer>();
-    _passengers = new ArrayList<Customer>();
+    _people = new LinkedList<>();
+    _passengers = new ArrayList<>();
   }
   
   public int getMaxWeight() { return _maxWeight; }
   public int getMaxPassengers() { return _maxPassengers; }
   public int getMaxFloors() { return _maxFloors; }
   
-  public void setCustomers(Queue<Customer> customers) {
-    for (Customer c: customers) {
-      if (c.getTargetFloor() > this.getMaxFloors() || 
-          c.getWeight() > this.getMaxWeight()) {
+  public void addPeople(Queue<Person> people) {
+    for (Person p: people) {
+      if (p.getTargetFloor() > this.getMaxFloors() ||
+          p.getWeight() > this.getMaxWeight()) {
         throw new IllegalArgumentException();
       }
-      this._customers.add(c);
+      this._people.add(p);
     }
   }
   
   public int calculateNumberOfStops() {
     int stops = 0;
-    while (!this._customers.isEmpty()) {
+    while (!this._people.isEmpty()) {
       while (this.isOneMore()) {
-        this._passengers.add(this._customers.poll());
+        this._passengers.add(this._people.poll());
       }
-      ArrayList<Integer> targetFloors = new ArrayList<Integer>();
-      for (Customer p: this._passengers) {
+      ArrayList<Integer> targetFloors = new ArrayList<>();
+      for (Person p: this._passengers) {
         int tf = p.getTargetFloor();
         if (!targetFloors.contains(tf)) stops++;
       }
@@ -50,24 +50,24 @@ public class Elevator {
   
   private boolean isOneMore() {
     int sum = 0;
-    for (Customer p: this._passengers) {
+    for (Person p: this._passengers) {
       sum += p.getWeight();
     }
-    return !this._customers.isEmpty() &&
-        sum + this._customers.peek().getWeight() < this.getMaxWeight() &&
+    return !this._people.isEmpty() &&
+        sum + this._people.peek().getWeight() < this.getMaxWeight() &&
         this._passengers.size() < this.getMaxPassengers();
   }
 
 
   
   public static void main(String[] args) {
-    LinkedList<Customer> customers = new LinkedList<Customer>(){};
-    customers.add(new Customer(60, 2, 0));
-    customers.add(new Customer(80, 3, 0));
-    customers.add(new Customer(40, 5, 0));
+    LinkedList<Person> people = new LinkedList<Person>(){};
+    people.add(new Person(60, 2, 0));
+    people.add(new Person(80, 3, 0));
+    people.add(new Person(40, 5, 0));
     
     Elevator elevator = new Elevator(200, 2, 5);
-    elevator.setCustomers(customers);
+    elevator.addPeople(people);
     int stops = elevator.calculateNumberOfStops();
     System.out.println(stops);
   }
