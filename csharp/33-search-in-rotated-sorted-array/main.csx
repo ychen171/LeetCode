@@ -3,10 +3,10 @@ public class Solution
     public int Search(int[] nums, int target)
     {
         int left = 0;
-        int right = nums.Length-1;
-        while (left < right && right - left > 1)
+        int right = nums.Length;
+        while (left < right)
         {
-            var mid = (left + right) / 2;
+            var mid = left + (right - left) / 2;
             // nums[mid] and target are "on the same side of nums[0]", takes nums[mid] as selected value
             // Otherwise do the revert side
             //      if target < nums[0], takes Min as selected value
@@ -21,20 +21,16 @@ public class Solution
                 else
                     selectedValue = int.MaxValue;
             }
-            if (target < selectedValue)
-                right = mid;
-            else if (target > selectedValue)
+            if (selectedValue < target)
                 left = mid + 1;
+            else if (selectedValue > target)
+                right = mid;
             else
                 return mid;
         }
 
-        if (target == nums[left])
-            return left;
-        else if (target == nums[right])
-            return right;
-        else
-            return -1;
+        if (left != nums.Length && nums[left] == target) return left;
+        else return -1;
     }
     
 }
