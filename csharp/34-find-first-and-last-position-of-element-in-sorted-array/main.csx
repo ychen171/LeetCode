@@ -11,21 +11,21 @@ public class Solution
         int right = nums.Length - 1;
         while (left < right)
         {
-            var mid = (left + right) / 2;
-            if (target > nums[mid])
+            var mid = left + (right - left) / 2;
+            if (nums[mid] < target)
                 left = mid + 1;
             else
                 right = mid;
         }
-        if (nums[left] != target) return result;
+        if (left == nums.Length || nums[left] != target) return result;
         result[0] = left;
 
         // search for the right one
         right = nums.Length - 1;
         while (left < right)
         {
-            var mid = (left + right) / 2 + 1;
-            if (target < nums[mid])
+            var mid = left + (right - left) / 2 + 1;
+            if (nums[mid] > target)
                 right = mid - 1;
             else
                 left = mid;
@@ -56,6 +56,10 @@ PrintResult(s.SearchRange(new int[] { 5, 7, 7, 8, 8, 10 }, 6));
 PrintResult(s.SearchRange(new int[] { }, 0));
 PrintResult(s.SearchRange(new int[] { 1 }, 1));
 PrintResult(s.SearchRange(new int[] { 0, 1, 1, 1, 1, 1, 2, 2, 3, 4 }, 1));
+PrintResult(s.SearchRange(new int[] { 0, 1, 1, 1, 1, 1, 2, 2, 3, 4 }, 4));
+PrintResult(s.SearchRange(new int[] { 0, 1, 1, 1, 1, 1, 2, 2, 3, 4, 4, 4 }, 4));
+PrintResult(s.SearchRange(new int[] { 2, 2 }, 3));
+PrintResult(s.SearchRange(new int[] { 0, 1 }, 1));
 
 
 
