@@ -6,7 +6,7 @@ public class Solution
         var result = new int[] { -1, -1 };
         if (nums.Length == 0) return result;
 
-        // search for the left one
+        // search for the left most one
         int left = 0;
         int right = nums.Length - 1;
         while (left < right)
@@ -20,7 +20,7 @@ public class Solution
         if (nums[left] != target) return result;
         result[0] = left;
 
-        // search for the right one
+        // search for the right most one
         right = nums.Length - 1;
         while (left < right)
         {

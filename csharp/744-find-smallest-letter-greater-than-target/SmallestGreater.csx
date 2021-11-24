@@ -44,6 +44,7 @@ public class Solution
 
     public char NextGreatestLetter1(char[] letters, char target)
     {
+        // search for the right most one
         int left = 0;
         int right = letters.Length - 1;
         while (left < right)

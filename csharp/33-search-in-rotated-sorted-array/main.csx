@@ -30,9 +30,8 @@ public class Solution
         }
 
         if (left != nums.Length && nums[left] == target) return left;
-        else return -1;
+        return -1;
     }
-    
 }
 
 
@@ -42,7 +41,6 @@ Console.WriteLine(s.Search(new int[] { 0, 1, 2 }, 0));
 Console.WriteLine(s.Search(new int[] { 4, 5, 6, 7, 0, 1, 2 }, 0));
 Console.WriteLine(s.Search(new int[] { 4, 5, 6, 7, 0, 1, 2 }, 3));
 Console.WriteLine(s.Search(new int[] { 1 }, 0));
-
 Console.WriteLine(s.Search(new int[] { 3, 5, 1 }, 3));
 Console.WriteLine(s.Search(new int[] { 1, 3 }, 2));
 Console.WriteLine(s.Search(new int[] { 4, 5, 6, 7, 8, 1, 2, 3 }, 8));
@@ -50,8 +48,7 @@ Console.WriteLine(s.Search(new int[] { 4, 5, 6, 7, 0, 1, 2 }, 0));
 Console.WriteLine(s.Search(new int[] { 1, 3 }, 1));
 Console.WriteLine(s.Search(new int[] { 3, 1 }, 1));
 Console.WriteLine(s.Search(new int[] { 1, 3 }, 3));
-
-
+Console.WriteLine();
 
 
 
