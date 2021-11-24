@@ -35,30 +35,29 @@ public class Solution
 
         return left;
     }
-    // public int MySqrt(int x)
-    // {
-    //     if (x < 2) return x;
-    //     int left = 2;
-    //     int right = x / 2;
-    //     long num;
-    //     while (left <= right)
-    //     {
-    //         var mid = left + (right - left) / 2;
-    //         num = (long)mid * (long)mid;
-    //         if (num > x)
-    //             right = mid - 1;
-    //         else if (num < x)
-    //             left = mid + 1;
-    //         else 
-    //             return mid;
-    //     }
+    public int MySqrt2(int x)
+    {
+        if (x < 2) return x;
+        int left = 2;
+        int right = x / 2;
+        while (left <= right)
+        {
+            var mid = left + (right - left) / 2;
+            var num = (long)mid * mid;
+            if (num == x) 
+                return mid;
+            else if (num < x)
+                left = mid + 1;
+            else
+                right = mid - 1;
+        }
 
-    //     return right;
-    // }
+        return right;
+    }
 
     public int MySqrtNewton(int x)
     {
-        long r = x;
+        long r = x / 2;
         while (r * r > x)
             r = (r + x / r) / 2;
 
@@ -73,6 +72,12 @@ Console.WriteLine(s.MySqrt(8));
 Console.WriteLine(s.MySqrt(15));
 Console.WriteLine(s.MySqrt(16));
 Console.WriteLine(s.MySqrt(2147395599));
+
+Console.WriteLine(s.MySqrt2(4));
+Console.WriteLine(s.MySqrt2(8));
+Console.WriteLine(s.MySqrt2(15));
+Console.WriteLine(s.MySqrt2(16));
+Console.WriteLine(s.MySqrt2(2147395599));
 
 Console.WriteLine(s.MySqrtNewton(4));
 Console.WriteLine(s.MySqrtNewton(8));
