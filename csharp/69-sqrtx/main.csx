@@ -7,7 +7,7 @@ public class Solution
 
         while (left < right)
         {
-            var mid = (left + right) / 2;
+            var mid = left + (right - left) / 2;
             if (nums[mid] < target)
                 left = mid + 1;
             else
@@ -15,7 +15,7 @@ public class Solution
         }
 
         if (nums[left] == target) return left;
-        else return -1;
+        return -1;
     }
 
     public int MySqrt(int x)
@@ -33,7 +33,7 @@ public class Solution
                 left = mid;
         }
 
-        return right;
+        return left;
     }
     // public int MySqrt(int x)
     // {
@@ -59,10 +59,10 @@ public class Solution
     public int MySqrtNewton(int x)
     {
         long r = x;
-        while (r*r > x)
+        while (r * r > x)
             r = (r + x / r) / 2;
-        
-        return (int) r;
+
+        return (int)r;
     }
 }
 
