@@ -17,7 +17,7 @@ public class Solution
             else
                 right = mid;
         }
-        if (left == nums.Length || nums[left] != target) return result;
+        if (nums[left] != target) return result;
         result[0] = left;
 
         // search for the right one
