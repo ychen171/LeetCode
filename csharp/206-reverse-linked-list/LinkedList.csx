@@ -51,16 +51,30 @@ public class Solution
         }
         return prev;
     }
+    public ListNode ReverseList3(ListNode head)
+    {
+        if (head == null) return head;
+        ListNode prev = head;
+        ListNode curr = head;
+        while (curr.next != null)
+        {
+            var nextTemp = curr.next;
+            curr.next = nextTemp.next;
+            nextTemp.next = prev;
+            prev = nextTemp;
+        }
+        return prev;
+    }
 
     // Recursive
     // Time: O(n)
     // Space: O(n)
-    public ListNode ReverseList3(ListNode head)
+    public ListNode ReverseList4(ListNode head)
     {
         // base case
         if (head == null || head.next == null) return head;
         // recursive case
-        var curr = ReverseList3(head.next);
+        var curr = ReverseList4(head.next);
         head.next.next = head;
         head.next = null;
         return curr;
