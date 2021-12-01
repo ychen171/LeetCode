@@ -1,4 +1,6 @@
 
+using System.Xml.Xsl.Runtime;
+using System.Reflection.Emit;
 public class ListNode
 {
     public int val;
@@ -15,62 +17,56 @@ public class Solution
     // HashSet
     // Time: O(n)
     // Space: O(n)
-    public bool HasCycle1(ListNode head)
+    public ListNode DetectCycle1(ListNode head)
     {
-        if (head == null) return false;
+        if (head == null) return null;
         var set = new HashSet<ListNode>();
         var curr = head;
         while (curr != null)
         {
             if (set.Contains(curr))
-                return true;
+                return curr;
             set.Add(curr);
             curr = curr.next;
         }
-
-        return false;
+        return null;
     }
 
-    // two-pointer 
+    // two-pointer
     // Time: O(n)
     // Space: O(1)
-    public bool HasCycle2(ListNode head)
+    public ListNode DetectCycle2(ListNode head)
     {
-        if (head == null) return false;
-        // start from the same pointer
+        // find the intersection
+        if (head == null) return null;
         var slow = head;
         var fast = head;
-
+        ListNode intersection = null;
         while (fast.next != null && fast.next.next != null)
         {
             slow = slow.next;
             fast = fast.next.next;
-
-            if (fast == slow)
-                return true;
+            if (slow == fast) 
+            {
+                intersection = slow;
+                break;
+            }
         }
-
-        return false;
-    }
-    // two-pointer 
-    // Time: O(n)
-    // Space: O(1)
-    public bool HasCycle4(ListNode head)
-    {
-        if (head == null) return false;
-        // start from the different pointers
-        var slow = head;
-        var fast = head.next;
-        
+        // find the entrance
+        if (intersection == null) return null;
+        slow = head;
+        fast = intersection;
         while (slow != fast)
         {
-            if (fast == null || fast.next == null)
-                return false;
             slow = slow.next;
-            fast = fast.next.next;
+            fast = fast.next;
         }
 
-        return true;
+        return slow;
     }
 }
+
+
+
+
 
