@@ -34,51 +34,65 @@ public class Solution
         var queue = new Queue<Node>();
         Node prev = null;
         Node curr = null;
-        int levelLength = 1;
         queue.Enqueue(root);
+        int levelLength = 1;
         while (queue.Count != 0)
         {
             // go through nodes at the same level
             levelLength = queue.Count;
-            for (int i = 0; i < levelLength; i++)
+            for (int i=0; i<levelLength; i++)
             {
                 prev = curr;
                 curr = queue.Dequeue();
                 // point prev to the next right node
                 if (prev != null) prev.next = curr;
-                // push the nodes of next level into the queue
+                // push the nodes of next level into queue
                 if (curr.left != null) queue.Enqueue(curr.left);
                 if (curr.right != null) queue.Enqueue(curr.right);
             }
-            // reach the end of the level
+            // reach the end of the current level
             curr = null;
         }
         return root;
     }
 
-    // Using previously established next pointers (two loops and one pointer)
+    // using previously established next pointers (two loops and two pointers) 
     // Time: O(N)
     // Space: O(1)
     public Node Connect2(Node root)
     {
         if (root == null) return null;
-        var leftMost = root;
-        // if leftMost reaches the final level, stop the loop
-        while (leftMost.left != null)
+        Node leftMost = root;
+        // reach the leaf level, stop the loop
+        while (leftMost != null)
         {
-            var curr = leftMost;
+            Node rightMostChild = null;
+            Node curr = leftMost;
+            leftMost = null;
+
             while (curr != null)
             {
-                // connection 1
-                curr.left.next = curr.right;
-                // connection 2
-                if (curr.next != null)
-                    curr.right.next = curr.next.left;
-                // move to right at the same level
+                // build connections at the child level
+                // process left child
+                if (curr.left != null)
+                {
+                    if (rightMostChild != null)
+                        rightMostChild.next = curr.left;
+                    rightMostChild = curr.left;
+                }
+                // process right child
+                if (curr.right != null)
+                {
+                    if (rightMostChild != null)
+                        rightMostChild.next = curr.right;
+                    rightMostChild = curr.right;
+                }
+                // find leftMost at child level
+                if (leftMost == null)
+                    leftMost = curr.left ?? curr.right;
+                // move right at the same level
                 curr = curr.next;
             }
-            // move down one level and set new leftMost
-            leftMost = leftMost.left;
         }
         return root;
     }
