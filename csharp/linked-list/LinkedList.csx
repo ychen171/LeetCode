@@ -262,3 +262,23 @@ obj.Get(0);
 
 
 
+public ListNode SortedMerge(ListNode a, ListNode b)
+{
+    if (a == null) return b;
+    if (b == null) return a;
+
+    if (a.val < b.val)
+    {
+        a.next = SortedMerge(a.next, b);
+        return a;
+    }
+    else
+    {
+        b.next = SortedMerge(a, b.next);
+        return b;
+    }
+}
+
+
+
+
