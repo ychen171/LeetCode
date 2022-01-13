@@ -1,5 +1,4 @@
 
-using System;
 public class TreeNode
 {
     public int val;
@@ -82,6 +81,30 @@ public class Solution
             {
                 nodeStack.Push(curr.right);
                 depthStack.Push(currDepth + 1);
+            }
+        }
+        return maxDepth;
+    }
+
+    // Iteration | BFS
+    // Time: O(n)
+    // Space: O(n)
+    public int MaxDepth4(TreeNode root)
+    {
+        if (root == null) return 0;
+        var queue = new Queue<TreeNode>();
+        var curr = root;
+        queue.Enqueue(curr);
+        int maxDepth = 0;
+        while (queue.Count != 0)
+        {
+            var levelLength = queue.Count;
+            maxDepth++;
+            for (int i = 0; i < levelLength; i++)
+            {
+                curr = queue.Dequeue();
+                if (curr.left != null) queue.Enqueue(curr.left);
+                if (curr.right != null) queue.Enqueue(curr.right);
             }
         }
         return maxDepth;
