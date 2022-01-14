@@ -1,6 +1,8 @@
 public class Solution
 {
     // Brute force
+    // Time: O(n)
+    // Space: O(1)
     public double MyPow(double x, int n)
     {
         if (n == 0) return 1.0;
@@ -16,13 +18,29 @@ public class Solution
     }
 
     // fast power algorithm recursive
+    // Time: O(log n)
+    // Space: O(log n)
     public double MyPowRecursive(double x, int n)
     {
-        // TODO
-        return 0;
+        if (n == 0) return 1.0;
+        double half = MyPowRecursive(x, n / 2);
+        double result;
+        if (n % 2 == 0) // n is even
+            result = half * half;
+        else
+        {
+            if (n > 0)
+                result = half * half * x;
+            else
+                result = half * half / x;
+        }
+
+        return result;
     }
 
     // fast power algorithm iterative
+    // Time: O(log n)
+    // Space: O(1)
     public double MyPowIterative(double x, int n)
     {
         if (n == 0) return 1.0;
