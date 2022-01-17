@@ -29,7 +29,7 @@ public List<int> BestSum(int target, int[] nums)
 // m = target
 // n = array length
 // Time: O(n*m)
-// Space: O(m)
+// Space: O(m^2)
 public List<int> BestSum(int target, int[] nums, Dictionary<int, List<int>> memo)
 {
     if (memo.ContainsKey(target)) return memo[target];
