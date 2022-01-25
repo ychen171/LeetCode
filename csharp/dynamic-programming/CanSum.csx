@@ -30,6 +30,8 @@ Console.WriteLine(CanSum(300, new int[] { 7, 14 }));
 stopwatch1.Stop();
 Console.WriteLine(stopwatch1.ElapsedTicks);
 
+
+
 // Memoized recursion
 // m = target
 // n = array length
@@ -65,6 +67,46 @@ Console.WriteLine(CanSum(300, new int[] { 7, 14 }, new Dictionary<int, bool>()))
 stopwatch2.Stop();
 Console.WriteLine(stopwatch2.ElapsedTicks);
 
+
+
+// Iteration | Tabulation
+// m = target
+// n = array length
+// Time: O(m*n)
+// Space: O(m)
+public bool CanSumTabulation(int target, int[] nums)
+{
+    var table = new List<bool>();
+    // initialize table with default value false
+    for (int i = 0; i <= target; i++)
+        table.Add(false);
+    // seed the trivial answer into the table
+    table[0] = true;
+    // fill further positions with current position
+    for (int i = 0; i <= target; i++)
+    {
+        if (table[i] == true)
+        {
+            foreach (var num in nums)
+            {
+                var nextIndex = i + num;
+                if (nextIndex <= target)
+                    table[nextIndex] = true;
+            }
+        }
+    }
+
+    return table[target];
+}
+var stopwatch3 = new Stopwatch();
+stopwatch3.Start();
+Console.WriteLine(CanSumTabulation(7, new int[] { 2, 3 }));
+Console.WriteLine(CanSumTabulation(7, new int[] { 5, 3, 4, 7 }));
+Console.WriteLine(CanSumTabulation(7, new int[] { 2, 4, }));
+Console.WriteLine(CanSumTabulation(8, new int[] { 2, 3, 5 }));
+Console.WriteLine(CanSumTabulation(300, new int[] { 7, 14 }));
+stopwatch3.Stop();
+Console.WriteLine(stopwatch3.ElapsedTicks);
 
 
 

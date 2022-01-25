@@ -19,6 +19,9 @@ public long FibMemo(int n, Dictionary<int, long> memo)
     return result;
 }
 
+// Iteration | Tabulation | Bottom-up
+// Time: O(n)
+// Space: O(n)
 public long FibBottomUp(int n)
 {
     var dict = new Dictionary<int, long>();
