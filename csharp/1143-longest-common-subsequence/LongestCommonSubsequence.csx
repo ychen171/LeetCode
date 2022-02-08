@@ -43,8 +43,9 @@ public class Solution
             for (int j = 0; j < text2.Length; j++)
             {
                 if (text1[i] == text2[j])
-                    table[i + 1, j + 1] += 1;
-                table[i + 1, j + 1] += Math.Max(table[i, j + 1], table[i + 1, j]);
+                    table[i + 1, j + 1] = table[i, j] + 1;
+                else
+                    table[i + 1, j + 1] += Math.Max(table[i, j + 1], table[i + 1, j]);
             }
         }
 
