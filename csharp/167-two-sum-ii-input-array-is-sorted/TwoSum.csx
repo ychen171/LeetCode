@@ -1,6 +1,8 @@
 public class Solution
 {
-    // two pointers
+    // Two pointers
+    // Time: O(n)
+    // Space: O(1)
     public int[] TwoSum(int[] numbers, int target)
     {
         var left = 0;
@@ -19,7 +21,9 @@ public class Solution
         return new int[] { -1, -1 };
     }
 
-    // dictionary
+    // Dictionary
+    // Time: O(n)
+    // Space: O(n)
     public int[] TwoSum2(int[] numbers, int target)
     {
         var dict = new Dictionary<int, int>();
