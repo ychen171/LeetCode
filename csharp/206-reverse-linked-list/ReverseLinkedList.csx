@@ -51,7 +51,8 @@ public class Solution
         }
         return prev;
     }
-    public ListNode ReverseList3(ListNode head)
+    // Better Iterative
+    public ListNode ReverseListIterative(ListNode head)
     {
         if (head == null) return head;
         ListNode prev = head;
@@ -69,12 +70,12 @@ public class Solution
     // Recursive
     // Time: O(n)
     // Space: O(n)
-    public ListNode ReverseList4(ListNode head)
+    public ListNode ReverseListRecursive(ListNode head)
     {
         // base case
         if (head == null || head.next == null) return head;
         // recursive case
-        var curr = ReverseList4(head.next);
+        var curr = ReverseListRecursive(head.next);
         head.next.next = head;
         head.next = null;
         return curr;
