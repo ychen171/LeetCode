@@ -1,0 +1,34 @@
+public class Solution
+{
+    // Priority Queue
+    // Time: O(n log n)
+    // Space: O(n)
+    public int MinMeetingRooms(int[][] intervals)
+    {
+        if (intervals.Length == 0) return 0;
+
+        // sort the meetings by start time
+        var sorted = intervals.OrderBy(i => i[0]).ToArray();
+        // Min heap
+        var allocator = new PriorityQueue<int[], int>();
+        // add first meeting interval, ordered by end time
+        allocator.Enqueue(sorted[0], sorted[0][1]);
+        // Iterate through the remaining sorted intervals
+        for (int i = 1; i < sorted.Length; i++)
+        {
+            // if the earliest meeting is ended before the new meeting is started, remove the earliest meeting 
+            if (sorted[i][0] >= allocator.Peek()[1])
+                allocator.Dequeue();
+            // add the new meeting
+            allocator.Enqueue(sorted[i], sorted[i][1]);
+        }
+        // return the size of Priority Queue
+        return allocator.Count;
+    }
+}
+
+var s = new Solution();
+Console.WriteLine(s.MinMeetingRooms(new int[][]{new int[]{0,30}, new int[]{5,10}, new int[]{15,20}}));
+Console.WriteLine(s.MinMeetingRooms(new int[][]{new int[]{7,10}, new int[]{2,4}}));
+Console.WriteLine(s.MinMeetingRooms(new int[][]{new int[]{1,10}, new int[]{2,5}, new int[]{3, 4}}));
+
