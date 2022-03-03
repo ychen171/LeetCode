@@ -88,7 +88,7 @@ public class Solution
             // number of nodes in the current level
             var levelLength = queue.Count();
             // populate current level
-            for (int i=0; i<levelLength; i++)
+            for (int i = 0; i < levelLength; i++)
             {
                 curr = queue.Dequeue();
                 result[level].Add(curr.val);

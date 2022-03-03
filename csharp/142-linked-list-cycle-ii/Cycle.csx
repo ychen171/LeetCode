@@ -40,7 +40,7 @@ public class Solution
         var slow = head;
         var fast = head;
         ListNode intersection = null;
-        while (fast.next != null && fast.next.next != null)
+        while (slow != null && fast != null && fast.next != null)
         {
             slow = slow.next;
             fast = fast.next.next;
