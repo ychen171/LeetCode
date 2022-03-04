@@ -10,7 +10,7 @@ public class TreeNode
 
 public class Solution
 {
-    // BFS Preorder traversal
+    // BFS traversal
     // Time: O(N)
     // Space: O(N)
     public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
@@ -44,6 +44,21 @@ public class Solution
                 return curr;
         }
         return null;
+    }
+
+    // DFS Traversal
+    // Time: O(N)
+    // Space: O(N)
+    public TreeNode LowestCommonAncestorR(TreeNode root, TreeNode p, TreeNode q)
+    {
+        if (root == null) return null;
+        if ((root.val - p.val) * (root.val - q.val) < 0 ) return root;
+        if (root.val < p.val && root.val < q.val)
+            root = LowestCommonAncestorR(root.right, p, q);
+        else if (root.val > p.val && root.val > q.val)
+            root = LowestCommonAncestorR(root.left, p, q);
+        
+        return root;
     }
 }
 

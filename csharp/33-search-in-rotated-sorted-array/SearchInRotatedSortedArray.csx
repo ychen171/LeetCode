@@ -32,6 +32,39 @@ public class Solution
         if (left != nums.Length && nums[left] == target) return left;
         return -1;
     }
+
+
+
+    public int Search1(int[] nums, int target)
+    {
+        int left = 0;
+        int right = nums.Length;
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            int selectedValue;
+            // nums[mid] and target are on the same side / slope, do the normal binary search
+            if ((nums[0] < nums[mid] && nums[0] < target) || nums[0] > nums[mid] && nums[0] > target)
+            {
+                selectedValue = nums[mid];
+            }
+            else
+            {
+                if (target < nums[0])
+                    selectedValue = int.MinValue;
+                else
+                    selectedValue = int.MaxValue;
+            }
+            if (selectedValue < target)
+                left = mid + 1;
+            else if (selectedValue > target)
+                right = mid;
+            else
+                return mid;
+        }
+        if (left != nums.Length && nums[left] == target) return left;
+        return -1;
+    }
 }
 
 
@@ -41,6 +74,7 @@ Console.WriteLine(s.Search(new int[] { 0, 1, 2 }, 0));
 Console.WriteLine(s.Search(new int[] { 4, 5, 6, 7, 0, 1, 2 }, 0));
 Console.WriteLine(s.Search(new int[] { 4, 5, 6, 7, 0, 1, 2 }, 3));
 Console.WriteLine(s.Search(new int[] { 1 }, 0));
+Console.WriteLine(s.Search(new int[] { 1 }, 1));
 Console.WriteLine(s.Search(new int[] { 3, 5, 1 }, 3));
 Console.WriteLine(s.Search(new int[] { 1, 3 }, 2));
 Console.WriteLine(s.Search(new int[] { 4, 5, 6, 7, 8, 1, 2, 3 }, 8));

@@ -10,7 +10,7 @@ public class TreeNode
 
 public class Solution
 {
-    // Recursive DFS Inorder
+    // Recursive DFS
     // Time: O(N)
     // Space: O(N)
     TreeNode answer;
@@ -34,7 +34,7 @@ public class Solution
         return count > 0;
     }
 
-    // Iterative using parent pointers and dictionary (DFS Inorder, backtracking)
+    // Iterative using parent pointers, dictionary, stack and set (DFS, backtracking)
     // Time: O(N)
     // Space: O(N)
     public TreeNode LowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q)
@@ -44,20 +44,20 @@ public class Solution
         stack.Push(root);
         parentDict[root] = null;
         TreeNode curr = null;
-        // DFS Inorder traversal
+        // DFS traversal
         // Stop the loop if both p and q are reached. 
         while (!(parentDict.ContainsKey(p) && parentDict.ContainsKey(q)))
         {
             curr = stack.Pop();
-            if (curr.right != null)
-            {
-                stack.Push(curr.right);
-                parentDict[curr.right] = curr;
-            }
             if (curr.left != null)
             {
                 stack.Push(curr.left);
                 parentDict[curr.left] = curr;
+            }
+            if (curr.right != null)
+            {
+                stack.Push(curr.right);
+                parentDict[curr.right] = curr;
             }
         }
         // backtrack p and store all ancestor into set
