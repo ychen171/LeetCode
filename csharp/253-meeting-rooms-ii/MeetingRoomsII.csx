@@ -9,6 +9,7 @@ public class Solution
 
         // sort the meetings by start time
         var sorted = intervals.OrderBy(i => i[0]).ToArray();
+        // Array.Sort(intervals, (a, b) => a[0] - b[0]);
         // Min heap
         var allocator = new PriorityQueue<int[], int>();
         // add first meeting interval, ordered by end time
