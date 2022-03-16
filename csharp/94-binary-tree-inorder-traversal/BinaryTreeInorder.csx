@@ -14,15 +14,32 @@ public class TreeNode
 
 public class Solution
 {
-    // Stack Iterative
+    // Recursive
     // Time: O(n)
     // Space: O(n)
-    public IList<int> InorderTraversal(TreeNode root)
+    public IList<int> InorderTraversalR(TreeNode root)
     {
-        var list = new List<int>();
+        var result = new List<int>();
+        Helper(root, result);
+        return result;
+    }
+    public void Helper(TreeNode node, IList<int> result)
+    {
+        if (node == null) return;
+        Helper(node.left, result);
+        result.Add(node.val);
+        Helper(node.right, result);
+    }
+
+    // Iterative
+    // Time: O(n)
+    // Space: O(n)
+    public IList<int> InorderTraversalI(TreeNode root)
+    {
+        var result = new List<int>();
+        if (root == null) return result;
         var stack = new Stack<TreeNode>();
         var curr = root;
-
         while (curr != null || stack.Count != 0)
         {
             while (curr != null)
@@ -31,12 +48,13 @@ public class Solution
                 curr = curr.left;
             }
             curr = stack.Pop();
-            list.Add(curr.val);
+            result.Add(curr.val);
             curr = curr.right;
         }
 
-        return list;
+        return result;
     }
+
     // Morris Traversal
     // Time: O(n)
     // Space: O(1)
