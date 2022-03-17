@@ -47,40 +47,25 @@ public bool IsValidBSTRecursive(TreeNode node, int? min, int? max)
     return IsValidBSTRecursive(node.left, min, node.val) && IsValidBSTRecursive(node.right, node.val, max);
 }
 
-// public bool IsValidBST2(TreeNode root)
-// {
-//     // Breadth first search
-//     var currNode = root;
-//     if (currNode == null) return true;
-//     var primaryQueue = new Queue<TreeNode>();
-//     var secondaryQueue = new Queue<TreeNode>();
-//     primaryQueue.Enqueue(currNode);
-//     while (primaryQueue.Count > 0 || secondaryQueue.Count > 0)
-//     {
-//         while (primaryQueue.Count > 0)
-//         {
-//             currNode = primaryQueue.Dequeue();
-//             if (currNode.left != null)
-//             {
-//                 if (currNode.left.val >= currNode.val)
-//                     return false;
-//                 else
-//                     secondaryQueue.Enqueue(currNode.left);
-//             }
-//             if (currNode.right != null)
-//             {
-//                 if (currNode.right.val <= currNode.val)
-//                     return false;
-//                 else
-//                     secondaryQueue.Enqueue(currNode.right);
-//             }
-//         }
-//         var temp = secondaryQueue;
-//         secondaryQueue = primaryQueue;
-//         primaryQueue = temp;
-//     }
-//     return true;
-// }
+public bool IsValidBST2(TreeNode root)
+{
+    return Helper(root, null, null);
+}
+public bool Helper(TreeNode node, int? min, int? max)
+{
+    // base case
+    if (node == null) return true;
+    if ((min.HasValue && node.val <= min) || (max.HasValue && node.val >= max)) return false;
+    // divide
+    int? leftMax = max.HasValue ? Math.Min(node.val, max.Value) : node.val;
+    int? rightMin = min.HasValue ? Math.Max(node.val, min.Value) : node.val;
+    // conquer
+    var isLeftValid = Helper(node.left, min, leftMax);
+    var isRightValid = Helper(node.right, rightMin, max);
+    // combine
+    return isLeftValid && isRightValid;
+}
+
 public List<int> BreadthFirstSearch(TreeNode node)
 {
     if (node == null)
