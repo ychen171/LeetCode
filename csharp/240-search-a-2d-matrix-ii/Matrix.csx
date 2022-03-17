@@ -33,7 +33,7 @@ public class Solution
         return -1;
     }
 
-    // Divide and Conquer 
+    // Divide and Conquer on row + Binary Search on col
     // Time: O((log m) * (log n))
     // Space: O(m)
     public bool SearchMatrix1(int[][] matrix, int target)
@@ -66,7 +66,7 @@ public class Solution
         return nums[left] == target;
     }
 
-    // Optimized Divide and Conquer
+    // 2D Divide and Conquer
     // Time: O()
     // Space: O()
     public bool SearchMatrix2(int[][] matrix, int target)
