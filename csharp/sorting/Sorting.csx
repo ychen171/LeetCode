@@ -92,4 +92,43 @@ nums = new List<int>() { 6, 5, 4, 3, 2, 1 };
 MergeSort(nums, 0, nums.Count - 1);
 Console.WriteLine(nums);
 
+// Time: O(N log N) in average, O(N^2) in worst but very rare
+// Space: O(log N) in average, O(N) in worst but very rare
+public void QuickSort(int[] nums)
+{
+    QuickSort(nums, 0, nums.Length - 1);
+}
+private void QuickSort(int[] nums, int lo, int hi)
+{
+    if (lo >= hi) return;
+    int pivotIndex = Partition(nums, lo, hi);
+    QuickSort(nums, lo, pivotIndex - 1);
+    QuickSort(nums, pivotIndex + 1, hi);
+}
+private int Partition(int[] nums, int lo, int hi)
+{
+    // pick the last element hi as a pivot
+    // return the index of pivot value in the sorted array
+    int pivot = nums[hi];
+    int i = lo; // temp pivot index
+    for (int j = lo; j < hi; j++)
+    {
+        if (nums[j] < pivot)
+        {
+            Swap(nums, i, j);
+            i++;
+        }
+    }
+    Swap(nums, i, hi);
+    return i;
+}
+private void Swap(int[] nums, int i, int j)
+{
+    var temp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = temp;
+}
 
+var numsArray = new int[] { 6, 5, 4, 3, 2, 1 };
+QuickSort(numsArray);
+Console.WriteLine(numsArray);
