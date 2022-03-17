@@ -57,10 +57,14 @@ Console.WriteLine(result);
 
 public void MergeSort(List<int> nums, int start, int end)
 {
+    // base case
     if (start >= end) return;
+    // divide
     var mid = start + (end - start) / 2;
+    // conquer
     MergeSort(nums, start, mid);
     MergeSort(nums, mid + 1, end);
+    // combine
     Merge(nums, start, mid, end);
 }
 
