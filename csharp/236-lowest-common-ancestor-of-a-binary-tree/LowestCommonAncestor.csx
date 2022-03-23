@@ -10,27 +10,28 @@ public class TreeNode
 
 public class Solution
 {
-    // Recursive DFS
+    // DFS | Postorder | Bottom up | Recursion
     // Time: O(N)
     // Space: O(N)
     TreeNode answer;
     public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
     {
-        DFSInorder(root, p, q);
+        DFS(root, p, q);
         return answer;
     }
 
-    private bool DFSInorder(TreeNode curr, TreeNode p, TreeNode q)
+    private bool DFS(TreeNode curr, TreeNode p, TreeNode q)
     {
         // base case
         if (curr == null) return false;
-        // recursive case DFS Inorder
+        // get answers from subproblems
+        int left = DFS(curr.left, p, q) ? 1 : 0;
+        int right = DFS(curr.right, p, q) ? 1 : 0;
+        // use the answers to come up with the answer for current call
         int mid = (curr == p || curr == q) ? 1 : 0;
-        int left = DFSInorder(curr.left, p, q) ? 1 : 0;
-        int right = DFSInorder(curr.right, p, q) ? 1 : 0;
-        // if any two of the flags become true, store the node and return true
-        int count = (left + mid + right);
+        int count = (left + right + mid);
         if (count >= 2) answer = curr;
+        // return answer to parent
         return count > 0;
     }
 
