@@ -23,20 +23,20 @@ public class Solution
         DFS(root);
         return globalMax;
     }
-    public int DFS(TreeNode root)
+
+    private int DFS(TreeNode node)
     {
         // base case
-        if (root == null) return 0;
-        // get answer from subproblems
-        int left = DFS(root.left);
-        int right = DFS(root.right);
-        left = Math.Max(left, 0);
-        right = Math.Max(right, 0);
-        // calculate the answer for current problem
-        int currMax = Math.Max(left,  right) + root.val;
-        globalMax = Math.Max(globalMax, left + right + root.val);
-        // return answer to parent
-        return currMax;
+        if (node == null) return 0;
+        // get answers from subproblems
+        var left = Math.Max(DFS(node.left), 0);
+        var right = Math.Max(DFS(node.right), 0);
+        // calculate answer for current problem based on the given answers
+        var maxPath = Math.Max(left, right) + node.val;
+        var currMax = left + right + node.val;
+        globalMax = Math.Max(globalMax, currMax);
+        // return current answer to parent
+        return maxPath;
     }
 }
 
