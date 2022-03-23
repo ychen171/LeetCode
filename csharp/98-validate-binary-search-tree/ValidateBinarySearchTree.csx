@@ -13,7 +13,9 @@ public class TreeNode
 
 public bool IsValidBST(TreeNode root)
 {
-    // Depth first search Inorder
+    // DFS Inorder Iteration
+    // Time: O(n)
+    // Space: O(n)
     var currNode = root;
     if (currNode == null) return true;
     var stack = new Stack<TreeNode>();
@@ -34,6 +36,9 @@ public bool IsValidBST(TreeNode root)
     return true;
 }
 
+// DFS Recursion | Top-down
+// Time: O(n)
+// Space: O(n)
 public bool IsValidBSTRecursive(TreeNode root)
 {
     return IsValidBSTRecursive(root, null, null);
