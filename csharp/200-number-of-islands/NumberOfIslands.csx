@@ -1,5 +1,6 @@
 public class Solution
 {
+    int[][] dirs = new int[][]{new int[]{0, 1}, new int[]{1, 0}, new int[]{0, -1}, new int[]{-1, 0}};
     // DFS Traversal | Recursion
     // Time: O(m * n)
     // Space: O(m * n)
@@ -36,10 +37,10 @@ public class Solution
         // mark the visited node as '0'
         grid[row][col] = '0';
         // traverse 4 directions
-        DFS(grid, row - 1, col);
-        DFS(grid, row + 1, col);
-        DFS(grid, row, col - 1);
-        DFS(grid, row, col + 1);
+        foreach (var dir in dirs)
+        {
+            DFS(grid, row + dir[0], col + dir[1]);
+        }
     }
 
     // BFS Traversal | Iteration
@@ -47,48 +48,43 @@ public class Solution
     // Space: O(min(m, n))
     public int NumIslandsBFS(char[][] grid)
     {
-        if (grid == null || grid.Length == 0) return 0;
-        var m = grid.Length;
-        var n = grid[0].Length;
-        var num = 0;
-        for (int r = 0; r < m; r++)
+        int m = grid.Length;
+        int n = grid[0].Length;
+        int num = 0;
+        
+        // for each point, if it is '1', mark as '0' and start BFS
+        var queue = new Queue<int>();
+        for (int i=0; i<m; i++)
         {
-            for (int c = 0; c < n; c++)
+            for (int j=0; j<n; j++)
             {
-                if (grid[r][c] == '1') num++;
-                grid[r][c] = '0';
-                var key = r * n + c;
-                var queue = new Queue<int>();
-                queue.Enqueue(key);
-                while (queue.Count != 0)
+                if (grid[i][j] == '1')
                 {
-                    key = queue.Dequeue();
-                    var row = key / n;
-                    var col = key % n;
-                    if (row - 1 >= 0 && row - 1 < m && grid[row - 1][col] == '1')
+                    num++;
+                    int key = i * n + j;
+                    queue.Enqueue(key);
+                    grid[i][j] = '0';
+                    while (queue.Count != 0)
                     {
-                        queue.Enqueue((row - 1) * n + col);
-                        grid[row - 1][col] = '0';
-                    }
-                    if (row + 1 >= 0 && row + 1 < m && grid[row + 1][col] == '1')
-                    {
-                        queue.Enqueue((row + 1) * n + col);
-                        grid[row + 1][col] = '0';
-                    }
-                    if (col - 1 >= 0 && col - 1 < n && grid[row][col - 1] == '1')
-                    {
-                        queue.Enqueue(row * n + col - 1);
-                        grid[row][col - 1] = '0';
-                    }
-                    if (col + 1 >= 0 && col + 1 < n && grid[row][col + 1] == '1')
-                    {
-                        queue.Enqueue(row * n + col + 1);
-                        grid[row][col + 1] = '0';
+                        key = queue.Dequeue();
+                        int r = key / n;
+                        int c = key % n;
+                        // add 4 neighbors into queue if valid and not visited
+                        // [r-1][c]  [r][c-1]  [r+1][c]  [r][c+1]
+                        foreach (var dir in dirs)
+                        {
+                            var row = r + dir[0];
+                            var col = c + dir[1];
+                            if (row < 0 || row >= m || col < 0 || col >= n || grid[row][col] == '0')
+                                continue;
+                            queue.Enqueue(row * n + col);
+                            grid[row][col] = '0';
+                        }
                     }
                 }
             }
         }
-
+        
         return num;
     }
 }
