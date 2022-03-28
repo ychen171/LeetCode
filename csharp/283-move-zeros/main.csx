@@ -25,19 +25,24 @@ public class Solution
     // Space: O(1)
     public void MoveZeroes2(int[] nums)
     {
-        var firstZeroIndex = 0;
+        int i = 0;
+        int j = 0;
         // find non-0 element and populate them from the beginning
-        for (int i = 0; i < nums.Length; i++)
+        while (j < nums.Length)
         {
-            if (nums[i] != 0)
+            if (nums[j] != 0)
             {
-                nums[firstZeroIndex] = nums[i];
-                firstZeroIndex++;
+                nums[i] = nums[j];
+                i++;
             }
+            j++;
         }
         // set the rest to be 0
-        for (int i = firstZeroIndex; i < nums.Length; i++)
+        while (i < nums.Length)
+        {
             nums[i] = 0;
+            i++;
+        }
     }
 }
 
