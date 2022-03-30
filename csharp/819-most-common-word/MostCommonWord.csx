@@ -5,48 +5,29 @@ public class Solution
     // M = banned.Length
     // Time: O(N + M)
     // Space: O(N + M)
-    public string MostCommonWord(string paragraph, string[] banned)
+    public string MostCommonWord(string paragraph, string[] banned) 
     {
-        var bannedSet = new HashSet<string>();
-        foreach (var bannedWord in banned)
-            bannedSet.Add(bannedWord);
-
-        string normalizedString = null;
-        var sb = new StringBuilder();
-        paragraph = paragraph.ToLower();
-        for (int i = 0; i < paragraph.Length; i++)
+        // split paragraph into list of words
+        string[] words = paragraph.ToLower().Split(new char[] {' ', '!', '?', '\'', ',', ';', '.'}, StringSplitOptions.RemoveEmptyEntries);
+        // use dictionary to store word: count if it is not banned
+        HashSet<string> bannedSet = banned.ToHashSet();
+        var dict = new Dictionary<string, int>();
+        string result = null;
+        int max = 0;
+        foreach (string word in words)
         {
-            var c = paragraph[i];
-            if (c >= 'a' && c <= 'z' || c == ' ')
-                sb.Append(c);
-            else
-                sb.Append(' ');
-        }
-        normalizedString = sb.ToString();
-        var words = normalizedString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-        var wordCountDict = new Dictionary<string, int>();
-        foreach (var word in words)
-        {
-            if (bannedSet.Contains(word)) continue;
-            if (wordCountDict.ContainsKey(word))
-                wordCountDict[word]++;
-            else
-                wordCountDict[word] = 1;
-        }
-
-        string mostWord = null;
-        int mostCount = 0;
-        foreach (var kv in wordCountDict)
-        {
-            if (kv.Value > mostCount)
+            if (bannedSet.Contains(word))
+                continue;
+            int count = dict.GetValueOrDefault(word, 0) + 1;
+            dict[word] = count;
+            if (count > max)
             {
-                mostWord = kv.Key;
-                mostCount = kv.Value;
+                result = word;
+                max = count;
             }
         }
-
-        return mostWord;
+        
+        return result;
     }
 }
 
