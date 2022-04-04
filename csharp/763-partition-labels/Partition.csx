@@ -37,6 +37,33 @@ public class Solution
         result.Add(prevEnd - prevStart + 1);
         return result;
     }
+
+    // Sliding Window
+    // Time: O()
+    // Space: O()
+    public IList<int> PartitionLabels1(string s)
+    {
+        int[] letterLastIndex = new int[26];
+        for (int i = 0; i < s.Length; i++)
+        {
+            letterLastIndex[s[i] - 'a'] = i;
+        }
+
+        int left = 0;
+        int right = 0;
+        var result = new List<int>();
+        for (int i = 0; i < s.Length; i++)
+        {
+            right = Math.Max(right, letterLastIndex[s[i] - 'a']);
+            if (i == right)
+            {
+                result.Add(right - left + 1);
+                left = i + 1;
+            }
+        }
+
+        return result;
+    }
 }
 
 public void Print(IList<int> input)
