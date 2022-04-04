@@ -23,4 +23,28 @@ public class Solution
 
         return result;
     }
+
+    // Stack | easy to understand
+    public int[] DailyTemperatures1(int[] temperatures)
+    {
+        int n = temperatures.Length;
+        int[] result = new int[n];
+        var stack = new Stack<int>();
+        int i = 0;
+        while (i < n)
+        {
+            if (stack.Count == 0 || temperatures[stack.Peek()] >= temperatures[i])
+            {
+                stack.Push(i);
+                i++;
+            }
+            else
+            {
+                var top = stack.Pop();
+                result[top] = i - top;
+            }
+        }
+
+        return result;
+    }
 }
