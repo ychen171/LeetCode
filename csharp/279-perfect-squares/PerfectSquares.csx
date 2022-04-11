@@ -6,6 +6,10 @@ public class Solution
 
     // n = 13, [9, 4, 1]
     // BFS, shortest path, 
+
+    // Time: O(sqrt(n) ^ h) = O(n^(h/2))
+    // sqrt(n) = the number of squares
+    // h = the height of the generic tree / n-ary tree
     public int NumSquares(int n)
     {
         List<int> squres = FindPerfectSquares(n);
