@@ -38,4 +38,32 @@ public class Solution
 
         return ans;
     }
+
+    // Stack | mono decreasing
+    // Time: O(n)
+    // Space: O(n)
+    public int Trap1(int[] height)
+    {
+        // height = [0,1,0,2,1,0,1,3,2,1,2,1]
+        var stack = new Stack<int>();
+        int n = height.Length;
+        stack.Push(0);
+        int ans = 0;
+        for (int i= 1; i < n; i++)
+        {
+            while (stack.Count != 0 && height[stack.Peek()] < height[i])
+            {
+                int currIndex = stack.Pop();
+                if (stack.Count == 0)
+                    break;
+                int currHeight = height[currIndex];
+                int wid = i - stack.Peek() - 1;
+                int hei = Math.Min(height[i], height[stack.Peek()]) - currHeight;
+                ans += wid * hei;
+            }
+            stack.Push(i);
+        }
+
+        return ans;
+    }
 }
