@@ -31,24 +31,43 @@ public class Solution
     // HashTable/Dictionary | Sliding Window
     // Time: O(n)
     // Space: O(n)
-    public int LengthOfLongestSubstring1(string s)
+    public int LengthOfLongestSubstring1(string s) 
     {
-        if (s.Length < 2) return s.Length;
-        int longest = 0;
-        int start = 0;
-        int end = 0;
-        var startIndexMap = new Dictionary<char, int>();
-
-        for (end = start; end < s.Length; end++)
+        // Sliding Window
+        // a    b   c   a   b   c   b   b
+        // ij
+        // i    j
+        // i        j
+        // i            j
+        //      i       j
+        
+        // a    b   b   a
+        // ij                   1
+        // i    j               2
+        // i        j
+        //          ij          1
+        //          i   j       2
+        
+        var charFirstIndexDict = new Dictionary<char, int>();
+        int i = 0;
+        int j = 0;
+        int n = s.Length;
+        int ans = 0;
+        while (j < n)
         {
-            if (startIndexMap.ContainsKey(s[end]))
-                start = Math.Max(startIndexMap[s[end]], start);
+            char curr = s[j];
+            if (charFirstIndexDict.ContainsKey(curr) && charFirstIndexDict[curr] >= i)
+            {
+                i = charFirstIndexDict[curr] + 1;
+            }
+            charFirstIndexDict[curr] = j;
+            // Console.WriteLine($"{i}, {j}");
+            ans = Math.Max(ans, j - i + 1);
             
-            startIndexMap[s[end]] = end + 1;
-            longest = Math.Max(end - start + 1, longest);
+            j++;
         }
-
-        return longest;
+        
+        return ans;
     }
 }
 

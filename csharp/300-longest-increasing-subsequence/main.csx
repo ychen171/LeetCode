@@ -101,6 +101,40 @@ public class Solution
         if (nums[left] == target) return left;
         return -1;
     }
+
+    // Backtracking
+    // Time: Slow
+    // Space: O(n)
+    public int LengthOfLIS4(int[] nums)
+    {
+        var result = new HashSet<int>();
+        Backtrack(nums, new List<int>(), 0, result);
+        return result.Max();
+    }
+
+    private void Backtrack(int[] nums, List<int> comb, int nextStart, HashSet<int> result)
+    {
+        // base case
+        if (nextStart == nums.Length)
+        {
+            result.Add(comb.Count);
+            return;
+        }
+        // recursive case
+        for (int i = nextStart; i < nums.Length; i++)
+        {
+            if (comb.Count == 0 || nums[i] > comb.Last())
+            {
+                comb.Add(nums[i]);
+                Backtrack(nums, comb, i + 1, result);
+                comb.RemoveAt(comb.Count - 1);
+            }
+            else
+            {
+                Backtrack(nums, comb, i + 1, result);
+            }
+        }
+    }
 }
 
 
