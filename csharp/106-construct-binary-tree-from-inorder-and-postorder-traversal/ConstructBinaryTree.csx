@@ -31,9 +31,9 @@ public class Solution
         for (int i = 0; i < inorder.Length; i++)
             inorderValueIndexDict[inorder[i]] = i;
 
-        return Helper(0, inorder.Length - 1);
+        return Helper1(0, inorder.Length - 1);
     }
-    private TreeNode Helper(int leftIndex, int rightIndex)
+    private TreeNode Helper1(int leftIndex, int rightIndex)
     {
         // base case
         if (leftIndex > rightIndex) return null;
@@ -47,9 +47,9 @@ public class Solution
         postorderIndex--;
 
         // build right subtree
-        root.right = Helper(inorderIndex + 1, rightIndex);
+        root.right = Helper1(inorderIndex + 1, rightIndex);
         // build left subtree
-        root.left = Helper(leftIndex, inorderIndex - 1);
+        root.left = Helper1(leftIndex, inorderIndex - 1);
 
         return root;
     }
@@ -57,39 +57,43 @@ public class Solution
     // Recursive using HashMap/Dictionary
     // Time: O(N)
     // Space: O(N)
-    private Dictionary<int, int> inorderValToIdxDict = new Dictionary<int, int>();
-    public TreeNode BuildTree2(int[] inorder, int[] postorder)
+    public TreeNode BuildTree(int[] inorder, int[] postorder) 
     {
-        // build dictionary value -> index for inorder
+        // inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
+        //  9       3       15      20      7    
+        //  lfTree       root            rtTree             
+        //  lfTree      rtTree             root
+        
+        //  iS           rootIndex          iE
+        //  [   leftLen ]         [  rightLen]
+        //  pS                              pE
+        //  go left
+        //  iS=iS      iE = rootIndex - 1
+        //  pS=pS      pE = pS + leftLen - 1
+        //  go right
+        //                     iS=rootIndex + 1 iE=iE
+        //                     pS=pS+leftLen pE=pE-1
+        var inorderValueIndexDict = new Dictionary<int, int>();
         for (int i = 0; i < inorder.Length; i++)
-            inorderValToIdxDict[inorder[i]] = i;
-        // start recursion
-        return Build(inorder, 0, inorder.Length - 1, postorder, 0, postorder.Length - 1);
+            inorderValueIndexDict[inorder[i]] = i;
+        return Helper(inorder, 0, inorder.Length - 1, postorder, 0, postorder.Length - 1, inorderValueIndexDict);
     }
-    private TreeNode Build(int[] inorder, int inStart, int inEnd, int[] postorder, int postStart, int postEnd)
+    
+    private TreeNode Helper(int[] inorder, int inStart, int inEnd, int[] postorder, int postStart, int postEnd, Dictionary<int, int> inorderValueIndexDict)
     {
         // base case
-        if (inStart > inEnd || postStart > postEnd) return null;
+        if (inStart > inEnd || postStart > postEnd)
+            return null;
+        
         // recursive case
-        var root = new TreeNode(postorder[postEnd]);
-        var rootIndex = inorderValToIdxDict[root.val];
-        // root.left = Build(inorderList, leftSubtreeStartIndex, leftSubtreeEndIndex, postorderList, leftSubtreeStartIndex, leftSubtreeEndIndex)
-        // root.right = Build(inorderList, rightSubtreeStartIndex, rightSubtreeEndIndex, postorderList, rightSubtreeStartIndex, rightSubtreeEndIndex)
-        root.left = Build(inorder, inStart, rootIndex - 1, postorder, postStart, postStart + rootIndex - 1 - inStart);
-        root.right = Build(inorder, rootIndex + 1, inEnd, postorder, postStart + rootIndex - inStart, postEnd - 1);
+        int rootVal = postorder[postEnd];
+        int rootIndex = inorderValueIndexDict[rootVal];
+        int leftLen = rootIndex - inStart;
+        // build node
+        TreeNode root = new TreeNode(rootVal);
+        root.left = Helper(inorder, inStart, rootIndex - 1, postorder, postStart, postStart + leftLen - 1, inorderValueIndexDict);
+        root.right = Helper(inorder, rootIndex + 1 , inEnd, postorder, postStart + leftLen, postEnd - 1, inorderValueIndexDict);
+        
         return root;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
