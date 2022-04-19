@@ -99,7 +99,7 @@ public class Solution
             ans[i] = new int[n];
             for (int j = 0; j < n; j++)
             {
-                ans[i][j] = int.MaxValue;
+                ans[i][j] = mat[i][j] == 0 ? 0 : int.MaxValue;
             }
         }
 
@@ -129,7 +129,7 @@ public class Solution
                 int c = col + dir[1];
                 if (r < 0 || r >= m || c < 0 || c >= n)
                     continue;
-                if (ans[r][c] <= ans[row][col] + 1)
+                if (ans[r][c] != int.MaxValue)
                     continue;
                 
                 ans[r][c] = ans[row][col] + 1;
