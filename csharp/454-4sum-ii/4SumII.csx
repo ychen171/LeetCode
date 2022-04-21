@@ -35,7 +35,7 @@ public class Solution
 
     public int FourSumCountGeneric(int[] nums1, int[] nums2, int[] nums3, int[] nums4)
     {
-        return KSumCount(new int[][] {nums1, nums2, nums3, nums4});
+        return KSumCount(new int[][] { nums1, nums2, nums3, nums4 });
     }
 
     public int KSumCount(int[][] kNums)
@@ -75,7 +75,7 @@ public class Solution
         foreach (var num in kNums[i])
         {
             complement -= num;
-            count += CountComplements(kNums, complement, i+1, dict);
+            count += CountComplements(kNums, complement, i + 1, dict);
             complement += num;
         }
 
