@@ -1,16 +1,13 @@
 public class Solution1
 {
-    // Graph
     // Kruskal's Algorithm + Union Find
     // Time: O(n^2 * log n)
     // Space: O(n^2)
     public int MinCostConnectPoints(int[][] points)
     {
         int n = points.Length;
-        // all edges: all combinations of two points
+        // 1. build all weighted edges: all combinations of two points (direction doesn't matter)
         List<int[]> edgeList = new List<int[]>();
-
-        // storing all edges of the complete graph
         for (int i = 0; i < n; i++)
         {
             for (int j = i + 1; j < n; j++)
@@ -27,7 +24,7 @@ public class Solution1
         // sort edges by weight
         edgeList.Sort((a, b) => a[0] - b[0]);
 
-        // union find
+        // 2. iterate through edges and perform union find on each edge to build Union graph
         UnionFind uf = new UnionFind(n);
         int mstCost = 0;
         int edgesUsed = 0;
@@ -39,6 +36,7 @@ public class Solution1
 
             if (uf.Union(node1, node2))
             {
+                // Do something
                 mstCost += weight;
                 edgesUsed++;
             }
