@@ -120,6 +120,52 @@ public class Solution
         // return the lowest common ancestor
         return q;
     }
+
+    // Recursive using parent pointers, dictionary, and set
+    // Time: O(n)
+    // Space: O(n)
+    public TreeNode LowestCommonAncestor4(TreeNode root, TreeNode p, TreeNode q)
+    {
+        var parentDict = new Dictionary<TreeNode, TreeNode>();
+        TreeNode curr = root;
+        parentDict[curr] = null;
+
+        DFS(curr, parentDict);
+
+        var qSet = new HashSet<TreeNode>();
+        curr = q;
+        while (curr != null)
+        {
+            qSet.Add(curr);
+            curr = parentDict[curr];
+        }
+
+        curr = p;
+        while (curr != null)
+        {
+            if (qSet.Contains(curr))
+                return curr;
+            
+            curr = parentDict[curr];
+        }
+
+        return curr;
+    }
+
+    private void DFS(TreeNode curr, Dictionary<TreeNode, TreeNode> parentDict)
+    {
+        // base case
+        if (curr == null)
+            return;
+
+        // recursive case
+        if (curr.left != null)
+            parentDict[curr.left] = curr;
+        if (curr.right != null)
+            parentDict[curr.right] = curr;
+        DFS(curr.left, parentDict);
+        DFS(curr.right, parentDict);
+    }
 }
 
 
