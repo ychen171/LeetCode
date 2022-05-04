@@ -34,6 +34,39 @@ public class Solution
 
         return nums[left];
     }
+
+    // Binary Search
+    // Time: O(log n)
+    // Space: O(1)
+    public int FindMin3(int[] nums)
+    {
+        // binary search
+        int left = 0;
+        int right = nums.Length - 1;
+
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[left] > nums[right])  // has a drop
+            {
+                if (nums[mid] < nums[right])
+                {
+                    right = mid;
+                }
+                else
+                {
+                    left = mid + 1;
+                }
+
+            }
+            else // mono increasing
+            {
+                right = mid;
+            }
+        }
+
+        return nums[left];
+    }
 }
 
 var s = new Solution();
