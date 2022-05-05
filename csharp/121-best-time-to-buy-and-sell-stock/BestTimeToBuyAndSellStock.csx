@@ -24,7 +24,7 @@ public class Solution
     {
         int minPrice = int.MaxValue;
         int profit = 0;
-        for (int i=0; i<prices.Length; i++)
+        for (int i = 0; i < prices.Length; i++)
         {
             if (prices[i] < minPrice)
                 minPrice = prices[i];
@@ -33,8 +33,40 @@ public class Solution
         }
         return profit;
     }
+
+    // Two Pointers
+    // Time: O(n)
+    // Space: O(1)
+    public int MaxProfitTwoPointers(int[] prices)
+    {
+        int n = prices.Length;
+        if (n == 1)
+            return 0;
+
+        int left = 0;
+        int profit = 0;
+        // find the buy point
+        for (int right = 1; right < n; right++)
+        {
+            if (prices[right - 1] > prices[right]) // descreasing
+            {
+                if (prices[left] > prices[right])
+                {
+                    left = right; // new low
+                }
+            }
+            else // increasing
+            {
+                // new high
+                profit = Math.Max(profit, prices[right] - prices[left]);
+            }
+
+        }
+
+        return profit;
+    }
 }
 
 var s = new Solution();
-Console.WriteLine(s.MaxProfitOnePass(new int[]{2,3,4,3,2,1,2}));
+Console.WriteLine(s.MaxProfitOnePass(new int[] { 2, 3, 4, 3, 2, 1, 2 }));
 
