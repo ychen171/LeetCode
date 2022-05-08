@@ -50,7 +50,7 @@ public class Solution
 
         return false;
     }
-    
+
     // mono stack
     // Time: O(n)
     // Space: O(n)
@@ -90,11 +90,14 @@ public class Solution
         {
             while (stack.Count != 0 && nums[stack.Peek()] <= nums[k]) // go up
             {
-                int index = stack.Pop();
-                if (mins[index] < nums[index] && nums[index] < nums[k])
+                stack.Pop();
+            }
+            if (stack.Count != 0)
+            {
+                var topIndex = stack.Peek();
+                if (mins[topIndex] < nums[topIndex] && mins[topIndex] < nums[k])
                     return true;
             }
-
             stack.Push(k);
         }
 
