@@ -6,6 +6,11 @@ public class FileSystem
         root = new Dir();
     }
 
+    // Time: O(m + n + k log k)
+    // m is the length of the input string
+    // n is the number of parts / levels
+    // k is the number of files and dirs for the given dir / level
+    // Space: O(m + n)
     public IList<string> Ls(string path)
     {
         var result = new List<string>();
