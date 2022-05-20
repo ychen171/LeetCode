@@ -1,62 +1,58 @@
 public class Solution
 {
-    // TODO | Doesn't work
     // Topological Sort | DFS
+    // Time: O(V + E)
+    // Space: O(V + E)
     public int[] FindOrder(int numCourses, int[][] prerequisites)
     {
         // build the graph
-        var graph = new Dictionary<int, List<int>>();
+        var prereqDict = new Dictionary<int, List<int>>();
         foreach (var pair in prerequisites)
         {
-            var a = pair[0];
-            var b = pair[1];
-            if (!graph.ContainsKey(b))
-                graph[b] = new List<int>();
-            graph[b].Add(a);
+            int curr = pair[0];
+            int prereq = pair[1];
+            if (!prereqDict.ContainsKey(curr))
+                prereqDict[curr] = new List<int>();
+            prereqDict[curr].Add(prereq);
         }
-
-        // DFS, traverse all courses
-        var learned = new HashSet<int>();
-        var stack = new Stack<int>();
+        // DFS, staring from each node
+        var cycleSet = new HashSet<int>();
+        var visitSet = new HashSet<int>();
+        var result = new List<int>();
         for (int i = 0; i < numCourses; i++)
         {
-            if (learned.Contains(i))
-                continue;
-            DFS(graph, numCourses, learned, i, stack);
-        }
-
-        if (stack.Count == 0)
-            return new int[] { };
-        var result = new List<int>();
-        while (stack.Count != 0)
-        {
-            result.Add(stack.Pop());
+            if (!DFS(prereqDict, cycleSet, visitSet, i, result))
+                return new int[] { };
         }
 
         return result.ToArray();
     }
 
-    private void DFS(Dictionary<int, List<int>> graph, int numCourses, HashSet<int> learned, int curr, Stack<int> stack)
+    private bool DFS(Dictionary<int, List<int>> prereqDict, HashSet<int> cycleSet, HashSet<int> visitSet, int course, List<int> result)
     {
         // base case
-        if (learned.Count == numCourses)
-            return;
-        if (learned.Contains(curr))
-            return;
+        if (cycleSet.Contains(course))
+            return false;
+        if (visitSet.Contains(course))
+            return true;
 
-        learned.Add(curr);
+        // a course has 3 possible states:
+        // visited -> course has been added to the result list
+        // visiting -> course has not been added to the result list, but added to cycle set
+        // univisited -> course has not been added to the result list or cycle set
 
-        // recursive case
-        if (graph.ContainsKey(curr))
+        cycleSet.Add(course);
+        if (prereqDict.ContainsKey(course))
         {
-            foreach (var nei in graph[curr])
+            foreach (var pre in prereqDict[course])
             {
-                if (learned.Contains(nei))
-                    continue;
-                DFS(graph, numCourses, learned, nei, stack);
+                if (!DFS(prereqDict, cycleSet, visitSet, pre, result))
+                    return false;
             }
         }
-
-        stack.Push(curr);
+        cycleSet.Remove(course);
+        visitSet.Add(course);
+        result.Add(course);
+        return true;
     }
 }
