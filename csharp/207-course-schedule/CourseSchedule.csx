@@ -55,4 +55,47 @@ public class Solution
 
         return finishedCount == numCourses;
     }
+
+    // DFS 
+    // Time: O(V + E)
+    // Space: O(V + E)
+    public bool CanFinish1(int numCourses, int[][] prerequisites)
+    {
+        // build the graph
+        var prereqDict = new Dictionary<int, List<int>>();
+        foreach (var pair in prerequisites)
+        {
+            int curr = pair[0];
+            int prereq = pair[1];
+            if (!prereqDict.ContainsKey(curr))
+                prereqDict[curr] = new List<int>();
+            prereqDict[curr].Add(prereq);
+        }
+        // DFS, starting from every node
+        var visited = new HashSet<int>();
+        for (int i = 0; i < numCourses; i++)
+        {
+            if (!DFS(prereqDict, visited, i))
+                return false;
+        }
+
+        return true;
+    }
+
+    private bool DFS(Dictionary<int, List<int>> prereqDict, HashSet<int> visited, int course)
+    {
+        if (!prereqDict.ContainsKey(course)) // no prerequisites
+            return true;
+        if (visited.Contains(course)) // detect a cycle
+            return false;
+        
+        visited.Add(course);
+        foreach (var pre in prereqDict[course])
+        {
+            if (!DFS(prereqDict, visited, pre))
+                return false;
+        }
+        prereqDict.Remove(course);
+        return true;
+    }
 }
