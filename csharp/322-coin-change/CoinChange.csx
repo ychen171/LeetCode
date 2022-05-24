@@ -43,7 +43,7 @@ public class Solution
             table.Add(amount + 1);
         // seed the trivial answer into the table
         table[0] = 0;
-        // fill futher positions with current position
+        // fill further positions with current position
         for (int i = 1; i <= amount; i++)
         {
             foreach (var coin in coins)
@@ -55,11 +55,26 @@ public class Solution
 
         return table[amount] == amount + 1 ? -1 : table[amount];
     }
+
+    public int CoinChangeTabulation1(int[] coins, int amount)
+    {
+        // initialize the table with default values
+        var table = new int[amount + 1];
+        // seed the trivial answer into the table
+        table[0] = 0;
+        for (int i = 1; i < amount + 1; i++)
+            table[i] = int.MaxValue;
+        // fill further positions based on current position
+        foreach (var coin in coins)
+        {
+            for (int i = coin; i < amount + 1; i++)
+            {
+                if (table[i - coin] == int.MaxValue)
+                    continue;
+                table[i] = Math.Min(table[i], table[i - coin] + 1);
+            }
+        }
+
+        return table[amount] == int.MaxValue ? -1 : table[amount];
+    }
 }
-
-var s = new Solution();
-Console.WriteLine(s.CoinChange(new int[] { 1, 2, 5 }, 11));
-Console.WriteLine(s.CoinChangeTabulation(new int[] { 1, 2, 5 }, 11));
-Console.WriteLine(s.CoinChangeTabulation(new int[] { 2 }, 3));
-
-
