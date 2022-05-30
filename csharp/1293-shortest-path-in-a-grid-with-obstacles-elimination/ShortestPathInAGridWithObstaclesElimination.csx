@@ -1,5 +1,8 @@
 public class Solution
 {
+    // BFS
+    // Time: O(m * n)
+    // Space: O(m * n)
     public int ShortestPath(int[][] grid, int k)
     {
         int m = grid.Length;
