@@ -1,7 +1,7 @@
 public class Solution
 {
     // Backtracking | Subsets
-    // Time: O(2^n)
+    // Time: O(n * 2^n)
     // Space: O(n)
     public IList<IList<int>> Subsets(int[] nums)
     {
