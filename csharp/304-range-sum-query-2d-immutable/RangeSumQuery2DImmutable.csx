@@ -1,14 +1,17 @@
 // Brute force
-// Time: O(m * n)
-// Space: O(1)
 public class NumMatrix
 {
     private int[][] matrix;
+
+    // Time: O(1)
+    // Space: O(m * n)
     public NumMatrix(int[][] matrix)
     {
         this.matrix = matrix;
     }
 
+    // Time: O(m * n)
+    // Space: O(1)
     public int SumRegion(int row1, int col1, int row2, int col2)
     {
         int m = matrix.Length;
@@ -27,13 +30,14 @@ public class NumMatrix
 }
 
 // Caching Rows | Prefix Sum
-// Time: O(m)
-// Space: O(m * n)
 public class NumMatrix1
 {
     private int[][] prefixSum;
     private int m;
     private int n;
+
+    // Time: O(m * n)
+    // Space: O(m * n)
     public NumMatrix1(int[][] matrix)
     {
         m = matrix.Length;
@@ -49,6 +53,8 @@ public class NumMatrix1
         }
     }
 
+    // Time: O(m)
+    // Space: O(1)
     public int SumRegion(int row1, int col1, int row2, int col2)
     {
         int sum = 0;
@@ -62,13 +68,13 @@ public class NumMatrix1
 }
 
 // Caching Rows and Cols | Prefix Sum
-// Time: O(1)
-// Space: O(m * n)
 public class NumMatrix2
 {
     private int[][] prefixSum;
     private int m;
     private int n;
+    // Time: O(m * n)
+    // Space: O(m * n)
     public NumMatrix2(int[][] matrix)
     {
         m = matrix.Length;
@@ -89,6 +95,8 @@ public class NumMatrix2
         }
     }
 
+    // Time: O(1)
+    // Space: O(1)
     public int SumRegion(int row1, int col1, int row2, int col2)
     {
         return prefixSum[row2 + 1][col2 + 1] - prefixSum[row1][col2 + 1] - prefixSum[row2 + 1][col1] + prefixSum[row1][col1];
