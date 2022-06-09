@@ -54,7 +54,8 @@ var nums = new List<int>() { 4, 3, 2, 1 };
 var result = MergeSort(nums);
 Console.WriteLine(result);
 
-
+// Time: O(n log n)
+// Space: O(n)
 public void MergeSort(List<int> nums, int start, int end)
 {
     // base case
