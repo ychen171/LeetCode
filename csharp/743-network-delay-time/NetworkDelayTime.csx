@@ -1,8 +1,8 @@
 public class Solution
 {
     // BFS
-    // Time: O(N * E)
-    // Space: O(N * E)
+    // Time: O(N * E) --> O(N * N*(N-1)) --> O(N^3)
+    // Space: O(N * E) --> O(N * N*(N-1)) --> O(N^3)
     public int NetworkDelayTime(int[][] times, int n, int k)
     {
         // build the graph [src] = [des, weight]
