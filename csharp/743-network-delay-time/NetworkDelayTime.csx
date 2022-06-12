@@ -120,4 +120,68 @@ public class Solution
             }
         }
     }
+
+    // Dijkstra's Algorithm
+    // Time: O(E log E) --> O(N * (N-1) * log (N * (N-1))) --> O(N^2 * log N)
+    // Space: O(E) --> O(N^2)
+    public int NetworkDelayTime2(int[][] times, int n, int k)
+    {
+        // build graph (adjacency list)
+        var graph = new Dictionary<int, List<int[]>>();
+        foreach (var item in times)
+        {
+            int src = item[0];
+            int dst = item[1];
+            int time = item[2];
+            if (!graph.ContainsKey(src))
+                graph[src] = new List<int[]>();
+            graph[src].Add(new int[] { dst, time });
+        }
+
+        // create min time array
+        var minUsedTime = new int[n + 1];
+        for (int i = 0; i <= n; i++)
+        {
+            minUsedTime[i] = int.MaxValue;
+        }
+
+        // BFS using PriorityQueue
+        // start at k
+        var pq = new PriorityQueue<int[], int>(); // element = [node, usedTime], priority comparer = usedTime
+        pq.Enqueue(new int[]{k, 0}, 0);
+        minUsedTime[k] = 0;
+
+        while (pq.Count != 0)
+        {
+            var element = pq.Dequeue();
+            var node = element[0];
+            var usedTime = element[1];
+            // invalid
+            if (!graph.ContainsKey(node))
+                continue;
+            // examine neighbors
+            foreach (int[] nei in graph[node])
+            {
+                var neiNode = nei[0];
+                var neiTime = nei[1];
+                
+                var newUsedTime = usedTime + neiTime;
+                if (newUsedTime < minUsedTime[neiNode])
+                {
+                    minUsedTime[neiNode] = newUsedTime;
+                    pq.Enqueue(new int[]{neiNode, newUsedTime}, newUsedTime);
+                }
+            }
+        }
+
+        int ans = -1;
+        for (int i = 1; i <= n; i++)
+        {
+            if (minUsedTime[i] == int.MaxValue)
+                return -1;
+            ans = Math.Max(ans, minUsedTime[i]);
+        }
+
+        return ans;
+    }
 }
