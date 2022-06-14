@@ -101,6 +101,7 @@ public class UnionFind
 
 public class Solution2
 {
+    // Prim's Algorithm
     // Graph + Priority Queue
     // Time: O(n^2 * log n)
     // Space: O(n^2)
@@ -108,10 +109,10 @@ public class Solution2
     {
         int n = points.Length;
 
-        var pq = new PriorityQueue<int[], int>();
+        var pq = new PriorityQueue<int[], int>();  // <[Cost, NodeToConnect], Cost>
         bool[] visited = new bool[n];
         
-        pq.Enqueue(new int[]{0, 0}, 0);
+        pq.Enqueue(new int[]{0, 0}, 0); // <[0 cost, node at index 0], 0 cost>
         int mstCost = 0;
         int edgesUsed = 0;
 
