@@ -1,17 +1,15 @@
 public class StockPrice
 {
     Dictionary<int, int> timePriceDict;
-    SortedDictionary<int, int> priceTimeDict;
+    SortedList<int, int> priceTimeList;
     int maxTimestamp;
     public StockPrice()
     {
         timePriceDict = new Dictionary<int, int>();
-        priceTimeDict = new SortedDictionary<int, int>();
+        priceTimeList = new SortedList<int, int>();
         maxTimestamp = -1;
     }
 
-    // Time: O(log n)
-    // Space: O(n)
     public void Update(int timestamp, int price)
     {
         // update existing
@@ -19,16 +17,16 @@ public class StockPrice
         {
             int existingPrice = timePriceDict[timestamp];
 
-            priceTimeDict[existingPrice]--;
-            if (priceTimeDict[existingPrice] == 0)
-                priceTimeDict.Remove(existingPrice);
+            priceTimeList[existingPrice]--;
+            if (priceTimeList[existingPrice] == 0)
+                priceTimeList.Remove(existingPrice);
 
-            priceTimeDict[price] = priceTimeDict.GetValueOrDefault(price, 0) + 1;
+            priceTimeList[price] = priceTimeList.GetValueOrDefault(price, 0) + 1;
             timePriceDict[timestamp] = price;
         }
         else // add new
         {
-            priceTimeDict[price] = priceTimeDict.GetValueOrDefault(price, 0) + 1;
+            priceTimeList[price] = priceTimeList.GetValueOrDefault(price, 0) + 1;
             timePriceDict[timestamp] = price;
         }
 
@@ -42,12 +40,12 @@ public class StockPrice
 
     public int Maximum()
     {
-        return priceTimeDict.Keys.Last();
+        return priceTimeList.Keys.Last();
     }
 
     public int Minimum()
     {
-        return priceTimeDict.Keys.First();
+        return priceTimeList.Keys.First();
     }
 }
 
