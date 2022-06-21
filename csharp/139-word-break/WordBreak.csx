@@ -1,6 +1,6 @@
 public class Solution
 {
-    // Recursion + Memoization
+    // DP | Top-down | Memoization | Recursion
     // Time: O(n^3)
     // Space: O(n)
     public bool WordBreak(string s, IList<string> wordDict)
@@ -31,6 +31,35 @@ public class Solution
         }
         memo[start] = result ? 1 : -1;
         return result;
+    }
+
+    // DP | Bottom-up | Tabulation | Iterationn
+    // Time: O(n^3)
+    // Space: O(n)
+    public bool WordBreak1(string s, IList<string> wordDict)
+    {
+        int n = s.Length;
+        // initialize the table with default values
+        var dp = new bool[n + 1];
+        // seed the trivial answer into the table
+        dp[0] = true;
+        // fill further positions based on current position
+        var wordSet = wordDict.ToHashSet();
+        for (int i = 1; i < n + 1; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (!dp[j])
+                    continue;
+                if (wordSet.Contains(s.Substring(j, i - j)))
+                {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+
+        return dp[n];
     }
 }
 
