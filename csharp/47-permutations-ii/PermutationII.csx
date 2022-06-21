@@ -2,8 +2,8 @@ public class Solution
 {
     // Backtracking
     // use string to represent unique combo
-    // Time: O(n!)
-    // Space: O(n!)
+    // Time: O(N * N!)
+    // Space: O(N * N!)
     public IList<IList<int>> PermuteUnique(int[] nums)
     {
         // the order matters
@@ -38,8 +38,8 @@ public class Solution
     }
 
     
-    // Time: O(n!)
-    // Space: O(n)
+    // Time: O(N * N!)
+    // Space: O(N * N!)
     public IList<IList<int>> PermuteUnique1(int[] nums)
     {
         // the order matters

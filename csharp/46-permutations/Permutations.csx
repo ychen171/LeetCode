@@ -1,8 +1,8 @@
 public class Solution
 {
     // Backtracking
-    // Time: O()
-    // Space: O()
+    // Time: O(N * N!)
+    // Space: O(N * N!)
     public IList<IList<int>> Permute(int[] nums)
     {
         var result = new List<IList<int>>();
