@@ -1,16 +1,16 @@
 public class Solution
 {
-    // Backtrack + Memoization
+    // Recursion + Memoization
     // Time: O(n^3)
     // Space: O(n)
     public bool WordBreak(string s, IList<string> wordDict)
     {
         HashSet<string> wordSet = wordDict.ToHashSet<string>();
         int[] memo = new int[s.Length + 1];
-        return Backtrack(s, wordSet, 0, memo);
+        return Helper(s, wordSet, 0, memo);
     }
 
-    private bool Backtrack(string s, HashSet<string> wordSet, int start, int[] memo)
+    private bool Helper(string s, HashSet<string> wordSet, int start, int[] memo)
     {
         if (memo[start] != 0)
             return memo[start] == 1;
@@ -23,7 +23,7 @@ public class Solution
         {
             if (!wordSet.Contains(s.Substring(start, end - start + 1)))
                 continue;
-            if (Backtrack(s, wordSet, end + 1, memo))
+            if (Helper(s, wordSet, end + 1, memo))
             {
                 result = true;
                 break;

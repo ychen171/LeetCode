@@ -1,18 +1,18 @@
 public class TimeMap
 {
     // Space: O(n)
-    Dictionary<string, SortedDictionary<int, string>> dict;
+    Dictionary<string, SortedList<int, string>> dict;
     public TimeMap()
     {
-        dict = new Dictionary<string, SortedDictionary<int, string>>();
+        dict = new Dictionary<string, SortedList<int, string>>();
     }
 
     // Time: O(1)
     public void Set(string key, string value, int timestamp)
     {
         if (!dict.ContainsKey(key))
-            dict[key] = new SortedDictionary<int, string>();
-        
+            dict[key] = new SortedList<int, string>();
+
         dict[key][timestamp] = value;
     }
 
@@ -21,12 +21,12 @@ public class TimeMap
     {
         if (!dict.ContainsKey(key))
             return string.Empty;
-        
-        var timeValueDict = dict[key];
+
+        var timeValueList = dict[key];
         for (int i = timestamp; i >= 1; i--)
         {
-            if (timeValueDict.ContainsKey(i))
-                return timeValueDict[i];
+            if (timeValueList.ContainsKey(i))
+                return timeValueList[i];
         }
 
         return string.Empty;
