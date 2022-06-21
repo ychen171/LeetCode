@@ -1,7 +1,7 @@
 public class Solution
 {
     // Backtracking | Recursion
-    // Time: O(9! * K / (9-K)!)
+    // Time: O(K * 9!/ ((9-K)! * K!))
     // Space: O(K)
     public IList<IList<int>> CombinationSum3(int k, int n)
     {
