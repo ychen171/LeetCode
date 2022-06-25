@@ -79,7 +79,7 @@ public class RandomizedSet1
     {
         if (!dict.ContainsKey(val))
             return false;
-        
+
         int i = dict[val];
         list[i] = list[list.Count - 1];
         dict[list[i]] = i;
@@ -94,5 +94,41 @@ public class RandomizedSet1
     {
         var rand = new Random();
         return list[rand.Next() % list.Count];
+    }
+}
+
+public class RandomizedSet2
+{
+    SortedList<int, int> sortedList;
+    Random random = new Random();
+    public RandomizedSet2()
+    {
+        sortedList = new SortedList<int, int>();
+        random = new Random();
+    }
+
+    public bool Insert(int val)
+    {
+        if (sortedList.ContainsKey(val))
+            return false;
+
+        sortedList[val] = 0;
+        return true;
+    }
+
+    public bool Remove(int val)
+    {
+        if (!sortedList.ContainsKey(val))
+            return false;
+
+        sortedList.Remove(val);
+        return true;
+    }
+
+    public int GetRandom()
+    {
+        var keys = sortedList.Keys;
+        var index = random.Next(0, sortedList.Count);
+        return keys[index];
     }
 }
