@@ -1,32 +1,30 @@
 
 // Priority Queue | Heap
-// Time: O(N*log(N) + M*log(K))
 // Space: O(N)
-public class KthLargest
+public class KthLargest 
 {
-    private int k;
-    private Queue<int> heap; // PriorityQueue
-    public KthLargest(int k, int[] nums)
+    private PriorityQueue<int, int> pq; // min heap
+    private int size;
+    // Time: O(N * log K)
+    public KthLargest(int k, int[] nums) 
     {
-        this.k = k;
-        heap = new Queue<int>();
+        pq = new PriorityQueue<int, int>();
+        size = k; 
         foreach (var num in nums)
         {
-            heap.Enqueue(num);
-        }
-        while (heap.Count > k)
-        {
-            heap.Dequeue();
+            pq.Enqueue(num, num);
+            if (pq.Count > size)
+                pq.Dequeue();
         }
     }
-    public int Add(int val)
+    // Time: (log K)
+    public int Add(int val) 
     {
-        heap.Enqueue(val);
-        if (heap.Count > k)
-        {
-            heap.Dequeue();
-        }
-        return heap.Peek();
+        pq.Enqueue(val, val);
+        if (pq.Count > size)
+            pq.Dequeue();
+        
+        return pq.Peek();
     }
 }
 
@@ -171,12 +169,12 @@ public class TreeNode
  */
 
 
-var k = new KthLargest1(2, new int[] { 0 });
-Console.WriteLine(k.Add(-1));
-Console.WriteLine(k.Add(1));
-Console.WriteLine(k.Add(-2));
-Console.WriteLine(k.Add(-4));
-Console.WriteLine(k.Add(3));
+var k = new KthLargest(2, new int[] { 0 }); // 0
+Console.WriteLine(k.Add(-1)); // -1, 0
+Console.WriteLine(k.Add(1));  // 0, 1
+Console.WriteLine(k.Add(-2)); // 0, 1
+Console.WriteLine(k.Add(-4)); // 0, 1
+Console.WriteLine(k.Add(3));  // 1, 3
 
 
 
