@@ -118,6 +118,75 @@ public class Solution
         memo[currIndex, prevColor, prevNeiCount] = currSum;
         return currSum;
     }
+
+    public int MinCost2(int[] houses, int[][] cost, int m, int n, int target)
+    {
+        // initialize the table with default values
+        var dp = new int[m, n, target + 1];
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                for (int k = 0; k < target; k++)
+                {
+                    dp[i, j, k] = int.MaxValue;
+                }
+            }
+        }
+        // seed the trival answer into the table
+        // initialize house 0, neighbor count is 1
+        for (int color = 1; color <= n; color++)
+        {
+            if (houses[0] == color) // painted same color
+                dp[0, color - 1, 1] = 0;
+            else if (houses[0] == 0) // not painted
+                dp[0, color - 1, 1] = cost[0][color - 1];
+        }
+        // fill further positions based on current position
+        for (int i = 1; i < m; i++)
+        {
+            for (int k = 1; k <= Math.Min(target, i + 1); k++)
+            {
+                for (int color = 1; color <= n; color++)
+                {
+                    // it is already painted, and the curr color is different
+                    // cannot be painted with different color
+                    if (houses[i] != 0 && color != houses[i])
+                        continue;
+
+                    int currSum = int.MaxValue;
+                    for (int prevColor = 1; prevColor <= n; prevColor++)
+                    {
+                        if (prevColor != color)
+                        {
+                            // decrement the neighbor count as adjacent houses have different color
+                            currSum = Math.Min(currSum, dp[i - 1, prevColor - 1, k - 1]);
+                        }
+                        else
+                        {
+                            // no change in neighbor count as the colors are the same
+                            currSum = Math.Min(currSum, dp[i - 1, prevColor - 1, k]);
+                        }
+                    }
+                    if (currSum == int.MaxValue)
+                        continue;
+
+                    int currCost = houses[i] == 0 ? cost[i][color - 1] : 0;
+                    dp[i, color - 1, k] = currSum + currCost;
+                }
+            }
+        }
+
+        int minCost = int.MaxValue;
+        // fint the min cost with m houses and target neighbor count
+        // by comparing cost for different color for the last house
+        for (int color = 1; color <= n; color++)
+        {
+            minCost = Math.Min(minCost, dp[m - 1, color - 1, target]);
+        }
+
+        return minCost == int.MaxValue ? -1 : minCost;
+    }
 }
 
 var s = new Solution();
