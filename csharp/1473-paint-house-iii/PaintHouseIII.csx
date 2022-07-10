@@ -195,7 +195,7 @@ var cost = new int[][] { new int[] { 1, 10 }, new int[] { 10, 1 }, new int[] { 1
 var m = 5;
 var n = 2;
 var target = 3;
-var result = s.MinCost1(houses, cost, m, n, target);
+var result = s.MinCost2(houses, cost, m, n, target);
 Console.WriteLine(result);
 
 
