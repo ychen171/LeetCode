@@ -9,18 +9,18 @@ public class Solution
     // DP | Top-down | Recursion
     // Time: O(n^m)
     // Space: O(m)
-    public int MinCost(int[] houses, int[][] cost, int m, int n, int target)
+    public int MinCost0(int[] houses, int[][] cost, int m, int n, int target)
     {
         this.houses = houses;
         this.cost = cost;
         this.m = m;
         this.n = n;
         this.targetCount = target;
-        Helper(0, 0, 0, 0);
+        Helper0(0, 0, 0, 0);
         return globalMinCost == int.MaxValue ? -1 : globalMinCost;
     }
 
-    public void Helper(int nextIndex, int currColor, int neighborCount, int totalCost)
+    public void Helper0(int nextIndex, int currColor, int neighborCount, int totalCost)
     {
         // base case
         if (nextIndex == m && neighborCount == targetCount)
@@ -40,9 +40,9 @@ public class Solution
         {
             nextColor = houses[nextIndex];
             if (currColor == nextColor)
-                Helper(nextIndex + 1, nextColor, neighborCount, totalCost);
+                Helper0(nextIndex + 1, nextColor, neighborCount, totalCost);
             else
-                Helper(nextIndex + 1, nextColor, neighborCount + 1, totalCost);
+                Helper0(nextIndex + 1, nextColor, neighborCount + 1, totalCost);
         }
         else // not painted yet
         {
@@ -52,9 +52,9 @@ public class Solution
                 nextColor = j + 1;
                 nextCost = costPerColor[j];
                 if (currColor == nextColor)
-                    Helper(nextIndex + 1, nextColor, neighborCount, totalCost + nextCost);
+                    Helper0(nextIndex + 1, nextColor, neighborCount, totalCost + nextCost);
                 else
-                    Helper(nextIndex + 1, nextColor, neighborCount + 1, totalCost + nextCost);
+                    Helper0(nextIndex + 1, nextColor, neighborCount + 1, totalCost + nextCost);
             }
         }
     }
@@ -62,7 +62,7 @@ public class Solution
     // DP | Top-down | Memoization | Recursion
     // Time: O(m * n * t)
     // Space: O(m * n * t)
-    public int MinCost1(int[] houses, int[][] cost, int m, int n, int target)
+    public int MinCost2(int[] houses, int[][] cost, int m, int n, int target)
     {
         this.houses = houses;
         this.cost = cost;
@@ -119,7 +119,7 @@ public class Solution
         return currSum;
     }
 
-    public int MinCost2(int[] houses, int[][] cost, int m, int n, int target)
+    public int MinCost5(int[] houses, int[][] cost, int m, int n, int target)
     {
         // initialize the table with default values
         var dp = new int[m, n, target + 1];
