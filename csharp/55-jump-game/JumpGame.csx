@@ -32,26 +32,27 @@ public class Solution
     // Space: O(n)
     public bool CanJumpTabulation(int[] nums)
     {
-        if (nums.Length == 1) return true;
+        int n = nums.Length;
+        if (n == 1) return true;
         // initialize table with default value
-        bool[] table = new bool[nums.Length];
+        bool[] dp = new bool[nums.Length];
         // seed the trivial answer into the table
-        table[0] = true;
+        dp[n - 1] = true;
         // fill further positions with current position
-        for (int i = 0; i < nums.Length; i++)
+        for (int i = n - 2; i >= 0; i--)
         {
             var maxLen = nums[i];
-            if (table[i])
+            for (int j = i + 1; j <= Math.Min(i + maxLen, n - 1); j++)
             {
-                for (int k = 1; k <= maxLen && i + k < nums.Length; k++)
+                if (dp[j])
                 {
-                    Console.WriteLine($"table[{i+k}] = true");
-                    table[i + k] = true;
+                    dp[i] = true;
+                    break;
                 }
             }
         }
 
-        return table[table.Length - 1];
+        return dp[0];
     }
 
     // Greedy
