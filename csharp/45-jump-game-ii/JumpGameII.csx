@@ -6,23 +6,58 @@ public class Solution
     public int Jump(int[] nums)
     {
         // initialize table with default value
-        var table = new List<int>();
+        int n = nums.Length;
+        var dp = new int[n];
+        Array.Fill(dp, int.MaxValue);
         // seed the trivial answer into the table
-        table.Add(0);
-        for (int i = 1; i < nums.Length; i++)
-        {
-            table.Add(int.MaxValue);
-        }
+        dp[0] = 0;
         // fill further positions with current position
-        for (int i = 0; i < nums.Length; i++)
+        for (int i = 0; i < n; i++)
         {
             var maxLen = nums[i];
-            for (int k = 1; k <= maxLen && i + k < nums.Length; k++)
+            for (int j = 1; j < n && j - i <= maxLen; j++)
+                dp[j] = Math.Min(dp[j], dp[i] + 1);
+        }
+        return dp[n - 1];
+    }
+
+    // DP | Top-down | Memoization | Recursion
+    // Time: O(n^2)
+    // Space: O(n)
+    public int JumpR(int[] nums)
+    {
+        int n = nums.Length;
+        if (n == 1)
+            return 0;
+        var memo = new int[n];
+        Array.Fill(memo, int.MaxValue);
+        return Helper(nums, n - 1, memo);
+    }
+
+    public int Helper(int[] nums, int index, int[] memo)
+    {
+        if (memo[index] != int.MaxValue)
+            return memo[index];
+
+        int n = nums.Length;
+        // base case
+        if (index == 0)
+            return 0;
+
+        // recursive case
+        int jumps = int.MaxValue;
+        for (int prevIndex = 0; prevIndex < index; prevIndex++)
+        {
+            if (prevIndex + nums[prevIndex] >= index)
             {
-                table[i + k] = Math.Min(table[i + k], table[i] + 1);
+                var prevJumps = Helper(nums, prevIndex, memo);
+                if (prevJumps == int.MaxValue) // unreachable
+                    continue;
+                jumps = Math.Min(jumps, prevJumps + 1);
             }
         }
-        return table[table.Count - 1];
+        memo[index] = jumps;
+        return jumps;
     }
 
     // Greedy
