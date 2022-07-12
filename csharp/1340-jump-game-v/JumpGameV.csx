@@ -82,7 +82,7 @@ public class Solution
         {
             if (arr[j] >= arr[i]) // j is blocking the further indexes
                 break;
-            
+
             ans = Math.Max(ans, 1 + HelperOptimized(arr, d, j, memo));
         }
         // search right side: from i + 1 to endJ
@@ -90,53 +90,12 @@ public class Solution
         {
             if (arr[j] >= arr[i]) // j is blocking the further indexes
                 break;
-            
+
             ans = Math.Max(ans, 1 + HelperOptimized(arr, d, j, memo));
         }
 
         memo[i] = ans;
         return ans;
-    }
-
-    // Doesn't work!!!
-    // DP | Bottom-up | Tabulation | Iteration
-    public int MaxJumps2(int[] arr, int d)
-    {
-        int n = arr.Length;
-        var dp = new int[n];
-        Array.Fill(dp, 1);
-        // dp[i] = 1 + max(dp[j]), where j is all indexes which can be reached from i
-        for (int i = 0; i < n; i++)
-        {
-            // find all indexes which can be reached from i
-            int startJ = Math.Max(0, i - d);
-            int endJ = Math.Min(n - 1, i + d);
-            for (int j = startJ; j <= endJ; j++)
-            {
-                if (j == i)
-                    continue;
-                if (arr[j] >= arr[i])
-                    continue;
-
-                int startK = Math.Min(i, j) + 1;
-                int endK = Math.Max(i, j) - 1;
-                bool validJ = true;
-                for (int k = startK; k <= endK; k++)
-                {
-                    if (arr[k] >= arr[i])
-                    {
-                        validJ = false;
-                        break;
-                    }
-                }
-                if (!validJ)
-                    continue;
-
-                dp[j] = Math.Max(dp[j], 1 + dp[i]);
-            }
-        }
-
-        return dp.Max();
     }
 }
 

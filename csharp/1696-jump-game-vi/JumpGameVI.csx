@@ -1,31 +1,41 @@
 public class Solution
 {
-    // Doesn't work!!!
-    // DP | Top-down | Recursion
-    int globalMaxSum = int.MinValue;
+    // TLE
+    // DP | Top-down | Memoization | Recursion
+    // Time: O(n*k)
+    // Space: O(n)
     public int MaxResult(int[] nums, int k)
     {
-        Helper(nums, k, 0, 0);
-        return globalMaxSum;
+        int n = nums.Length;
+        var memo = new int[n];
+        Array.Fill(memo, int.MinValue);
+        return Helper(nums, k, n - 1, memo);
     }
 
-    public void Helper(int[] nums, int k, int index, int sum)
+    public int Helper(int[] nums, int k, int curr, int[] memo)
     {
+        if (memo[curr] != int.MinValue)
+            return memo[curr];
         int n = nums.Length;
+        // scores[i] = nums[i] + Max(scores[j]), where j is all indexes can be reached from i 
+        // j = [i + 1, min(n-1, i+k)]
+
         // base case
-        if (index == n - 1)
-        {
-            globalMaxSum = Math.Max(globalMaxSum, sum);
-            return;
-        }
-        if (index >= n)
-            return;
+        if (curr == 0)
+            return nums[0];
 
         // recursive case
-        for (int i = index + 1; i <= Math.Min(n - 1, index + k); i++)
+        int ans = int.MinValue;
+        for (int prev = curr - 1; prev >= Math.Max(0, curr - k); prev--)
         {
-            Helper(nums, k, i, sum + nums[i]);
+            var prevAns = Helper(nums, k, prev, memo);
+            if (prevAns == int.MinValue)
+                continue;
+            ans = Math.Max(ans, nums[curr] + prevAns);
         }
+
+        memo[curr] = ans;
+        return ans;
     }
 
     // DP + DeQueue (monotonic queue)
