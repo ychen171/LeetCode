@@ -48,14 +48,12 @@ public class Solution
         // recursive case
         int rootVal = preorder[preStart];
         int rootIndex = inorderValueIndexDict[rootVal];
-        int leftLen = rootIndex - inStart;
-        int rightLen = inEnd - rootIndex;
+        int leftSize = rootIndex - inStart;
+        int rightSize = inEnd - rootIndex;
         // build root using left and right
-        TreeNode leftNode = Helper(preorder, preStart + 1, preStart + 1 + leftLen - 1, inorder, inStart, rootIndex - 1, inorderValueIndexDict);
-        TreeNode rightNode = Helper(preorder, preEnd - rightLen + 1, preEnd, inorder, rootIndex + 1, inEnd, inorderValueIndexDict);
         TreeNode root = new TreeNode(rootVal);
-        root.left = leftNode;
-        root.right = rightNode;
+        root.left = Helper(preorder, preStart + 1, preStart + leftSize, inorder, inStart, rootIndex - 1, inorderValueIndexDict);
+        root.right = Helper(preorder, preStart + leftSize + 1, preEnd, inorder, rootIndex + 1, inEnd, inorderValueIndexDict);
         return root;
     }
 }
