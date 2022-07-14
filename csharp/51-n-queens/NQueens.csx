@@ -28,7 +28,7 @@ public class Solution
         return solutions;
     }
 
-    // Time: O(n!)
+    // Time: O(n * n!)
     // Space: O(n^2)
     private void Backtrack(char[][] board, int row, HashSet<int> colSet, HashSet<int> diagSet, HashSet<int> antiDiagSet)
     {
