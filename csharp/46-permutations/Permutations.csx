@@ -5,34 +5,35 @@ public class Solution
     // Space: O(N * N!)
     public IList<IList<int>> Permute(int[] nums)
     {
-        var result = new List<IList<int>>();
-        var remain = new HashSet<int>(nums);
-        var perm = new List<int>();
         var n = nums.Length;
-        Backtrack(n, remain, perm, result);
+        var used = new bool[n];
+        var perm = new List<int>();
+        var result = new List<IList<int>>();
+        Backtrack(nums, used, perm, result);
         return result;
     }
 
-    private void Backtrack(int n, HashSet<int> remain, IList<int> perm, IList<IList<int>> result)
+    private void Backtrack(int[] nums, bool[] used, IList<int> perm, IList<IList<int>> result)
     {
         // base case
+        int n = nums.Length;
         if (perm.Count == n)
         {
             result.Add(new List<int>(perm));
-            Console.WriteLine("add to result");
             return;
         }
 
-        var remainList = new List<int>(remain);
-        foreach (var candidate in remainList)
+        // recursive case
+        for (int i = 0; i < n; i++)
         {
-            perm.Add(candidate);
-            remain.Remove(candidate);
-            PrintList(perm);
-            Backtrack(n, remain, perm, result);
-            perm.Remove(candidate);
-            remain.Add(candidate);
-            PrintList(perm);
+            int num = nums[i];
+            if (used[i]) // skip the used num
+                continue;
+            used[i] = true;
+            perm.Add(num);
+            Backtrack(nums, used, perm, result);
+            used[i] = false;
+            perm.RemoveAt(perm.Count - 1);
         }
     }
 
