@@ -5,8 +5,10 @@ public class Solution
     // Space: O(n)
     public IList<IList<int>> Subsets(int[] nums)
     {
-        // elements in nums are unique
-        // find all combinations. Order doesn't matter
+        // order doesn't matter
+        // input has no duplicates
+        // num cannot be used
+        // subset is unique
         var result = new List<IList<int>>();
         Backtrack(nums, new List<int>(), 0, result);
         return result;

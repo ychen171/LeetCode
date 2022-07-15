@@ -6,6 +6,10 @@ public class Solution
     // Space: O(N)
     public IList<IList<int>> CombinationSum2(int[] candidates, int target)
     {
+        // order doesn't matter
+        // input has duplicates, output can have duplicates
+        // num cannot be reused
+        // combination is unique
         Array.Sort(candidates);
         var combo = new List<int>();
         var result = new List<IList<int>>();

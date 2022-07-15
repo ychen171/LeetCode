@@ -5,6 +5,10 @@ public class Solution
     // Space: O(N * N!)
     public IList<IList<int>> Permute(int[] nums)
     {
+        // output order matters
+        // input has no duplicates
+        // num cannot be used
+        // unique permutation
         var n = nums.Length;
         var used = new bool[n];
         var perm = new List<int>();

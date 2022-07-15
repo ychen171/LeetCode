@@ -6,7 +6,10 @@ public class Solution
     // Space: O(T/M)
     public IList<IList<int>> CombinationSum(int[] candidates, int target)
     {
-        Array.Sort(candidates);
+        // order doesn't matter
+        // input has no duplicates
+        // num can be reused
+        // combination is unique
         IList<IList<int>> result = new List<IList<int>>();
         var combo = new List<int>();
         Backtrack(candidates, target, combo, 0, result);

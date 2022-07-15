@@ -6,22 +6,24 @@ public class Solution
     // Space: O(N * N!)
     public IList<IList<int>> PermuteUnique(int[] nums)
     {
-        // the order matters
-        // num cannot be reused, but there are duplicates
+        // output order matters
+        // input has duplicates, permutation can have duplicates
+        // num cannot be reused
+        // permutation is unique
         var usedIndexes = new HashSet<int>();
         var combo = new List<int>();
         var resultDict = new Dictionary<string, IList<int>>();
-        Backtrack(nums, usedIndexes, "", combo, resultDict);     
+        Backtrack(nums, usedIndexes, "", combo, resultDict);
         return resultDict.Values.ToList();
     }
 
-    private void Backtrack(int[] nums, HashSet<int> usedIndexes, string comboString, IList<int> combo, Dictionary<string, IList<int>> resultDict)
+    private void Backtrack(int[] nums, HashSet<int> usedIndexes, string permString, IList<int> perm, Dictionary<string, IList<int>> resultDict)
     {
         // base case
-        if (combo.Count == nums.Length)
+        if (perm.Count == nums.Length)
         {
-            if (!resultDict.ContainsKey(comboString)) // not a duplicate combo
-                resultDict[comboString] = new List<int>(combo);
+            if (!resultDict.ContainsKey(permString)) // not a duplicate combo
+                resultDict[permString] = new List<int>(perm);
             return;
         }
         // recursive case
@@ -29,23 +31,23 @@ public class Solution
         {
             if (usedIndexes.Contains(i))
                 continue;
-            combo.Add(nums[i]);
+            perm.Add(nums[i]);
             usedIndexes.Add(i);
-            Backtrack(nums, usedIndexes, comboString + nums[i], combo, resultDict);
-            combo.RemoveAt(combo.Count - 1);
+            Backtrack(nums, usedIndexes, permString + nums[i], perm, resultDict);
+            perm.RemoveAt(perm.Count - 1);
             usedIndexes.Remove(i);
         }
     }
 
-    
+
     // Time: O(N * N!)
     // Space: O(N * N!)
     public IList<IList<int>> PermuteUnique1(int[] nums)
     {
-        // the order matters
-        // num cannot be reused, but there are duplicates
-
-        // create unique num and count dict
+        // output order matters
+        // input has duplicates, permutation can have duplicates
+        // num cannot be reused
+        // permutation is unique
         int n = nums.Length;
         var numCountDict = new Dictionary<int, int>();
         foreach (var num in nums)
@@ -59,12 +61,12 @@ public class Solution
         return result;
     }
 
-    private void Backtrack(int n, Dictionary<int, int> numCountDict, IList<int> combo, IList<IList<int>> result)
+    private void Backtrack(int n, Dictionary<int, int> numCountDict, IList<int> perm, IList<IList<int>> result)
     {
         // base case
-        if (combo.Count == n)
+        if (perm.Count == n)
         {
-            result.Add(new List<int>(combo));
+            result.Add(new List<int>(perm));
             return;
         }
 
@@ -75,13 +77,75 @@ public class Solution
         {
             if (numCountDict[num] == 0)
                 continue;
-            combo.Add(num);
+            perm.Add(num);
             numCountDict[num]--;
-            Backtrack(n, numCountDict, combo, result);
+            Backtrack(n, numCountDict, perm, result);
             numCountDict[num]++;
-            combo.RemoveAt(combo.Count - 1);
+            perm.RemoveAt(perm.Count - 1);
         }
+    }
+
+    // Doesn't work!!! on [1,1,2]
+    public IList<IList<int>> PermuteUnique2(int[] nums)
+    {
+        // output order matters
+        // input has duplicates, permutation can have duplicates
+        // num cannot be reused
+        // permutation is unique
+        Array.Sort(nums);
+        int n = nums.Length;
+        var used = new bool[n];
+        var perm = new List<int>();
+        var result = new List<IList<int>>();
+        Backtrack(nums, used, perm, result);
+        return result;
+    }
+
+    private void Backtrack(int[] nums, bool[] used, IList<int> perm, IList<IList<int>> result)
+    {
+        // base case
+        int n = nums.Length;
+        if (perm.Count == n)
+        {
+            result.Add(new List<int>(perm));
+            return;
+        }
+
+        // recursive case
+        for (int i = 0; i < n; i++)
+        {
+            if (used[i])
+                continue;
+            // maintains the relative positions of every group of dups
+            // skip the num if the prev dup num has not been used
+            if (i != 0 && nums[i] == nums[i - 1] && used[i - 1])
+                continue;
+
+            used[i] = true;
+            perm.Add(nums[i]);
+            PrintList(perm);
+            Backtrack(nums, used, perm, result);
+            perm.Remove(perm.Count - 1);
+            used[i] = false;
+            // PrintList(perm);
+        }
+    }
+
+    private void PrintList(IList<int> perm)
+    {
+        var sb = new StringBuilder();
+        sb.Append("[");
+        for (int i = 0; i < perm.Count; i++)
+        {
+            sb.Append(perm[i] + ", ");
+        }
+        if (sb.Length >= 2) sb.Remove(sb.Length - 2, 2);
+        sb.Append("]");
+        Console.WriteLine(sb.ToString());
     }
 }
 
-
+var s = new Solution();
+var nums = new int[] { 1,1,2 };
+// var result = s.PermuteUnique2(nums);
+// Console.WriteLine(result);

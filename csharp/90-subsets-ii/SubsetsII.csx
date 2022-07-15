@@ -2,10 +2,11 @@ public class Solution
 {
     public IList<IList<int>> SubsetsWithDup(int[] nums)
     {
-        // contains duplicates
         // order doesn't matter
-        // subset can contain duplicates
-        // don't count twice if all values in two subsets are same
+        // input has duplicates, output can have duplicates
+        // num cannot be reused
+        // subset is unique
+
         Array.Sort(nums);
         var result = new List<IList<int>>();
         Backtrack(nums, new List<int>(), 0, result);
