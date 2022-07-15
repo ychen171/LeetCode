@@ -79,13 +79,13 @@ public class Solution
                 continue;
             perm.Add(num);
             numCountDict[num]--;
+            PrintList(perm);
             Backtrack(n, numCountDict, perm, result);
             numCountDict[num]++;
             perm.RemoveAt(perm.Count - 1);
         }
     }
-
-    // Doesn't work!!! on [1,1,2]
+    
     public IList<IList<int>> PermuteUnique2(int[] nums)
     {
         // output order matters
@@ -118,14 +118,14 @@ public class Solution
                 continue;
             // maintains the relative positions of every group of dups
             // skip the num if the prev dup num has not been used
-            if (i != 0 && nums[i] == nums[i - 1] && used[i - 1])
+            if (i != 0 && nums[i] == nums[i - 1] && !used[i - 1])
                 continue;
 
             used[i] = true;
             perm.Add(nums[i]);
             PrintList(perm);
             Backtrack(nums, used, perm, result);
-            perm.Remove(perm.Count - 1);
+            perm.RemoveAt(perm.Count - 1);
             used[i] = false;
             // PrintList(perm);
         }
@@ -147,5 +147,7 @@ public class Solution
 
 var s = new Solution();
 var nums = new int[] { 1,1,2 };
-// var result = s.PermuteUnique2(nums);
-// Console.WriteLine(result);
+Console.WriteLine("PermuteUnique1");
+s.PermuteUnique1(nums);
+Console.WriteLine("PermuteUnique2");
+s.PermuteUnique2(nums);
