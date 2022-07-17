@@ -4,7 +4,7 @@ public class Solution
     int m;
     int n;
     int maxMove;
-    // Memoization Recursion
+    // DP | Memoization | Recursion
     // Time: O(m*n*k)
     // Space: O(m*n*k)
     public int FindPaths(int m, int n, int maxMove, int startRow, int startColumn)
