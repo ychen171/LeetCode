@@ -2,7 +2,7 @@ public class Solution
 {
     // Two pointers + HashSet
     // Time: O(n)
-    // Space: O(1)
+    // Space: O(n)
     public int RemoveDuplicates(int[] nums)
     {
         if (nums.Length <= 1) return nums.Length;
@@ -37,5 +37,24 @@ public class Solution
         }
 
         return i + 1;
+    }
+
+    public int RemoveDuplicates2(int[] nums)
+    {
+        int n = nums.Length;
+        if (n < 2) return n;
+        int slow = 0;
+        int fast = 0;
+        while (fast < n)
+        {
+            if (nums[slow] != nums[fast])
+            {
+                slow++;
+                nums[slow] = nums[fast];
+            }
+            fast++;
+        }
+
+        return slow + 1;
     }
 }
