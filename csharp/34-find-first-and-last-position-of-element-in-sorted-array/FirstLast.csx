@@ -3,36 +3,93 @@ public class Solution
 {
     public int[] SearchRange(int[] nums, int target)
     {
-        var result = new int[] { -1, -1 };
-        if (nums.Length == 0) return result;
+        var ans = new int[] { -1, -1 };
+        int n = nums.Length;
+        if (n == 0)
+            return ans;
 
-        // search for the left most one
+        ans[0] = BinarySearchLeftBound1(nums, target);
+        ans[1] = BinarySearchRightBound1(nums, target);
+
+        return ans;
+    }
+
+    public int BinarySearchLeftBound(int[] nums, int target)
+    {
+        int n = nums.Length;
         int left = 0;
-        int right = nums.Length - 1;
+        int right = n - 1;
         while (left < right)
         {
-            var mid = left + (right - left) / 2;
+            int mid = left + (right - left) / 2;
+            // [..., mid][mid + 1, ...]
             if (nums[mid] < target)
                 left = mid + 1;
-            else
+            else // nums[mid] >= target
                 right = mid;
         }
-        if (nums[left] != target) return result;
-        result[0] = left;
 
-        // search for the right most one
-        right = nums.Length - 1;
-        while (left < right)
+        return nums[left] == target ? left : -1;
+    }
+
+    public int BinarySearchLeftBound1(int[] nums, int target)
+    {
+        int n = nums.Length;
+        int left = 0;
+        int right = n - 1;
+        while (left <= right)
         {
-            var mid = left + (right - left) / 2 + 1;
-            if (nums[mid] > target)
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else if (nums[mid] > target)
                 right = mid - 1;
             else
+                right = mid - 1;
+        }
+
+        // left = right + 1
+        if (left == n) return -1;
+        return nums[left] == target ? left : -1;
+    }
+
+    public int BinarySearchRightBound(int[] nums, int target)
+    {
+        int n = nums.Length;
+        int left = 0;
+        int right = n - 1;
+        while (left < right)
+        {
+            int mid = left + (right - left + 1) / 2;
+            // [..., mid - 1][mid, ...]
+            if (nums[mid] > target)
+                right = mid - 1;
+            else // nums[mid] <= target
                 left = mid;
         }
-        result[1] = right;
 
-        return result;
+        return nums[right] == target ? right : -1;
+    }
+
+    public int BinarySearchRightBound1(int[] nums, int target)
+    {
+        int n = nums.Length;
+        int left = 0;
+        int right = n - 1;
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else if (nums[mid] > target)
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+
+        // left = right + 1
+        if (right == -1) return -1;
+        return nums[right] == target ? right : -1;
     }
 }
 
