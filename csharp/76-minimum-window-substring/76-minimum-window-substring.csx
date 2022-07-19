@@ -9,51 +9,62 @@ public class Solution
     // Space: O(s + t)
     public string MinWindow(string s, string t)
     {
+        int m = s.Length;
+        int n = t.Length;
+        // edge case
+        if (m == 0 || n == 0 || m < n)
+            return string.Empty;
+        var sDict = new Dictionary<char, int>();
         var tDict = new Dictionary<char, int>();
         foreach (char c in t)
-        {
             tDict[c] = tDict.GetValueOrDefault(c, 0) + 1;
-        }
 
-        int i = 0;
-        int j = 0;
-        int[] ans = new int[] { 0, s.Length - 1, int.MaxValue };
-        var sDict = new Dictionary<char, int>();
         int required = tDict.Count;
         int actual = 0;
-        // increase window size
-        while (j < s.Length)
+        int left = 0, right = 0;
+        int start = 0, len = int.MaxValue;
+        // [left, right)
+        while (right < m)
         {
-            char c = s[j];
+            // c is the char to add to the window
+            char c = s[right];
+            // increase the window size
+            right++;
+            // update data in the window
             if (tDict.ContainsKey(c))
             {
                 sDict[c] = sDict.GetValueOrDefault(c, 0) + 1;
-
                 if (sDict[c] == tDict[c])
                     actual++;
+            }
 
-                // descrease window size
-                while (i <= j && actual == required)
+            // check if we need to shrink the window
+            while (left <= right && actual == required)
+            {
+                // update answer
+                if (right - left < len)
                 {
-                    c = s[i];
-                    if (j - i + 1 < ans[2])
-                    {
-                        ans[0] = i;
-                        ans[1] = j;
-                        ans[2] = j - i + 1;
-                    }
-                    if (tDict.ContainsKey(c))
-                    {
-                        sDict[c]--;
-                        if (sDict[c] < tDict[c])
-                            actual--;
-                    }
-                    i++;
+                    start = left;
+                    len = right - left;
+                }
+
+                // d is the char to remove from the window
+                char d = s[left];
+                // decrease the window size
+                left++;
+                // update data in the window
+                if (tDict.ContainsKey(d))
+                {
+                    sDict[d]--;
+                    if (sDict[d] < tDict[d])
+                        actual--;
+
+                    if (sDict[d] == 0)
+                        sDict.Remove(d);
                 }
             }
-            j++;
         }
 
-        return ans[2] == int.MaxValue ? string.Empty : s.Substring(ans[0], ans[2]);
+        return len == int.MaxValue ? string.Empty : s.Substring(start, len);
     }
 }
