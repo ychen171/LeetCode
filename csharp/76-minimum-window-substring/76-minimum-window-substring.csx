@@ -19,7 +19,7 @@ public class Solution
         foreach (char c in t)
             tDict[c] = tDict.GetValueOrDefault(c, 0) + 1;
 
-        int required = tDict.Count;
+        int expected = tDict.Count;
         int actual = 0;
         int left = 0, right = 0;
         int start = 0, len = int.MaxValue;
@@ -39,7 +39,7 @@ public class Solution
             }
 
             // check if we need to shrink the window
-            while (left <= right && actual == required)
+            while (left <= right && actual == expected)
             {
                 // update answer
                 if (right - left < len)
@@ -55,12 +55,9 @@ public class Solution
                 // update data in the window
                 if (tDict.ContainsKey(d))
                 {
-                    sDict[d]--;
-                    if (sDict[d] < tDict[d])
+                    if (sDict[d] == tDict[d])
                         actual--;
-
-                    if (sDict[d] == 0)
-                        sDict.Remove(d);
+                    sDict[d]--;
                 }
             }
         }
