@@ -69,6 +69,42 @@ public class Solution
         
         return ans;
     }
+
+    // Sliding Window | Standard Template
+    // Time: O(n)
+    // Space: O(n)
+    public int LengthOfLongestSubstring2(string s) 
+    {
+        int n = s.Length;
+        // edge case
+        if (n < 2)
+            return n;
+        
+        var windowDict = new Dictionary<char, int>();
+        int left = 0, right = 0;
+        int ans = 0;
+        while (right < n)
+        {
+            char c = s[right];
+            right++;
+            // update data in window [left, right)
+            windowDict[c] = windowDict.GetValueOrDefault(c, 0) + 1;
+            
+            // check if we need to shrink window
+            while (windowDict[c] > 1)
+            {
+                char d = s[left];
+                left++;
+                // update data in window
+                windowDict[d]--;
+            }
+            
+            // update answer
+            ans = Math.Max(ans, right - left);
+        }
+        
+        return ans;
+    }
 }
 
 var s = new Solution();
