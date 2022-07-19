@@ -66,4 +66,57 @@ public class Solution
 
         return true;
     }
+
+    // Sliding Window | Standard Template
+    // Time: O(m + n)
+    public IList<int> FindAnagrams1(string s, string p) 
+    {
+        int m = s.Length; // source
+        int n = p.Length; // target
+        var result = new List<int>();
+        // edge case
+        if (m < n)
+            return result;
+        
+        var needDict = new Dictionary<char, int>();
+        foreach (var c in p)
+            needDict[c] = needDict.GetValueOrDefault(c, 0) + 1;
+        var windowDict = new Dictionary<char, int>();
+        int expected = needDict.Count;
+        int actual = 0;
+        
+        int left = 0, right = 0;
+        while (right < m)
+        {
+            char c = s[right];
+            right++;
+            // update data in window [left, right)
+            if (needDict.ContainsKey(c))
+            {
+                windowDict[c] = windowDict.GetValueOrDefault(c, 0) + 1;
+                if (windowDict[c] == needDict[c])
+                    actual++;
+            }
+            
+            // check if we need to shrink window
+            if (right - left == n)
+            {
+                // update result
+                if (actual == expected)
+                    result.Add(left);
+                    
+                char d = s[left];
+                left++;
+                // update data in window [left, right)
+                if (needDict.ContainsKey(d))
+                {
+                    if (windowDict[d] == needDict[d])
+                        actual--;
+                    windowDict[d]--;
+                }
+            }
+        }
+        
+        return result;
+    }
 }
