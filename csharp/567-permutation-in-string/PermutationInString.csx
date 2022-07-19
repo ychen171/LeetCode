@@ -131,19 +131,19 @@ public class Solution
     // Space: O(1)
     public bool CheckInclusion3(string s1, string s2)
     {
-        if (s1.Length > s2.Length) 
+        if (s1.Length > s2.Length)
             return false;
         // pre populate arrays for the starting position
         int[] arr1 = new int[26];
         int[] arr2 = new int[26];
-        for (int i=0; i<s1.Length; i++)
+        for (int i = 0; i < s1.Length; i++)
         {
             arr1[s1[i] - 'a']++;
-            arr2[s2[i] - 'a']++; 
+            arr2[s2[i] - 'a']++;
         }
         // move forward, increase count for the front, decrease count for the end
         // compare arr1 and arr2
-        for (int i=0; i< s2.Length-s1.Length; i++)
+        for (int i = 0; i < s2.Length - s1.Length; i++)
         {
             if (Compare(arr1, arr2))
                 return true;
@@ -153,7 +153,64 @@ public class Solution
 
         return Compare(arr1, arr2);
     }
+
+    // Sliding Window
+    // Time: O(n1 + n2)
+    // Space: O(n1 + n2)
+    public bool CheckInclusion4(string s1, string s2)
+    {
+        int n1 = s1.Length; // target
+        int n2 = s2.Length; // source
+        // edge case
+        if (n1 > n2)
+            return false;
+
+        var needDict = new Dictionary<char, int>();
+        foreach (var c in s1)
+            needDict[c] = needDict.GetValueOrDefault(c, 0) + 1;
+        var windowDict = new Dictionary<char, int>();
+        int expected = needDict.Count;
+        int actual = 0;
+
+        int left = 0, right = 0;
+        while (right < n2)
+        {
+            char c = s2[right];
+            right++;
+            // update data in window
+            if (needDict.ContainsKey(c))
+            {
+                windowDict[c] = windowDict.GetValueOrDefault(c, 0) + 1;
+                if (windowDict[c] == needDict[c])
+                    actual++;
+            }
+            
+            // check if we need to shrink window
+            if (right - left == n1)
+            {
+                // update answer
+                if (actual == expected)
+                    return true;
+
+                char d = s2[left];
+                left++;
+                // update data in window
+                if (needDict.ContainsKey(d))
+                {
+                    if (windowDict[d] == needDict[d])
+                        actual--;
+                    windowDict[d]--;
+
+                    if (windowDict[d] == 0)
+                        windowDict.Remove(d);
+                }
+            }
+        }
+
+        return false;
+    }
 }
 
 var s = new Solution();
 Console.WriteLine(s.CheckInclusion1("adc", "dcda"));
+Console.WriteLine(s.CheckInclusion4("trinitrophenylmethylnitramine", "dinitrophenylhydrazinetrinitrophenylmethylnitramine"));
