@@ -86,7 +86,8 @@ public class Solution
 
         int n = prices.Length;
         var dp = new int[n][];
-        Array.Fill(dp, new int[2]);
+        for (int i = 0; i < n; i++)
+            dp[i] = new int[2];
 
         for (int i = 0; i < n; i++)
         {
@@ -116,8 +117,10 @@ public class Solution
         int dp_i_1 = int.MinValue; // profit at ith day, with stock
         for (int i = 0; i < n; i++)
         {
-            dp_i_0 = Math.Max(dp_i_0, dp_i_1 + prices[i]);
-            dp_i_1 = Math.Max(dp_i_1, -prices[i]);
+            int dp_prev_0 = dp_i_0;
+            int dp_prev_1 = dp_i_1;
+            dp_i_0 = Math.Max(dp_prev_0, dp_prev_1 + prices[i]);
+            dp_i_1 = Math.Max(dp_prev_1, -prices[i]);
         }
 
         return dp_i_0;
