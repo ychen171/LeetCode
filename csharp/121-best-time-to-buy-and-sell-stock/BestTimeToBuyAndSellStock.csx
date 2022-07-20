@@ -113,17 +113,17 @@ public class Solution
     public int MaxProfit2(int[] prices)
     {
         int n = prices.Length;
-        int dp_i_0 = 0; // the profit at ith day, without stock 
-        int dp_i_1 = int.MinValue; // profit at ith day, with stock
+        int dp_0 = 0; // the profit at ith day, without stock 
+        int dp_1 = int.MinValue; // profit at ith day, with stock
         for (int i = 0; i < n; i++)
         {
-            int dp_prev_0 = dp_i_0;
-            int dp_prev_1 = dp_i_1;
-            dp_i_0 = Math.Max(dp_prev_0, dp_prev_1 + prices[i]);
-            dp_i_1 = Math.Max(dp_prev_1, -prices[i]);
+            int temp_0 = dp_0;
+            int temp_1 = dp_1;
+            dp_0 = Math.Max(temp_0, temp_1 + prices[i]);
+            dp_1 = Math.Max(temp_1, -prices[i]);
         }
 
-        return dp_i_0;
+        return dp_0;
     }
 }
 

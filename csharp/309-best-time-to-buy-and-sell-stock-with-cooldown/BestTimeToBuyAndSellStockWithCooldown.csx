@@ -44,6 +44,27 @@ public class Solution
         }
         return dp[n - 1][0];
     }
+
+    // DP Template Optimized
+    // Time: O(n)
+    // Space: O(1)
+    public int MaxProfit1(int[] prices)
+    {
+        int n = prices.Length;
+        int dp_0 = 0;
+        int dp_1 = int.MinValue;
+        int dp_prev_0 = 0;
+        for (int i = 0; i < n; i++)
+        {
+            int temp_0 = dp_0;
+            int temp_1 = dp_1;
+            dp_0 = Math.Max(temp_0, temp_1 + prices[i]);
+            dp_1 = Math.Max(temp_1, dp_prev_0 - prices[i]);
+            dp_prev_0 = temp_0;
+        }
+
+        return dp_0;
+    }
 }
 
 var s = new Solution();
