@@ -18,8 +18,8 @@ public class Solution
         if (head == null || head.next == null)
             return head;
         
-        var dummy1 = new ListNode(0);
-        var dummy2 = new ListNode(0);
+        var dummy1 = new ListNode();
+        var dummy2 = new ListNode();
         ListNode p1 = dummy1;
         ListNode p2 = dummy2;
         ListNode p = head;
@@ -35,14 +35,11 @@ public class Solution
                 p2.next = p;
                 p2 = p2.next;
             }
-            // break the link
-            ListNode nextTemp = p.next;
-            p.next = null;
-            p = nextTemp;
         }
         // dummy1 -> h1 ----> p1
         // dummy2 -> h2 ----> p2
         p1.next = dummy2.next;
+        p2.next = null;
 
         return dummy1.next;
     }
