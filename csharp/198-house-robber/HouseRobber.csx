@@ -39,6 +39,45 @@ public class Solution
 
         return table[nums.Length - 1];
     }
+
+    // DP Template
+    // Time: O(n)
+    // Space: O(n)
+    public int RobTemplate(int[] nums)
+    {
+        /*
+            states: dp[i][s], i: house index [0, n-1], s: 0 = not robbed, 1 = robbed
+            options: rob, skip
+            goal: Math.Max(dp[n-1][0], dp[n-1][1])
+
+            dp[i][0] = Math.Max(dp[i-1][1], dp[i-1][0])
+            dp[i][1] = Math.Max(dp[i-1][1], dp[i-1][0] + nums[i])
+
+            base case:
+            dp[-1][0] = 0
+            dp[-1][1] = int.MinValue
+        */
+
+        int n = nums.Length;
+        var dp = new int[n][];
+        for (int i = 0; i < n; i++)
+            dp[i] = new int[2];
+
+        for (int i = 0; i < n; i++)
+        {
+            // base case
+            if (i - 1 == -1)
+            {
+                dp[i][0] = 0;
+                dp[i][1] = nums[i];
+                continue;
+            }
+            dp[i][0] = Math.Max(dp[i - 1][1], dp[i - 1][0]);
+            dp[i][1] = Math.Max(dp[i - 1][1], dp[i - 1][0] + nums[i]);
+        }
+
+        return Math.Max(dp[n - 1][0], dp[n - 1][1]);
+    }
 }
 
 var nums1 = new int[] { 1, 2, 3, 1 };
