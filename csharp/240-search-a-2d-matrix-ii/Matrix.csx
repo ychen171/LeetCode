@@ -17,20 +17,23 @@ public class Solution
 
     public int Search(int[] nums, int target)
     {
+        int n = nums.Length;
         int left = 0;
-        int right = nums.Length - 1;
+        int right = n - 1;
 
-        while (left < right)
+        while (left <= right)
         {
             var mid = left + (right - left) / 2;
             if (nums[mid] < target)
                 left = mid + 1;
+            else if (nums[mid] > target)
+                right = mid - 1;
             else
-                right = mid;
+                return mid;
         }
 
-        if (nums[left] == target) return left;
-        return -1;
+        if (left == n || nums[left] != target) return -1;
+        return left;
     }
 
     // Divide and Conquer on row + Binary Search on col
@@ -105,17 +108,20 @@ public class Solution
     // Space: O(1)
     public bool SearchMatrix4(int[][] matrix, int target)
     {
-        int row = matrix.Length - 1;
-        int col = 0;
+        int m = matrix.Length;
+        int n = matrix[0].Length;
+        int r = m - 1;
+        int c = 0;
 
-        while (row > -1 && col < matrix[0].Length)
+        while (r >= 0 && c < n)
         {
-            if (matrix[row][col] == target)
-                return true;
-            else if (matrix[row][col] < target)
-                col++;
+            int num = matrix[r][c];
+            if (num > target)
+                r--;
+            else if (num < target)
+                c++;
             else
-                row--;
+                return true;
         }
 
         return false;
