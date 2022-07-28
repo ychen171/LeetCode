@@ -144,6 +144,44 @@ public class Solution
 
         return hare;
     }
+
+    public int BinarySearchLeftBound(int[] nums, int target)
+    {
+        int n = nums.Length;
+        int left = 0;
+        int right = n - 1;
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else if (nums[mid] > target)
+                right = mid - 1;
+            else
+                right = mid - 1;
+        }
+        if (left == n) return -1;
+        return left;
+    }
+
+    public int BinarySearchRightBound(int[] nums, int target)
+    {
+        int n = nums.Length;
+        int left = 0;
+        int right = n - 1;
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else if (nums[mid] > target)
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+        if (right == -1) return -1;
+        return right;
+    }
 }
 
 
@@ -161,10 +199,13 @@ Console.WriteLine(s.FindDuplicate7(new int[] { 1, 1 }));
 Console.WriteLine(s.FindDuplicate7(new int[] { 3, 3, 3, 5, 4, 1 }));
 Console.WriteLine();
 
+var ans1 = s.BinarySearchLeftBound(new int[] { 1, 2, 3, 3, 3, 5, 7 }, 3);
+Console.WriteLine("Binary Search Left Bound");
+Console.WriteLine(ans1);
 
-
-
-
+var ans2 = s.BinarySearchRightBound(new int[] { 1, 2, 3, 3, 3, 5, 7 }, 3);
+Console.WriteLine("Binary Search Right Bound");
+Console.WriteLine(ans2);
 
 
 
