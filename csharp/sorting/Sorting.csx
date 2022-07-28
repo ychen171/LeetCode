@@ -111,23 +111,23 @@ private int Partition(int[] nums, int lo, int hi)
     // pick the last element hi as a pivot
     // return the index of pivot value in the sorted array
     int pivot = nums[hi];
-    int i = lo; // temp pivot index
-    for (int j = lo; j < hi; j++)
+    int left = lo; // temp pivot index
+    for (int right = lo; right < hi; right++)
     {
-        if (nums[j] < pivot)
+        if (nums[right] < pivot)
         {
-            Swap(nums, i, j);
-            i++;
+            Swap(nums, left, right);
+            left++;
         }
     }
-    Swap(nums, i, hi);
-    return i;
+    Swap(nums, left, hi);
+    return left;
 }
-private void Swap(int[] nums, int i, int j)
+private void Swap(int[] nums, int left, int right)
 {
-    var temp = nums[i];
-    nums[i] = nums[j];
-    nums[j] = temp;
+    var temp = nums[left];
+    nums[left] = nums[right];
+    nums[right] = temp;
 }
 
 var numsArray = new int[] { 6, 5, 4, 3, 2, 1 };
