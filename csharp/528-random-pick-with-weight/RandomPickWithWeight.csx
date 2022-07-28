@@ -32,62 +32,49 @@ public class Solution
     {
         int index = 0;
         currSum = random.Next(0, totalSum); // [0, totalSum)
-        // linear search
-        // for (int i = 0; i < len + 1; i++)
-        // {
-        //     if (currSum < prefixSum[i])
-        //     {
-        //         index = i - 1;
-        //         break;
-        //     }
-        // }
         // binary search
-        index = BinarySearchRight(prefixSum, currSum);
+        index = BinarySearchRightBound(prefixSum, currSum);
 
         return index;
     }
 
-    public int BinarySearchRight(int[] nums, int target)
+    public int BinarySearchRightBound(int[] nums, int target)
     {
         int n = nums.Length;
         int left = 0;
         int right = n - 1;
-        // [..., mid-1][mid, ...]
-        while (left < right)
+
+        while (left <= right)
         {
-            int mid = left + (right - left + 1) / 2;
-            if (nums[mid] > target)
-            {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else if (nums[mid] > target)
                 right = mid - 1;
-            }
-            else // nums[mid] <= target
-            {
-                left = mid;
-            }
+            else // ==
+                return mid;
         }
 
-        return right; // nums[right] <= target
+        return right == -1 ? 0 : right;
     }
     public int BinarySearchLeft(int[] nums, int target)
     {
         int n = nums.Length;
         int left = 0;
         int right = n - 1;
-        // [..., mid][mid+1, ...]
-        while (left < right)
+
+        while (left <= right)
         {
             int mid = left + (right - left) / 2;
             if (nums[mid] < target)
-            {
                 left = mid + 1;
-            }
-            else // nums[mid] >= target
-            {
-                right = mid;
-            }
+            else if (nums[mid] > target)
+                right = mid - 1;
+            else
+                return mid;
         }
 
-        return left; // target <= nums[left]
+        return left == n ? n - 1 : left;
     }
 }
 
@@ -104,7 +91,7 @@ int target;
 Console.WriteLine("Testing Binary Search Right Most");
 for (target = 0; target < 4; target++)
 {
-    Console.WriteLine(sln.BinarySearchRight(nums, target));
+    Console.WriteLine(sln.BinarySearchRightBound(nums, target));
 }
 Console.WriteLine("Testing Binary Search Left Most");
 for (target = 0; target < 4; target++)
