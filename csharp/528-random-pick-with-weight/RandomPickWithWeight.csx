@@ -57,7 +57,7 @@ public class Solution
 
         return right == -1 ? 0 : right;
     }
-    public int BinarySearchLeft(int[] nums, int target)
+    public int BinarySearchLeftBound(int[] nums, int target)
     {
         int n = nums.Length;
         int left = 0;
@@ -96,5 +96,5 @@ for (target = 0; target < 4; target++)
 Console.WriteLine("Testing Binary Search Left Most");
 for (target = 0; target < 4; target++)
 {
-    Console.WriteLine(sln.BinarySearchLeft(nums, target));
+    Console.WriteLine(sln.BinarySearchLeftBound(nums, target));
 }
