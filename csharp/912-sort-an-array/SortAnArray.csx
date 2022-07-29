@@ -32,7 +32,7 @@ public class Solution
                 merged[k] = nums[j++];
             else if (j == hi + 1)
                 merged[k] = nums[i++];
-            else if (nums[i] < nums[j])
+            else if (nums[i] <= nums[j])
                 merged[k] = nums[i++];
             else
                 merged[k] = nums[j++];
@@ -79,3 +79,21 @@ public class Solution
         nums[right] = temp;
     }
 }
+
+public static void Print(int[] nums)
+{
+    var sb = new StringBuilder();
+    sb.Append('[');
+    foreach (var num in nums)
+        sb.Append($"{num}, ");
+
+    sb.Remove(sb.Length - 2, 2);
+    sb.Append(']');
+    Console.WriteLine(sb.ToString());
+}
+
+var s = new Solution();
+var nums = new int[] { 3, 5, 2, 1, 6, 4, 4 };
+Print(nums);
+s.MergeSort(nums, 0, nums.Length - 1);
+Print(nums);

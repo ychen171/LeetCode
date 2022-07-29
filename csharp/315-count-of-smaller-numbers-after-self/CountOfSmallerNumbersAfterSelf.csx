@@ -110,4 +110,70 @@ public class Solution
 
         return result;
     }
+
+    // Merge Sort
+    // Time: O(n log n)
+    // Space: O(n)
+    IList<int> result;
+    public IList<int> CountSmaller2(int[] nums)
+    {
+        int n = nums.Length;
+        result = new List<int>();
+        var pairs = new KeyValuePair<int, int>[n];
+        for (int i = 0; i < n; i++)
+        {
+            result.Add(0);
+            pairs[i] = new KeyValuePair<int, int>(i, nums[i]);
+        }
+
+        MergeSort(pairs, 0, n - 1);
+
+        return result;
+    }
+
+    public void MergeSort(KeyValuePair<int, int>[] pairs, int lo, int hi)
+    {
+        // base case
+        if (lo >= hi)
+            return;
+
+        // recursive case
+        int mid = lo + (hi - lo) / 2;
+        MergeSort(pairs, lo, mid);
+        MergeSort(pairs, mid + 1, hi);
+        Merge(pairs, lo, mid, hi);
+    }
+
+    public void Merge(KeyValuePair<int, int>[] pairs, int lo, int mid, int hi)
+    {
+        int len = hi - lo + 1;
+        var merged = new KeyValuePair<int, int>[len];
+        // [lo, mid] [mid + 1, hi]
+        int i = lo, j = mid + 1;
+        for (int k = 0; k < len; k++)
+        {
+            if (i == mid + 1)
+                merged[k] = pairs[j++];
+            else if (j == hi + 1)
+            {
+                merged[k] = pairs[i++];
+                result[merged[k].Key] += j - mid - 1;
+            }
+            else if (pairs[i].Value <= pairs[j].Value)
+            {
+                merged[k] = pairs[i++];
+                result[merged[k].Key] += j - mid - 1;
+            }
+            else
+                merged[k] = pairs[j++];
+        }
+
+        for (int k = 0; k < len; k++)
+            pairs[k + lo] = merged[k];
+    }
 }
+
+var s = new Solution();
+var nums = new int[] { 1, 3, 5, 2, 4, 6, 7 };
+var result = s.CountSmaller2(nums);
+Console.WriteLine(result);
