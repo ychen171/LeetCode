@@ -18,36 +18,24 @@ public class Codec
         var curr = root;
         var queue = new Queue<TreeNode>();
         queue.Enqueue(curr);
-        var isLast = false;
-        // if it reaches the final level, stop the loop
-        while (!isLast)
+        while (queue.Count != 0)
         {
-            var levelLength = queue.Count;
-            isLast = true;
+            var levelLen = queue.Count;
             // iterate through nodes in the same level, add value as string, including null
-            for (int i = 0; i < levelLength; i++)
+            for (int i = 0; i < levelLen; i++)
             {
                 curr = queue.Dequeue();
                 // add null, but don't add child
                 if (curr == null)
                 {
                     sb.Append("null,");
+                    continue;
                 }
-                else
-                {
-                    // Enqueue left child and right child even if it is null
-                    queue.Enqueue(curr.left);
-                    queue.Enqueue(curr.right);
-                    // add value,
-                    sb.Append(curr.val + ",");
-                    // if there is any non-null child, this level is not the last level
-                    if (curr.left != null || curr.right != null)
-                        isLast = false;
-                }
+                sb.Append(curr.val).Append(',');
+                // Enqueue left child and right child even if it is null
+                queue.Enqueue(curr.left);
+                queue.Enqueue(curr.right);
             }
-            // reach the end of the level, remove the trailing "," and append ";"
-            sb.Remove(sb.Length - 1, 1);
-            sb.Append(";");
         }
         return sb.ToString();
     }
@@ -56,41 +44,98 @@ public class Codec
     public TreeNode deserialize(string data)
     {
         if (string.IsNullOrEmpty(data)) return null;
-        // split data into multiple level strings
-        List<string> levelStringList = data.Split(";").ToList();
-        // first item in the first level string is root
-        var rootLevelString = levelStringList[0];
-        var items = rootLevelString.Split(",").ToList();
-        if (items.Count != 1) return null;
+        var items = data.Split(',');
+        if (items[0] == "null") return null;
 
         var queue = new Queue<TreeNode>();
-        int rootVal = int.Parse(items[0]);
-        TreeNode root = new TreeNode(rootVal);
+        var root = new TreeNode(int.Parse(items[0]));
         queue.Enqueue(root);
-        // iterate through the rest of the level strings
-        for (int i = 1; i < levelStringList.Count - 1; i++)
+        int index = 1;
+        while (index < items.Length && queue.Count != 0)
         {
-            // split level string into multiple items at the same level
-            items = levelStringList[i].Split(",").ToList();
-            TreeNode parent = null;
-            for (int j = 0; j < items.Count; j++)
+            var curr = queue.Dequeue();
+            string leftStr = items[index++];
+            if (leftStr == "null")
+                curr.left = null;
+            else
             {
-                // Dequeue one node for every two new nodes
-                if (j % 2 == 0)
-                    parent = queue.Dequeue();
-                // new node can be null
-                var node = items[j] == "null" ? null : new TreeNode(int.Parse(items[j]));
-                // continue the loop if new node is null
-                if (node == null) continue;
-                // only Enqueue non-null new node
-                queue.Enqueue(node);
-                // connections
-                if (j % 2 == 0)
-                    parent.left = node;
-                else
-                    parent.right = node;
+                var leftNode = new TreeNode(int.Parse(leftStr));
+                curr.left = leftNode;
+                queue.Enqueue(leftNode);
+            }
+            string rightStr = items[index++];
+            if (rightStr == "null")
+                curr.right = null;
+            else
+            {
+                var rightNode = new TreeNode(int.Parse(rightStr));
+                curr.right = rightNode;
+                queue.Enqueue(rightNode);
             }
         }
+        return root;
+    }
+}
+
+public class CodecR
+{
+    // Inorder Traversal | Recursion
+    // Time: O(n)
+    // Space: O(h)
+    public string serialize(TreeNode root)
+    {
+        var sb = new StringBuilder();
+        SerializeInorder(root, sb);
+        return sb.ToString();
+    }
+
+    public void SerializeInorder(TreeNode root, StringBuilder sb)
+    {
+        // base case
+        if (root == null)
+        {
+            sb.Append(-1001);
+            sb.Append(',');
+            return;
+        }
+
+        // recursive case
+        sb.Append(root.val);
+        sb.Append(',');
+        SerializeInorder(root.left, sb);
+        SerializeInorder(root.right, sb);
+    }
+
+    // Inorder Traversal | Recursion + Queue
+    // Time: O(n)
+    // Space: O(n)
+    public TreeNode deserialize(string data)
+    {
+        if (string.IsNullOrEmpty(data))
+            return null;
+
+        string[] items = data.Split(',');
+        var queue = new Queue<string>();
+        foreach (var item in items)
+            queue.Enqueue(item);
+
+        return DeserializeInorder(queue);
+    }
+
+    public TreeNode DeserializeInorder(Queue<string> queue)
+    {
+        // base case
+        if (queue.Count == 0)
+            return null;
+
+        // recursive case
+        var rootVal = int.Parse(queue.Dequeue());
+        if (rootVal == -1001)
+            return null;
+        var root = new TreeNode(rootVal);
+        root.left = DeserializeInorder(queue);
+        root.right = DeserializeInorder(queue);
+
         return root;
     }
 }
@@ -119,11 +164,12 @@ node4.right = node7;
 var ser = new Codec();
 var deser = new Codec();
 
-var longString = ser.serialize(node1);
-Console.WriteLine(longString);
-var root = deser.deserialize(longString);
-var result = root;
+// var longString = ser.serialize(node1);
+// Console.WriteLine(longString);
+// var root = deser.deserialize(longString);
+// var result = root;
 
-
+var codecR = new CodecR();
+Console.WriteLine(codecR.serialize(node1));
 
 
