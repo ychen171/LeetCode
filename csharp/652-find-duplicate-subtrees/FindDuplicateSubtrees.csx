@@ -15,8 +15,8 @@ public class TreeNode
 public class Solution
 {
     // Postorder Bottom-up Recursion + Dcitionary + Key Serialization
-    // Time: O(n^2)
-    // Space: O()
+    // Time: O(n*h), O(n log n) in average, O(n^2) in worst
+    // Space: O(n)
     public IList<TreeNode> FindDuplicateSubtrees(TreeNode root)
     {
         // postorder traversal
