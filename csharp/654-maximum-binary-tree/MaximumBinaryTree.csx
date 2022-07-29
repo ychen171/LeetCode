@@ -15,7 +15,7 @@ public class TreeNode
 public class Solution
 {
     // Recursion | Bottom-up | Two Pointers 
-    // Time: O(n^2)
+    // Time: O(n*h), O(n log n) in average , O(n^2) in worst
     // Space: O(n)
     public TreeNode ConstructMaximumBinaryTree(int[] nums)
     {
