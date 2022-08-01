@@ -63,22 +63,18 @@ public class Solution
 
     public TreeNode LowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q)
     {
-        return LCA(root, p, q);
-    }
-    private TreeNode LCA(TreeNode curr, TreeNode p, TreeNode q)
-    {
-        if (curr == null) return null;
-        if (curr == p || curr == q) return curr;
-        TreeNode left = LCA(curr.left, p, q);
-        TreeNode right = LCA(curr.right, p, q);
-        if (left != null && right != null)
-            return curr;
-        else if (left != null)
-            return left;
-        else if (right != null)
-            return right;
-        else
+        // base case 
+        if (root == null)
             return null;
+        if (root.val == p.val || root.val == q.val)
+            return root;
+
+        // recursive case
+        var left = LowestCommonAncestor2(root.left, p, q);
+        var right = LowestCommonAncestor2(root.right, p, q);
+        if (left != null && right != null)
+            return root;
+        return left ?? right;
     }
 
     // Iterative using parent pointers, dictionary, stack and set (DFS, backtracking)
@@ -145,7 +141,7 @@ public class Solution
         {
             if (qSet.Contains(curr))
                 return curr;
-            
+
             curr = parentDict[curr];
         }
 
