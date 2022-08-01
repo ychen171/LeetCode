@@ -21,7 +21,7 @@ public class Solution
         while (queue.Count != 0)
         {
             curr = queue.Dequeue();
-            if ((curr.val - p.val) * (curr.val - q.val) <=0)
+            if ((curr.val - p.val) * (curr.val - q.val) <= 0)
                 return curr;
             if (curr.left != null) queue.Enqueue(curr.left);
             if (curr.right != null) queue.Enqueue(curr.right);
@@ -51,14 +51,25 @@ public class Solution
     // Space: O(N)
     public TreeNode LowestCommonAncestorR(TreeNode root, TreeNode p, TreeNode q)
     {
-        if (root == null) return null;
-        if ((root.val - p.val) * (root.val - q.val) <= 0 ) return root;
-        if (root.val < p.val && root.val < q.val)
-            root = LowestCommonAncestorR(root.right, p, q);
-        else if (root.val > p.val && root.val > q.val)
-            root = LowestCommonAncestorR(root.left, p, q);
-        
-        return root;
+        int pVal = Math.Min(p.val, q.val);
+        int qVal = Math.Max(p.val, q.val);
+        return LCA(root, pVal, qVal);
+    }
+
+    private TreeNode LCA(TreeNode root, int pVal, int qVal)
+    {
+        // pVal < qVal
+        // base case
+        if (root == null)
+            return null;
+        if (root.val >= pVal && root.val <= qVal)
+            return root;
+
+        // recursive case
+        if (root.val > qVal)
+            return LCA(root.left, pVal, qVal);
+        else
+            return LCA(root.right, pVal, qVal);
     }
 }
 
