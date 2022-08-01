@@ -51,30 +51,35 @@ public class Solution
         return allNodes;
     }
 
-    // Memoizied Recursion
-    // Time:
-    // Space: 
+    // DP | Memoization | Recursion
+    // Time: O(n^2)
+    // Space: O(n^2)
+    List<TreeNode>[][] memo;
     public IList<TreeNode> GenerateTrees2(int n)
     {
-        return GenerateTreesMemo(1, n, new Dictionary<string, List<TreeNode>>());
+        memo = new List<TreeNode>[n + 1][];
+        for (int i = 0; i < n + 1; i++)
+            memo[i] = new List<TreeNode>[n + 1];
+        return GenerateTreesMemo(1, n);
     }
-    public List<TreeNode> GenerateTreesMemo(int start, int end, Dictionary<string, List<TreeNode>> memo)
+    public List<TreeNode> GenerateTreesMemo(int start, int end)
     {
-        var key = $"{start},{end}";
-        if (memo.ContainsKey(key)) return memo[key];
-
-        var allNodes = new List<TreeNode>();
+        // base case
         if (start > end)
         {
-            allNodes.Add(null);
-            return allNodes;
+            return new List<TreeNode>() { null };
         }
-        // pick up a root
+
+        if (memo[start][end] != null)
+            return memo[start][end];
+
+        // recursive case
+        var allNodes = new List<TreeNode>();
         for (int i = start; i <= end; i++)
         {
             // all possible left subtrees if i is choosen to be a root
-            var leftNodes = GenerateTreesMemo(start, i - 1, memo);
-            var rightNodes = GenerateTreesMemo(i + 1, end, memo);
+            var leftNodes = GenerateTreesMemo(start, i - 1);
+            var rightNodes = GenerateTreesMemo(i + 1, end);
             // connect left and right trees to the root i
             foreach (var leftNode in leftNodes)
             {
@@ -87,7 +92,7 @@ public class Solution
                 }
             }
         }
-        memo[key] = allNodes;
+        memo[start][end] = allNodes;
         return allNodes;
     }
 }
