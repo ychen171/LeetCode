@@ -19,42 +19,48 @@ public interface NestedInteger
 
 public class NestedIterator
 {
-    private Stack<NestedInteger> stack;
+    IList<int> intList;
+    int index;
+    // Time: O(N + L)
+    // Space: O(N + H)
     public NestedIterator(IList<NestedInteger> nestedList)
     {
-        stack = new Stack<NestedInteger>();
-        for (int i = nestedList.Count - 1; i >= 0; i--)
-            stack.Push(nestedList[i]);
+        intList = new List<int>();
+        index = 0;
+        foreach (var node in nestedList)
+        {
+            Flatten(node, intList);
+        }
+    }
+    
+    private void Flatten(NestedInteger node, IList<int> intList)
+    {
+        // base case
+        if (node.IsInteger())
+        {
+            intList.Add(node.GetInteger());
+            return;
+        }
+
+        // recursive case
+        foreach (var child in node.GetList())
+        {
+            Flatten(child, intList);
+        }
     }
 
+    // Time: O(1)
     public bool HasNext()
     {
-        // check if there are integers left by getting one onto the top of stack
-        MakeStackTopAnInteger();
-        // if there are any intergers remaining, one will be on the top of stack,
-        // and therefore the stack can't possibly be empty. 
-        return stack.Count != 0;
+        return index < intList.Count;
     }
 
+    // Time: O(1)
     public int Next()
     {
         if (!HasNext())
             return -1;
-
-        return stack.Pop().GetInteger();
-    }
-
-    private void MakeStackTopAnInteger()
-    {
-        // while there are items remaining on the deque and the front of deque is a list, keep unpacking
-        while (stack.Count != 0 && !stack.Peek().IsInteger())
-        {
-            var nestedList = stack.Pop().GetList();
-            for (int i = nestedList.Count - 1; i >= 0; i--)
-            {
-                stack.Push(nestedList[i]);
-            }
-        }
+        return intList[index++];
     }
 }
 
