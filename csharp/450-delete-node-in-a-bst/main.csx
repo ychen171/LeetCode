@@ -16,6 +16,55 @@ public class Solution
 {
     // Time: O(H): O(log N) in average, O(N) in worst
     // Space: O(1)
+    public TreeNode DeleteNodeR(TreeNode root, int key)
+    {
+        // base case
+        if (root == null)
+            return null;
+        // recursive case
+        if (root.val == key) // delete
+        {
+            // case 1: it is leaf node
+            // case 2: it has one child
+            // case 3: it has two children
+            if (root.left == null && root.right == null)
+                root = null;
+            else if (root.left == null)
+                root = root.right;
+            else if (root.right == null)
+                root = root.left;
+            else
+            {
+                // find successor
+                var successor = FindSuccessor(root);
+                // delete successor
+                root.right = DeleteNodeR(root.right, successor.val);
+                // replace it using successor
+                successor.left = root.left;
+                successor.right = root.right;
+                root = successor;
+            }
+        }
+        else if (root.val > key)
+        {
+            root.left = DeleteNodeR(root.left, key);
+        }
+        else
+        {
+            root.right = DeleteNodeR(root.right, key);
+        }
+
+        return root;
+    }
+    private TreeNode FindSuccessor(TreeNode root)
+    {
+        if (root == null) return null;
+        TreeNode successor = root.right;
+        while (successor.left != null)
+            successor = successor.left;
+        return successor;
+    }
+
     public TreeNode DeleteNode(TreeNode root, int key)
     {
         if (root == null) return null;
@@ -65,7 +114,7 @@ public class Solution
                 else parent.right = curr.right;
             }
             // the node to delete has two children
-            else 
+            else
             {
                 // go to the right subtree and find the leftmost node
                 parent = curr;
