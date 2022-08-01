@@ -2,7 +2,9 @@ public class Solution
 {
     public int[] SortArray(int[] nums)
     {
-        MergeSort(nums, 0, nums.Length - 1);
+        Shuffle(nums);
+        Quicksort(nums, 0, nums.Length - 1);
+        // MergeSort(nums, 0, nums.Length - 1);
         return nums;
     }
 
@@ -56,20 +58,33 @@ public class Solution
 
     public int Partition(int[] nums, int lo, int hi)
     {
-        int pivot = nums[hi];
-        int left = lo;
-        while (nums[left] < pivot)
-            left++;
-        for (int right = left; right <= hi; right++)
+        int pivot = nums[lo];
+        int left = lo + 1, right = hi;
+        // [lo, left-1] <= pivot && [right+1, hi] > pivot
+        while (left <= right)
         {
-            if (nums[right] < pivot)
-            {
-                Swap(nums, left, right);
+            while (left < hi && nums[left] <= pivot)
                 left++;
-            }
+            while (right > lo && nums[right] > pivot)
+                right--;
+            if (left >= right)
+                break;
+            Swap(nums, left, right);
         }
-        Swap(nums, left, hi);
-        return left;
+        Swap(nums, lo, right);
+
+        return right;
+    }
+
+    public void Shuffle(int[] nums)
+    {
+        var rand = new Random();
+        int n = nums.Length;
+        for (int i = 0; i < n; i++)
+        {
+            int r = rand.Next(i, n);
+            Swap(nums, i, r);
+        }
     }
 
     public void Swap(int[] nums, int left, int right)
