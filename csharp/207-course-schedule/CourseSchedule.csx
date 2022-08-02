@@ -124,25 +124,24 @@ public class Solution
         return !hasCycle && visited.Count == numCourses;
     }
 
-    private void DFS(Dictionary<int, List<int>> graph, HashSet<int> visited, HashSet<int> path, int course)
+    private void DFS(Dictionary<int, List<int>> graph, HashSet<int> visited, HashSet<int> onPath, int course)
     {
         // base case
-        if (path.Contains(course))
+        if (onPath.Contains(course))
             hasCycle = true;
         if (visited.Contains(course) || hasCycle)
             return;
 
-        visited.Add(course);
-        path.Add(course);
+        onPath.Add(course);
         // recursive case
         if (graph.ContainsKey(course))
         {
-            foreach (var nei in graph[course])
+            foreach (var pre in graph[course])
             {
-                DFS(graph, visited, path, nei);
+                DFS(graph, visited, onPath, pre);
             }
         }
-
-        path.Remove(course);
+        onPath.Remove(course);
+        visited.Add(course);
     }
 }
