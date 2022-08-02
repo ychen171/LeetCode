@@ -12,9 +12,9 @@ public class Solution
         // 0 ---> 1
         //   <---         cyclic
 
-        // build graph and incoming edge count for each node
+        // build graph and indegree count for each node
         var graph = new Dictionary<int, List<int>>();
-        var incomingCount = new Dictionary<int, int>();
+        var indegree = new Dictionary<int, int>();
         foreach (var pair in prerequisites)
         {
             var des = pair[0];
@@ -23,14 +23,14 @@ public class Solution
                 graph[src] = new List<int>();
             graph[src].Add(des);
 
-            incomingCount[des] = incomingCount.GetValueOrDefault(des, 0) + 1;
+            indegree[des] = indegree.GetValueOrDefault(des, 0) + 1;
         }
 
         // add all entry nodes into queue
         var queue = new Queue<int>();
         for (int i = 0; i < numCourses; i++)
         {
-            if (incomingCount.ContainsKey(i))
+            if (indegree.ContainsKey(i))
                 continue;
             queue.Enqueue(i);
         }
@@ -45,8 +45,8 @@ public class Solution
                 continue;
             foreach (int nei in graph[curr])
             {
-                incomingCount[nei]--; // curr is finished, decrease the incoming count for nei
-                if (incomingCount[nei] == 0) // all prerequisites are finished
+                indegree[nei]--; // curr is finished, decrease the incoming count for nei
+                if (indegree[nei] == 0) // all prerequisites are finished
                 {
                     queue.Enqueue(nei);
                 }
@@ -88,7 +88,7 @@ public class Solution
             return true;
         if (visited.Contains(course)) // detect a cycle
             return false;
-        
+
         visited.Add(course);
         foreach (var pre in prereqDict[course])
         {
@@ -97,5 +97,52 @@ public class Solution
         }
         prereqDict.Remove(course);
         return true;
+    }
+
+    // DFS
+    // Time: O(V + E)
+    // Space: O(V + E)
+    bool hasCycle = false;
+    public bool CanFinish2(int numCourses, int[][] prerequisites)
+    {
+        // build graph
+        var graph = new Dictionary<int, List<int>>();
+        foreach (var pair in prerequisites)
+        {
+            int curr = pair[0];
+            int pre = pair[1];
+            if (!graph.ContainsKey(curr))
+                graph[curr] = new List<int>();
+            graph[curr].Add(pre);
+        }
+
+        // DFS
+        var visited = new HashSet<int>();
+        for (int course = 0; course < numCourses; course++)
+            DFS(graph, visited, new HashSet<int>(), course);
+
+        return !hasCycle && visited.Count == numCourses;
+    }
+
+    private void DFS(Dictionary<int, List<int>> graph, HashSet<int> visited, HashSet<int> path, int course)
+    {
+        // base case
+        if (path.Contains(course))
+            hasCycle = true;
+        if (visited.Contains(course) || hasCycle)
+            return;
+
+        visited.Add(course);
+        path.Add(course);
+        // recursive case
+        if (graph.ContainsKey(course))
+        {
+            foreach (var nei in graph[course])
+            {
+                DFS(graph, visited, path, nei);
+            }
+        }
+
+        path.Remove(course);
     }
 }
