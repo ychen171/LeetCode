@@ -8,7 +8,7 @@ public class Solution
         // build the graph and incoming edge count
         // [a,b]       b -----> a
         var graph = new Dictionary<int, List<int>>();
-        var incomingCount = new Dictionary<int, int>();
+        var indegree = new Dictionary<int, int>();
         foreach (var pair in prerequisites)
         {
             var a = pair[0];
@@ -17,7 +17,7 @@ public class Solution
                 graph[b] = new List<int>();
             graph[b].Add(a);
 
-            incomingCount[a] = incomingCount.GetValueOrDefault(a, 0) + 1;
+            indegree[a] = indegree.GetValueOrDefault(a, 0) + 1;
         }
 
         // BFS to sort node
@@ -25,7 +25,7 @@ public class Solution
         // add all entry nodes
         for (int i = 0; i < numCourses; i++)
         {
-            if (!incomingCount.ContainsKey(i))
+            if (!indegree.ContainsKey(i))
             {
                 queue.Enqueue(i);
             }
@@ -41,9 +41,9 @@ public class Solution
             foreach (int nei in graph[curr])
             {
                 // visit one edge, mark it by reducing the count
-                incomingCount[nei]--;
+                indegree[nei]--;
                 // all incoming edges are visited, meaning all prerequisites are meet
-                if (incomingCount[nei] == 0) 
+                if (indegree[nei] == 0) 
                 {
                     queue.Enqueue(nei);
                 }

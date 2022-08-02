@@ -21,37 +21,38 @@ public class Solution
         var result = new List<int>();
         for (int i = 0; i < numCourses; i++)
         {
-            if (!DFS(prereqDict, cycleSet, visitSet, i, result))
+            if (!CanFinish(prereqDict, cycleSet, visitSet, i, result))
                 return new int[] { };
         }
 
         return result.ToArray();
     }
 
-    private bool DFS(Dictionary<int, List<int>> prereqDict, HashSet<int> cycleSet, HashSet<int> visitSet, int course, List<int> result)
+    // return whether or not the course can be finished
+    private bool CanFinish(Dictionary<int, List<int>> prereqDict, HashSet<int> onPath, HashSet<int> visited, int course, List<int> result)
     {
         // base case
-        if (cycleSet.Contains(course))
+        if (onPath.Contains(course)) // found cycle
             return false;
-        if (visitSet.Contains(course))
+        if (visited.Contains(course)) // it is finished
             return true;
 
         // a course has 3 possible states:
         // visited -> course has been added to the result list
-        // visiting -> course has not been added to the result list, but added to cycle set
-        // univisited -> course has not been added to the result list or cycle set
+        // visiting -> course has not been added to the result list, but added to onPath set
+        // univisited -> course has not been added to the result list or onPath set
 
-        cycleSet.Add(course);
+        onPath.Add(course);
         if (prereqDict.ContainsKey(course))
         {
             foreach (var pre in prereqDict[course])
             {
-                if (!DFS(prereqDict, cycleSet, visitSet, pre, result))
+                if (!CanFinish(prereqDict, onPath, visited, pre, result))
                     return false;
             }
         }
-        cycleSet.Remove(course);
-        visitSet.Add(course);
+        onPath.Remove(course);
+        visited.Add(course);
         result.Add(course);
         return true;
     }
