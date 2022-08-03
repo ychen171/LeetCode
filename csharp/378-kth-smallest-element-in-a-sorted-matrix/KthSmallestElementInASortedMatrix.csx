@@ -118,4 +118,76 @@ public class Solution
 
         return count;
     }
+
+    // Quickselect
+    // Time: O(n^2 * log n)
+    // Space: O(n^2)
+    public int KthSmallest3(int[][] matrix, int k)
+    {
+        int n = matrix.Length;
+        int size = n * n;
+        var nums = new int[size];
+        int index = 0;
+        for (int r = 0; r < n; r++)
+        {
+            for (int c = 0; c < n; c++)
+            {
+                nums[index] = matrix[r][c];
+                index++;
+            }
+        }
+
+        int lo = 0, hi = size - 1;
+        k = k - 1;
+        while (lo <= hi)
+        {
+            int pivotIndex = Partition(nums, lo, hi);
+            if (pivotIndex < k)
+                lo = pivotIndex + 1;
+            else if (pivotIndex > k)
+                hi = pivotIndex - 1;
+            else
+                return nums[pivotIndex];
+        }
+
+        return -1;
+    }
+
+    private void Shuffle(int[] nums)
+    {
+        int n = nums.Length;
+        var rand = new Random();
+        for (int i = 0; i < n; i++)
+        {
+            var r = rand.Next(i, n);
+            Swap(nums, i, r);
+        }
+    }
+
+    private void Swap(int[] nums, int left, int right)
+    {
+        var temp = nums[left];
+        nums[left] = nums[right];
+        nums[right] = temp;
+    }
+
+    private int Partition(int[] nums, int lo, int hi)
+    {
+        int pivot = nums[lo];
+        // [lo, left-1] <= pivot && [right+1, hi] > pivot
+        int left = lo + 1, right = hi;
+        while (left <= right)
+        {
+            while (left < hi && nums[left] <= pivot)
+                left++;
+            while (right > lo && nums[right] > pivot)
+                right--;
+            if (left >= right)
+                break;
+            Swap(nums, left, right);
+        }
+        Swap(nums, lo, right);
+
+        return right;
+    }
 }
