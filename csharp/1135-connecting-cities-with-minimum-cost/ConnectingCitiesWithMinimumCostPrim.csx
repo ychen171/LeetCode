@@ -25,8 +25,35 @@ public class Solution
         if (graph.Count != n)
             return -1;
         // prim to build MST
-        var prim = new Prim(graph);
-        return prim.AllConnected() ? prim.WeightSum : -1;
+        // var prim = new Prim(graph);
+        // return prim.AllConnected() ? prim.WeightSum : -1;
+
+        var pq = new PriorityQueue<int[], int>(); // <[node, weight], weight>
+        var inMST = new HashSet<int>();
+        int cost = 0;
+        // start by adding node 1 into empty MST
+        pq.Enqueue(new int[] { 1, 0 }, 0);
+        while (pq.Count != 0)
+        {
+            var curr = pq.Dequeue();
+            int node = curr[0];
+            int weight = curr[1];
+            if (inMST.Contains(node))
+                continue;
+            cost += weight;
+            inMST.Add(node);
+            if (graph.ContainsKey(node))
+            {
+                foreach (var nei in graph[node])
+                {
+                    if (inMST.Contains(nei[0]))
+                        continue;
+                    pq.Enqueue(nei, nei[1]);
+                }
+            }
+        }
+
+        return inMST.Count == n ? cost : -1;
     }
 
 }
