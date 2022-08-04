@@ -1,4 +1,4 @@
-public class Solution1
+public class Solution
 {
     // Kruskal's Algorithm | Sorting + Union Find
     // Time: O(n^2 * log n)
@@ -86,54 +86,5 @@ public class UnionFind
         int rootP = Find(p);
         int rootQ = Find(q);
         return rootP == rootQ;
-    }
-}
-
-
-public class Solution2
-{
-    // Prim's Algorithm
-    // Graph + Priority Queue
-    // Time: O(n^2 * log n)
-    // Space: O(n^2)
-    public int MinCostConnectPoints2(int[][] points)
-    {
-        int n = points.Length;
-
-        var pq = new PriorityQueue<int[], int>();  // <[Cost, NodeToConnect], Cost>
-        bool[] visited = new bool[n];
-
-        pq.Enqueue(new int[] { 0, 0 }, 0); // <[0 cost, node at index 0], 0 cost>
-        int mstCost = 0;
-        int edgesUsed = 0;
-
-        while (edgesUsed < n)
-        {
-            var curr = pq.Dequeue();
-            int weight = curr[0];
-            int index = curr[1];
-            int[] currNode = points[index];
-
-            if (visited[index])
-                continue;
-
-            visited[index] = true;
-            mstCost += weight;
-            edgesUsed++;
-
-            // if neighbor node is not in MST, then edge from curr node to neighbor node
-            // can be added into the priority queue
-            for (int i = 0; i < n; i++)
-            {
-                if (visited[i])
-                    continue;
-
-                int[] neiNode = points[i];
-                int neiWeight = Math.Abs(currNode[0] - neiNode[0]) + Math.Abs(currNode[1] - neiNode[1]);
-                pq.Enqueue(new int[] { neiWeight, i }, neiWeight);
-            }
-        }
-
-        return mstCost;
     }
 }
