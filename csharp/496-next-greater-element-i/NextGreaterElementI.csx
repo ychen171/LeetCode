@@ -39,4 +39,39 @@ public class Solution
 
         return ans;
     }
+
+    // Stack + Dictioanry
+    // Time: O(m+n)
+    // Space: O(m+n)
+    public int[] NextGreaterElement1(int[] nums1, int[] nums2)
+    {
+        int m = nums1.Length;
+        int n = nums2.Length;
+        var greater = NextGreaterElement(nums2);
+        var greaterDict = new Dictionary<int, int>();
+        for (int i = 0; i < n; i++)
+            greaterDict[nums2[i]] = greater[i];
+
+        var result = new int[m];
+        for (int i = 0; i < m; i++)
+            result[i] = greaterDict[nums1[i]];
+
+        return result;
+    }
+
+    public int[] NextGreaterElement(int[] nums)
+    {
+        int n = nums.Length;
+        var result = new int[n];
+        var stack = new Stack<int>();
+        for (int i = n - 1; i >= 0; i--)
+        {
+            while (stack.Count != 0 && stack.Peek() <= nums[i])
+                stack.Pop();
+            result[i] = stack.Count == 0 ? -1 : stack.Peek();
+            stack.Push(nums[i]);
+        }
+
+        return result;
+    }
 }
