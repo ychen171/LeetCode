@@ -35,4 +35,24 @@ public class Solution
 
         return ans;
     }
+
+
+    public int[] NextGreaterElements1(int[] nums)
+    {
+        int n = nums.Length;
+        var stack = new Stack<int>();
+        var ans = new int[n];
+        for (int i = 2 * n - 1; i >= 0; i--)
+        {
+            var num = nums[i % n];
+            while (stack.Count != 0 && stack.Peek() <= num)
+                stack.Pop();
+
+            ans[i % n] = stack.Count == 0 ? -1 : stack.Peek();
+
+            stack.Push(num);
+        }
+
+        return ans;
+    }
 }
