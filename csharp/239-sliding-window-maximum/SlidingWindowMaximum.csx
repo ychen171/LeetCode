@@ -33,4 +33,53 @@ public class Solution
 
         return ans.ToArray();
     }
+
+    public int[] MaxSlidingWindow1(int[] nums, int k)
+    {
+        int n = nums.Length;
+        var window = new MonoQueue();
+        var ans = new List<int>();
+        for (int i = 0; i < n; i++)
+        {
+            if (i < k - 1)
+            {
+                window.Push(nums[i]);
+            }
+            else
+            {
+                window.Push(nums[i]);
+                ans.Add(window.Max());
+                window.Pop(nums[i - k + 1]);
+            }
+        }
+
+        return ans.ToArray();
+    }
+}
+
+public class MonoQueue
+{
+    LinkedList<int> queue;
+    public MonoQueue()
+    {
+        queue = new LinkedList<int>();
+    }
+
+    public void Push(int num)
+    {
+        while (queue.Count != 0 && queue.Last.Value < num)
+            queue.RemoveLast();
+        queue.AddLast(num);
+    }
+
+    public void Pop(int num)
+    {
+        if (queue.First.Value == num)
+            queue.RemoveFirst();
+    }
+
+    public int Max()
+    {
+        return queue.First.Value;
+    }
 }
