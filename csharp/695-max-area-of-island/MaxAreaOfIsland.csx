@@ -29,21 +29,18 @@ public class Solution
         int m = grid.Length;
         int n = grid[0].Length;
         // base case
-        if (grid[row][col] == 0)
+        if (row < 0 || row >= m || col < 0 || col >= n) // invalid
+            return 0;
+        if (grid[row][col] == 0) // visited
             return 0;
 
-        grid[row][col] = -1; // mark visited
+        grid[row][col] = 0; // mark visited
         int area = 1;
         // recursive case
         foreach (var dir in directions)
         {
             int r = row + dir[0];
             int c = col + dir[1];
-            if (r < 0 || r >= m || c < 0 || c >= n) // invalid
-                continue;
-            if (grid[r][c] == -1) // visited
-                continue;
-
             area += Helper(grid, r, c);
         }
 
