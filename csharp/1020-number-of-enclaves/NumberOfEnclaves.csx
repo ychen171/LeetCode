@@ -21,25 +21,20 @@ public class Solution
             DFS(grid, 0, col);
             DFS(grid, m - 1, col);
         }
-        // DFS
-        int ans = 0;
+        // count 1s
+        int count = 0;
         for (int row = 1; row < m - 1; row++)
         {
             for (int col = 1; col < n - 1; col++)
             {
                 if (grid[row][col] == 1)
-                {
-                    count = 0;
-                    DFS(grid, row, col);
-                    ans += count;
-                }
+                    count++;
             }
         }
 
-        return ans;
+        return count;
     }
     int[][] directions = new int[][] { new int[] { 1, 0 }, new int[] { 0, 1 }, new int[] { -1, 0 }, new int[] { 0, -1 } };
-    int count = 0;
     private void DFS(int[][] grid, int row, int col)
     {
         int m = grid.Length;
@@ -52,7 +47,6 @@ public class Solution
 
         // recursive case
         grid[row][col] = 0; // mark as visited
-        count++;
         foreach (var dir in directions)
         {
             var nr = row + dir[0];
