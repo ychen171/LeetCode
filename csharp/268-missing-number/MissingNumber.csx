@@ -50,6 +50,22 @@ public class Solution
 
         return expectedSum - actualSum;
     }
+
+    // Bit Manipulation
+    // Time: O(n)
+    // Space: O(1)
+    public int MissingNumber3(int[] nums)
+    {
+        int n = nums.Length;
+        int ans = n;
+        for (int i = 0; i < n; i++)
+        {
+            ans ^= i;
+            ans ^= nums[i];
+        }
+
+        return ans;
+    }
 }
 
 
