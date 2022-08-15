@@ -1,6 +1,6 @@
 public class Solution
 {
-    // Time: Hash Table | HashSet
+    // Hash Table | HashSet
     // Time: O(n)
     // Space: O(n)
     public int SingleNumber(int[] nums)
@@ -14,5 +14,19 @@ public class Solution
         }
 
         return set.First();
+    }
+
+    // Bit Manipulation
+    // Time: O(n)
+    // Space: O(1)
+    public int SingleNumber1(int[] nums)
+    {
+        int ans = 0;
+        foreach (var num in nums)
+        {
+            ans ^= num;
+        }
+
+        return ans;
     }
 }
