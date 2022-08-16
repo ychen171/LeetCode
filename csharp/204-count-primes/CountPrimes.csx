@@ -1,5 +1,8 @@
 public class Solution
 {
+    // Math
+    // Time: O(sqrt(n) * log log n)
+    // Space: O(n)
     public int CountPrimes(int n)
     {
         // edge case
