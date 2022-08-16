@@ -1,28 +1,32 @@
 public class Solution
 {
-    // sort and compare
+    // Sorting
     // Time: O(N * log N)
     // Space: O(N)
     public int[][] Merge(int[][] intervals)
     {
-        int[][] sortedIntervals = intervals.OrderBy(x => x[0]).ToArray();
-        List<int[]> mergedIntervals = new List<int[]>();
-        mergedIntervals.Add(sortedIntervals[0]);
-        for (int i = 1; i < sortedIntervals.Length; i++)
+        int n = intervals.Length;
+        // edge case
+        if (n <= 1)
+            return intervals;
+
+        Array.Sort(intervals, (a, b) => a[0] - b[0]);
+        var mergedList = new List<int[]>();
+        mergedList.Add(intervals[0]);
+        for (int i = 1; i < n; i++)
         {
-            var lastInterval = mergedIntervals.Last();
-            var currInterval = sortedIntervals[i];
-            if (currInterval[0] <= lastInterval[1])
+            var last = mergedList.Last();
+            var curr = intervals[i];
+            if (last[1] < curr[0]) // not overlapped
             {
-                if (currInterval[1] > lastInterval[1])
-                    lastInterval[1] = currInterval[1];
+                mergedList.Add(curr);
             }
             else
             {
-                mergedIntervals.Add(currInterval);
+                last[1] = Math.Max(last[1], curr[1]);
             }
         }
 
-        return mergedIntervals.ToArray();
+        return mergedList.ToArray();
     }
 }
