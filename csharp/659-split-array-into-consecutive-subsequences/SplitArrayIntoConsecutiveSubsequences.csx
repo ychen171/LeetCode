@@ -10,6 +10,7 @@ public class Solution
         foreach (var num in nums)
         {
             freq[num] = freq.GetValueOrDefault(num, 0) + 1;
+            need[num] = 0;
         }
 
         foreach (var num in nums)
@@ -18,7 +19,7 @@ public class Solution
                 continue;
             // check if num can be appended to the existing subset
             // check if num can be the beginning of new subset
-            if (need.ContainsKey(num) && need[num] > 0 && freq[num] > 0)
+            if (freq[num] > 0 && need[num] > 0)
             {
                 need[num]--;
                 freq[num]--;
