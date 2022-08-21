@@ -44,5 +44,26 @@ public class Solution
 
         return area;
     }
+
+    // Tow Pointers
+    // Time: O(n)
+    // Space: O(1)
+    public int MaxArea2(int[] height)
+    {
+        int n = height.Length;
+        int left = 0, right = n - 1;
+        int ans = 0;
+        while (left < right)
+        {
+            var currArea = Math.Min(height[left], height[right]) * (right - left);
+            ans = Math.Max(ans, currArea);
+            if (height[left] < height[right])
+                left++;
+            else
+                right--;
+        }
+
+        return ans;
+    }
 }
 
