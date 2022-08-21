@@ -39,17 +39,45 @@ public class Solution
         return ans;
     }
 
+    // Two Pointers
+    // Time: O(n)
+    // Space: O(1)
+    public int Trap1(int[] height)
+    {
+        int leftMaxHei = 0, rightMaxHei = 0;
+        int n = height.Length;
+        int left = 0, right = n - 1;
+        int ans = 0;
+        while (left < right)
+        {
+            leftMaxHei = Math.Max(leftMaxHei, height[left]);
+            rightMaxHei = Math.Max(rightMaxHei, height[right]);
+            if (leftMaxHei < rightMaxHei)
+            {
+                ans += leftMaxHei - height[left];
+                left++;
+            }
+            else
+            {
+                ans += rightMaxHei - height[right];
+                right--;
+            }
+        }
+
+        return ans;
+    }
+
     // Stack | mono decreasing
     // Time: O(n)
     // Space: O(n)
-    public int Trap1(int[] height)
+    public int Trap2(int[] height)
     {
         // height = [0,1,0,2,1,0,1,3,2,1,2,1]
         var stack = new Stack<int>();
         int n = height.Length;
         stack.Push(0);
         int ans = 0;
-        for (int i= 1; i < n; i++)
+        for (int i = 1; i < n; i++)
         {
             while (stack.Count != 0 && height[stack.Peek()] < height[i])
             {
