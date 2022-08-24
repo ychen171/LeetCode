@@ -59,6 +59,8 @@ public class Solution
                 int leftRange = index - stack.Peek();
                 int rightRange = i - index;
                 int count = leftRange * rightRange;
+                Console.WriteLine($"left: {leftRange}, right:{rightRange}, count:{count}");
+                Console.WriteLine($"{index}: {nums[index]}");
                 sum += (long)nums[index] * count;
             }
             stack.Push(i);
@@ -66,4 +68,66 @@ public class Solution
 
         return (int)(sum % 1000000007);
     }
+
+    // Monotonic Stack
+    // Time: O(n)
+    // Space: O(n)
+    public int SumSubarrayMins2(int[] arr)
+    {
+        var stack = new Stack<int>();
+        // find the next lesser element
+        // iterate from right to left
+        int n = arr.Length;
+        stack.Push(n);
+        long sum = 0;
+        for (int i = n - 1; i >= 0; i--)
+        {
+            while (stack.Count > 1 && arr[i] <= arr[stack.Peek()])
+            {
+                int index = stack.Pop();
+                int leftRange = index - i;
+                int rightRange = stack.Peek() - index;
+                int count = leftRange * rightRange;
+                sum += (long)arr[index] * count;
+                sum %= 1000000007;
+            }
+            stack.Push(i);
+        }
+
+        while (stack.Count > 1)
+        {
+            int index = stack.Pop();
+            int leftRange = index - (-1);
+            int rightRange = stack.Peek() - index;
+            int count = leftRange * rightRange;
+            sum += (long)arr[index] * count;
+            sum %= 1000000007;
+        }
+
+        return (int)(sum % 1000000007);
+    }
+
+    public int[] NextLesserElement(int[] nums)
+    {
+        int n = nums.Length;
+        var result = new int[n];
+        var stack = new Stack<int>();
+        for (int i = n - 1; i >= 0; i--)
+        {
+            var num = nums[i];
+            while (stack.Count != 0 && num <= stack.Peek())
+                stack.Pop();
+            result[i] = stack.Count == 0 ? -1 : stack.Peek();
+            stack.Push(num);
+        }
+
+        return result;
+    }
 }
+
+var sln = new Solution();
+// var nums = new int[] { 3, 1, 2, 4 };
+var nums = new int[] { 3, 3, 2, 2, 3, 2 };
+var result = sln.NextLesserElement(nums);
+Console.WriteLine(result);
+
