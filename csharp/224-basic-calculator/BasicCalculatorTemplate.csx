@@ -16,6 +16,7 @@ public class Solution
                 num = 10 * num + (c - '0');
 
             // push the complete integer into stack
+            // only when c in [+, -, *, /] or c is the last char
             if ((!char.IsDigit(c) && c != ' ') || i == s.Length - 1)
             {
                 switch (sign)

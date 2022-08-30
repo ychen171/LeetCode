@@ -91,6 +91,7 @@ public class Solution
             if (char.IsDigit(c))
                 num = 10 * num + (c - '0');
             // calcualte and push to stack
+            // only when c in [+, -, *, /] or c is the last char
             if (c != ' ' && !char.IsDigit(c) || i == s.Length - 1)
             {
                 switch (sign)

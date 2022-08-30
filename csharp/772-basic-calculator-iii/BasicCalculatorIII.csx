@@ -32,7 +32,7 @@ public class Solution
                 num = Cal(q);
 
             // calculate and push into stack
-            // c == [+, -, *, /, )]
+            // only when c in [+, -, *, /, )] or c is the last char
             if (!char.IsDigit(c) || q.Count == 0)
             {
                 switch (sign)
