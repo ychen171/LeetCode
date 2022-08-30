@@ -99,7 +99,7 @@ public class Solution
         return true;
     }
 
-    // DFS
+    // DFS | Cycle Detection
     // Time: O(V + E)
     // Space: O(V + E)
     bool hasCycle = false;
@@ -131,7 +131,8 @@ public class Solution
             hasCycle = true;
         if (visited.Contains(course) || hasCycle)
             return;
-
+        
+        visited.Add(course);
         onPath.Add(course);
         // recursive case
         if (graph.ContainsKey(course))
@@ -142,6 +143,5 @@ public class Solution
             }
         }
         onPath.Remove(course);
-        visited.Add(course);
     }
 }
