@@ -5,45 +5,57 @@ public class Solution
     // Space: O(n)
     public int TotalStrength(int[] strength)
     {
-        // create prefix sum
-        var preSum = new int[strength.Length + 1];
-        for (int i = 0; i < strength.Length; i++)
-            preSum[i + 1] = preSum[i] + strength[i];
+        long MOD = 1000000007;
+        // subarray + sum => prefix sum
+        // subarray + min => mono stack
+        // sum of first k elements
+        int n = strength.Length;
+        var prefix = new long[n + 1];
+        for (int i = 0; i < n; i++)
+            prefix[i + 1] = (prefix[i] + strength[i]) % MOD;
+        // sum of first k prefixes
+        var prefixSum = new long[n + 2];
+        for (int i = 0; i < n + 1; i++)
+            prefixSum[i + 1] = (prefixSum[i] + prefix[i]) % MOD;
 
-        // find the next lesser element
-        // iterate from left to right
+
+        // find the next lesser element on the right
+        // find the next lesser or equal element on the left
+        // foreach strength[i] as min, find the possible subarray sums
+
         var stack = new Stack<int>();
-        var nums = strength.ToList();
-        nums.Add(0);
-        stack.Push(-1);
-        long ans = 0;
-        int count = 0;
-        for (int i = 0; i < nums.Count; i++)
+        var right = new int[n];
+        for (int i = n - 1; i >= 0; i--)
         {
-            while (stack.Count > 1 && nums[i] <= nums[stack.Peek()]) // found new small
-            {
-                // (leftLimit, rightLimit)
-                int index = stack.Pop();
-                int leftLimit = stack.Peek();
-                int rightLimit = i;
-                Console.WriteLine($"leftLimit:{leftLimit}, rightLimit:{rightLimit}");
-                int leftRange = index - leftLimit;
-                int rightRange = rightLimit - index;
-                // [l, r]
-                for (int l = index; l > leftLimit; l--)
-                {
-                    for (int r = index; r < rightLimit; r++)
-                    {
-                        ans += (preSum[r + 1] - preSum[l]) * nums[index];
-                    }
-                }
-                ans %= 1000000007;
-            }
+            while (stack.Count != 0 && strength[i] <= strength[stack.Peek()])
+                stack.Pop();
+            // strength[i] > strength[stack.Peek()]
+            right[i] = stack.Count == 0 ? n : stack.Peek();
             stack.Push(i);
         }
 
-        Console.WriteLine($"count:{count}");
-        return (int)(ans % 1000000007);
+        stack.Clear();
+        var left = new int[n];
+        for (int i = 0; i < n; i++)
+        {
+            while (stack.Count != 0 && strength[i] < strength[stack.Peek()])
+                stack.Pop();
+            // strength[stack.Peek()] <= strength[i]
+            left[i] = stack.Count == 0 ? -1 : stack.Peek();
+            stack.Push(i);
+        }
+
+        long ans = 0;
+        for (int i = 0; i < n; i++)
+        {
+            int leftLimit = left[i];
+            int rightLimit = right[i];
+            ans += ((prefixSum[rightLimit + 1] - prefixSum[i + 1]) * (i - leftLimit) % MOD + MOD * 2 - (prefixSum[i + 1] - prefixSum[leftLimit + 1]) * (rightLimit - i) % MOD) % MOD * strength[i] % MOD;
+            // ans += ((prefixSum[rightLimit + 1] - prefixSum[i + 1]) * (i - leftLimit) - (prefixSum[i + 1] - prefixSum[leftLimit + 1]) * (rightLimit - i)) * strength[i];
+            ans %= MOD;
+        }
+
+        return (int)(ans);
     }
 
     // Brute force | TLE
