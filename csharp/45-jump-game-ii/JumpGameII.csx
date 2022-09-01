@@ -31,33 +31,32 @@ public class Solution
             return 0;
         var memo = new int[n];
         Array.Fill(memo, int.MaxValue);
-        return Helper(nums, n - 1, memo);
+        return Helper(nums, 0, memo);
     }
 
     public int Helper(int[] nums, int index, int[] memo)
     {
+        int n = nums.Length;
+        // base case
+        if (index >= n - 1)
+            return 0;
+        
         if (memo[index] != int.MaxValue)
             return memo[index];
 
-        int n = nums.Length;
-        // base case
-        if (index == 0)
-            return 0;
-
         // recursive case
-        int jumps = int.MaxValue;
-        for (int prevIndex = 0; prevIndex < index; prevIndex++)
+        int result = int.MaxValue;
+        int len = nums[index];
+        for (int jump = 1; jump <= len; jump++)
         {
-            if (prevIndex + nums[prevIndex] >= index)
-            {
-                var prevJumps = Helper(nums, prevIndex, memo);
-                if (prevJumps == int.MaxValue) // unreachable
-                    continue;
-                jumps = Math.Min(jumps, prevJumps + 1);
-            }
+            var nextIndex = index + jump;
+            var subResult = Helper(nums, nextIndex, memo);
+            if (subResult == int.MaxValue)
+                continue;
+            result = Math.Min(result, subResult + 1);
         }
-        memo[index] = jumps;
-        return jumps;
+        memo[index] = result;
+        return result;
     }
 
     // Greedy

@@ -69,6 +69,23 @@ public class Solution
 
         return lastPos == 0;
     }
+
+    // Greedy
+    // Time: O(n)
+    // Space: O(1)
+    public bool CanJumpGreedy1(int[] nums)
+    {
+        int n = nums.Length;
+        int farthest = 0;
+        for (int i = 0; i < n - 1; i++)
+        {
+            farthest = Math.Max(farthest, i + nums[i]);
+            if (farthest <= i) // stuck
+                return false;
+        }
+
+        return farthest >= n - 1;
+    }
 }
 
 var s = new Solution();
