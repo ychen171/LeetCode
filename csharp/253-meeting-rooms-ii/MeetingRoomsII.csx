@@ -26,10 +26,53 @@ public class Solution
         // return the size of Priority Queue
         return allocator.Count;
     }
+
+    // Sorting + Two Pointers
+    // Time: O(n log n)
+    // Space: O(n)
+    public int MinMeetingRooms1(int[][] intervals)
+    {
+        int n = intervals.Length;
+        if (n == 1)
+            return 1;
+
+        var starts = new int[n];
+        var ends = new int[n];
+        for (int i = 0; i < n; i++)
+        {
+            var intv = intervals[i];
+            starts[i] = intv[0];
+            ends[i] = intv[1];
+        }
+        // sort by start
+        Array.Sort(starts);
+        // sort by end
+        Array.Sort(ends);
+        // scan and find overlapping
+        int p = 0, q = 0;
+        int count = 0;
+        int ans = 0;
+        while (p < n && q < n)
+        {
+            if (starts[p] < ends[q]) // overlapping
+            {
+                count++;
+                p++;
+            }
+            else
+            {
+                count--;
+                q++;
+            }
+            ans = Math.Max(ans, count);
+        }
+
+        return ans;
+    }
 }
 
 var s = new Solution();
-Console.WriteLine(s.MinMeetingRooms(new int[][]{new int[]{0,30}, new int[]{5,10}, new int[]{15,20}}));
-Console.WriteLine(s.MinMeetingRooms(new int[][]{new int[]{7,10}, new int[]{2,4}}));
-Console.WriteLine(s.MinMeetingRooms(new int[][]{new int[]{1,10}, new int[]{2,5}, new int[]{3, 4}}));
+Console.WriteLine(s.MinMeetingRooms(new int[][] { new int[] { 0, 30 }, new int[] { 5, 10 }, new int[] { 15, 20 } }));
+Console.WriteLine(s.MinMeetingRooms(new int[][] { new int[] { 7, 10 }, new int[] { 2, 4 } }));
+Console.WriteLine(s.MinMeetingRooms(new int[][] { new int[] { 1, 10 }, new int[] { 2, 5 }, new int[] { 3, 4 } }));
 
