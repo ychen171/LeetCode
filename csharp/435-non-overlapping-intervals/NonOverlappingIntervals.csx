@@ -13,20 +13,17 @@ public class Solution
         Array.Sort(intervals, (a, b) => a[1] - b[1]);
         // iterate and compare start
         var last = intervals[0];
-        int ans = 0; ;
+        int count = 1;
         for (int i = 1; i < n; i++)
         {
             var curr = intervals[i];
             if (curr[0] >= last[1]) // non overlapped
             {
+                count++;
                 last = curr;
-            }
-            else // overlapped
-            {
-                ans++;
             }
         }
 
-        return ans;
+        return n - count;
     }
 }
