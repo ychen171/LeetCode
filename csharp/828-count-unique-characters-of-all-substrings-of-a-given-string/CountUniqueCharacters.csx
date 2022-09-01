@@ -79,4 +79,43 @@ public class Solution
 
         return ans;
     }
+
+    // all unique substrings
+    // Time: O(n)
+    // Space: O(n)
+    public int UniqueLetterString2(string s)
+    {
+        int n = s.Length;
+        var lastIndex = new int[26][];
+        for (int k = 0; k < 26; k++)
+        {
+            lastIndex[k] = new int[2] { -1, -1 };
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n; i++)
+        {
+            var c = s[i];
+            int leftLimit = lastIndex[c - 'A'][0];
+            int mid = lastIndex[c - 'A'][1];
+            int leftRange = mid - leftLimit;
+            int rightRange = i - mid;
+            int count = leftRange * rightRange;
+            ans += count;
+
+            // update lastIndex
+            lastIndex[c - 'A'][0] = lastIndex[c - 'A'][1];
+            lastIndex[c - 'A'][1] = i;
+        }
+
+        for (int i = 0; i < 26; i++)
+        {
+            int leftRange = lastIndex[i][1] - lastIndex[i][0];
+            int rightRange = n - lastIndex[i][1];
+            int count = leftRange * rightRange;
+            ans += count;
+        }
+
+        return ans;
+    }
 }
