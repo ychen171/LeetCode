@@ -66,40 +66,31 @@ public class Solution
                 list.Add(target);
             else // Binary Search
             {
-                var left = 0;
-                var right = list.Count - 1;
-                while (left < right)
-                {
-                    var mid = left + (right - left) / 2;
-                    if (list[mid] < target)
-                        left = mid + 1;
-                    else
-                        right = mid;
-                }
-
-                if (list[left] > target) list[left] = target;
+                int index = BinarySearchLeftBound(list, target);
+                if (index != -1)
+                    list[index] = target;
             }
         }
 
         return list.Count;
     }
-
-
-
-    public int BinarySearch(int[] nums, int target)
+    
+    public int BinarySearchLeftBound(List<int> nums, int target)
     {
-        var left = 0;
-        var right = nums.Length - 1;
-        while (left < right)
+        int left = 0;
+        int right = nums.Count - 1;
+        while (left <= right)
         {
-            var mid = left + (right - left) / 2;
+            int mid = left + (right - left) / 2;
             if (nums[mid] < target)
                 left = mid + 1;
-            else
-                right = mid;
+            else if (nums[mid] > target)
+                right = mid - 1;
+            else // ==
+                right = mid - 1;
         }
-        if (nums[left] == target) return left;
-        return -1;
+        if (left == nums.Count) return -1;
+        return left;
     }
 
     // Backtracking
