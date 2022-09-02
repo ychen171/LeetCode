@@ -1,66 +1,67 @@
 public class Solution
 {
+    // Sorting + LIS | BinarySearch
+    // Time: O(n log n)
+    // Space: O(n)
     public int MaxEnvelopes(int[][] envelopes)
     {
-        if (envelopes.Length == 1)
-            return 1;
         int n = envelopes.Length;
-        // sort the array on first element in ascending order
-        // sort the array on second element in descending order
-        var comparer = new EnvelopeComparer();
-        Array.Sort(envelopes, comparer);
-
-        // extract the second dimension and run LIS
+        if (n == 1)
+            return 1;
+        // sort by first element in ascending order and second element in descending order
+        Array.Sort(envelopes, (a, b) =>
+        {
+            if (a[0] == b[0])
+                return b[1] - a[1];
+            return a[0] - b[0];
+        });
+        // extract second elements into a list
         var secondDim = new int[n];
         for (int i = 0; i < n; i++)
         {
             secondDim[i] = envelopes[i][1];
         }
-
+        // LIS
         return LengthOfLIS(secondDim);
     }
 
+    // Time: O(n log n)
+    // Space: O(n)
     public int LengthOfLIS(int[] nums)
     {
         var list = new List<int>();
         list.Add(nums[0]);
-
         for (int i = 1; i < nums.Length; i++)
         {
-            int num = nums[i];
-            if (num > list.Last())
-                list.Add(num);
-            else
+            var target = nums[i];
+            if (list.Last() < target) // add to the list
+                list.Add(target);
+            else // binary search the list to find the position to replace
             {
-                int j = BinarySearch(list, num);
-                list[j] = num;
+                int index = BinarySearchLeftBound(list, target);
+                if (index != -1)
+                    list[index] = target;
             }
         }
 
         return list.Count;
     }
 
-    public int BinarySearch(List<int> list, int target)
+    public int BinarySearchLeftBound(List<int> list, int target)
     {
         int left = 0;
         int right = list.Count - 1;
-        while (left < right)
+        while (left <= right)
         {
             int mid = left + (right - left) / 2;
-            if (list[mid] == target)
-            {
-                return mid;
-            }
-            else if (list[mid] < target)
-            {
+            if (list[mid] < target)
                 left = mid + 1;
-            }
-            else
-            {
-                right = mid;
-            }
+            else if (list[mid] > target)
+                right = mid - 1;
+            else // ==
+                right = mid - 1;
         }
-
+        if (left == list.Count) return -1;
         return left;
     }
 
