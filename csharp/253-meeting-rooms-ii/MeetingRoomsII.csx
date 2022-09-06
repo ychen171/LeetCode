@@ -69,6 +69,26 @@ public class Solution
 
         return ans;
     }
+
+    // Sort + Priority Queue
+    // Time: O(n log n)
+    // Space: O(n)
+    public int MinMeetingRooms2(int[][] intervals)
+    {
+        int n = intervals.Length;
+        // sort by start
+        Array.Sort(intervals, (a, b) => a[0] - b[0]);
+        // priority queue by end
+        var pq = new PriorityQueue<int[], int>();
+        foreach (var intv in intervals)
+        {
+            if (pq.Count != 0 && pq.Peek()[1] <= intv[0])
+                pq.Dequeue();
+            pq.Enqueue(intv, intv[1]);
+        }
+
+        return pq.Count;
+    }
 }
 
 var s = new Solution();
