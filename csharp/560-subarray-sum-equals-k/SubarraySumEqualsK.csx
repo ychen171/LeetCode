@@ -72,7 +72,7 @@ public class Solution
         int sum = 0;
         var sumCountDict = new Dictionary<int, int>();
         sumCountDict[0] = 1;
-        for (int i=0; i<nums.Length; i++)
+        for (int i = 0; i < nums.Length; i++)
         {
             sum += nums[i];
             if (sumCountDict.ContainsKey(sum - k))
@@ -83,5 +83,27 @@ public class Solution
         }
 
         return count;
+    }
+
+    public int SubarraySum5(int[] nums, int k)
+    {
+        int n = nums.Length;
+        var preSum = new int[n + 1];
+        var countDict = new Dictionary<int, int>();
+        countDict[0] = 1;
+        int result = 0;
+
+        for (int i = 1; i < n + 1; i++)
+        {
+            preSum[i] = preSum[i - 1] + nums[i - 1];
+            int need = preSum[i] - k;
+            if (countDict.ContainsKey(need))
+            {
+                result += countDict[need];
+            }
+            countDict[preSum[i]] = countDict.GetValueOrDefault(preSum[i], 0) + 1;
+        }
+
+        return result;
     }
 }
