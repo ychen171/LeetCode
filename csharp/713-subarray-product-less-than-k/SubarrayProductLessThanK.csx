@@ -2,7 +2,7 @@ public class Solution
 {
     // Sliding Window | Two Pointers
     // Time: O(n)
-    // Space: O(n)
+    // Space: O(1)
     public int NumSubarrayProductLessThanK(int[] nums, int k)
     {
         int n = nums.Length;
