@@ -39,7 +39,7 @@ public class Solution
         var m = multipliers.Length;
         // initialize table with default values
         // seed the trivial answer into the table
-        int[,] table = new int[m + 1, m + 1];
+        int[,] dp = new int[m + 1, m + 1];
         // fill further positions with current position
         for (int i = m - 1; i >= 0; i--)
         {
@@ -47,11 +47,11 @@ public class Solution
             {
                 var mult = multipliers[i];
                 var right = n - 1 - (i - left);
-                table[i, left] = Math.Max(mult * nums[left] + table[i + 1, left + 1], mult * nums[right] + table[i + 1, left]);
+                dp[i, left] = Math.Max(mult * nums[left] + dp[i + 1, left + 1], mult * nums[right] + dp[i + 1, left]);
             }
         }
 
-        return table[0, 0];
+        return dp[0, 0];
     }
 }
 
