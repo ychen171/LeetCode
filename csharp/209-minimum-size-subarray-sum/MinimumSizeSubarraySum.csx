@@ -71,4 +71,83 @@ public class Solution
 
         return minLen == int.MaxValue ? 0 : minLen;
     }
+
+    // Prefix Sum + Binary Search
+    // Time: O(n + n log n) => O(n log n)
+    // Space: O(n)
+    public int MinSubArrayLen2(int target, int[] nums)
+    {
+        /*
+            preSum[j+1] - preSum[i] : [i, j]
+            preSum[j+1] - preSum[i] >= target
+            preSum[j+1] >= target + preSum[i]
+            preSum[j+1] - target >= preSum[i]
+            
+                2   3   1   2   4   3
+            0   2   5   6   8   12  15
+            
+        */
+        int n = nums.Length;
+        var preSum = new int[n + 1];
+        for (int i = 1; i < n + 1; i++)
+            preSum[i] = preSum[i - 1] + nums[i - 1];
+
+        int ans = int.MaxValue;
+        for (int j = 0; j < n; j++)
+        {
+            int need = preSum[j + 1] - target;
+            int i = BinarySearchRB(preSum, need);
+            if (i == -1)
+                continue;
+            ans = Math.Min(ans, j - i + 1);
+        }
+
+        return ans == int.MaxValue ? 0 : ans;
+    }
+
+    public int BinarySearchRB(int[] nums, int target)
+    {
+        int n = nums.Length;
+        int left = 0, right = n - 1;
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else if (nums[mid] > target)
+                right = mid - 1;
+            else // ==
+                left = mid + 1;
+        }
+        if (right == -1) return -1;
+        return right;
+    }
+
+    // Sliding Window
+    // Time: O(n)
+    // Space: O(n)
+    public int MinSubArrayLen3(int target, int[] nums)
+    {
+        int n = nums.Length;
+        int left = 0, right = 0;
+        // [left, right)
+        int windowSum = 0;
+        int ans = int.MaxValue;
+        while (right < n)
+        {
+            // expand window
+            windowSum += nums[right];
+            right++;
+            while (windowSum >= target && left < right)
+            {
+                // update ans
+                ans = Math.Min(ans, right - left);
+                // shrink window
+                windowSum -= nums[left];
+                left++;
+            }
+        }
+
+        return ans == int.MaxValue ? 0 : ans;
+    }
 }
