@@ -64,7 +64,100 @@ public class Solution
 
         return ans;
     }
+
+    int p = 113;
+    int MOD = 1000000007;
+    int pinv = 0;
+    public int FindLength2(int[] nums1, int[] nums2)
+    {
+        pinv = ModInverse(p, MOD);
+        int m = nums1.Length;
+        int n = nums2.Length;
+
+        // Binary Search
+        int left = 0, right = Math.Min(m, n) + 1;
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            if (Check(mid, nums1, nums2))
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        return left - 1;
+    }
+
+    public int[] Rolling(int[] source, int length)
+    {
+        var ans = new int[source.Length - length + 1];
+        long h = 0, power = 1;
+        if (length == 0)
+            return ans;
+        for (int i = 0; i < source.Length; i++)
+        {
+            h = (h + source[i] * power) % MOD;
+            if (i < length - 1)
+            {
+                power = (power * p) % MOD;
+            }
+            else
+            {
+                ans[i - (length - 1)] = (int)h;
+                h = (h - source[i - (length - 1)]) * pinv % MOD;
+                if (h < 0)
+                    h += MOD;
+            }
+        }
+
+        return ans;
+    }
+
+    public bool Check(int guess, int[] A, int[] B)
+    {
+        var hashes = new Dictionary<int, List<int>>();
+        int k = 0;
+        foreach (int x in Rolling(A, guess))
+        {
+            hashes.GetValueOrDefault(x, new List<int>()).Add(k);
+            k++;
+        }
+        int j = 0;
+        foreach (int x in Rolling(B, guess))
+        {
+            foreach (int i in hashes.GetValueOrDefault(x, new List<int>()))
+            {
+                bool matched = true;
+                for (int p = 0; p < guess; p++)
+                {
+                    if (A[i + p] != B[j + p])
+                    {
+                        matched = false;
+                        break;
+                    }
+                }
+                if (matched) return true;
+            }
+            j++;
+        }
+        return false;
+    }
+    public int ModInverse(int a, int m)
+    {
+        if (m == 1) return 0;
+        int m0 = m;
+        (int x, int y) = (1, 0);
+
+        while (a > 1)
+        {
+            int q = a / m;
+            (a, m) = (m, a % m);
+            (x, y) = (y, x - q * y);
+        }
+        return x < 0 ? x + m0 : x;
+    }
 }
+
+
 
 // var sln = new Solution();
 // var nums1 = new int[] { 1, 2, 3, 2, 8 };
