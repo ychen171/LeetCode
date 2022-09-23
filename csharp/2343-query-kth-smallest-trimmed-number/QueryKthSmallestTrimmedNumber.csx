@@ -1,5 +1,8 @@
 public class Solution
 {
+    // Simulation + Priority Queue
+    // Time: O(m * n log n)
+    // Space: O(n)
     public int[] SmallestTrimmedNumbers(string[] nums, int[][] queries)
     {
         var n = nums.Length;
@@ -10,7 +13,7 @@ public class Solution
             var query = queries[j];
             int k = query[0];
             int trim = query[1];
-            var pq = new PriorityQueue<Tuple<int, long>, Tuple<int, long>>(Comparer<Tuple<int, long>>.Create((a, b) =>
+            var pq = new PriorityQueue<Tuple<int, string>, Tuple<int, string>>(Comparer<Tuple<int, string>>.Create((a, b) =>
             {
                 if (a.Item2 == b.Item2)
                 {
@@ -21,27 +24,25 @@ public class Solution
                     else
                         return 0;
                 }
-                else if (a.Item2 < b.Item2)
-                    return 1;
-                else
-                    return -1;
+                return string.Compare(b.Item2, a.Item2);
             })); // max heap
             for (int i = 0; i < n; i++)
             {
                 string str = nums[i];
-                long trimmedNum = 0;
+                var sb = new StringBuilder();
                 for (int p = str.Length - trim; p < str.Length; p++)
                 {
-                    trimmedNum = trimmedNum * 10 + str[p] - '0';
+                    sb.Append(str[p]);
                 }
-                var pair = new Tuple<int, long>(i, trimmedNum);
+                var trimmed = sb.ToString();
+                var pair = new Tuple<int, string>(i, trimmed);
                 if (pq.Count < k)
                 {
                     pq.Enqueue(pair, pair);
                 }
                 else
                 {
-                    if (pq.Peek().Item2 > trimmedNum)
+                    if (string.Compare(trimmed, pq.Peek().Item2) < 0)
                     {
                         pq.Dequeue();
                         pq.Enqueue(pair, pair);
@@ -49,6 +50,45 @@ public class Solution
                 }
             }
             ans[j] = pq.Peek().Item1;
+        }
+
+        return ans;
+    }
+
+    // Simulation + Sorting
+    // Time: O(m * n log n)
+    // Space: O(n)
+    public int[] SmallestTrimmedNumbers1(string[] nums, int[][] queries)
+    {
+        int n = nums.Length;
+        int m = queries.Length;
+        var ans = new int[m];
+        for (int j = 0; j < m; j++)
+        {
+            var query = queries[j];
+            int k = query[0];
+            int trim = query[1];
+
+            var list = new List<Tuple<string, int>>();
+            for (int i = 0; i < n; i++)
+            {
+                string str = nums[i];
+                var sb = new StringBuilder();
+                for (int p = str.Length - trim; p < str.Length; p++)
+                {
+                    sb.Append(str[p]);
+                }
+                var trimmed = sb.ToString();
+                list.Add(new Tuple<string, int>(trimmed, i));
+            }
+            // sorting by str then index
+            list.Sort((a, b) =>
+            {
+                if (a.Item1 == b.Item1)
+                    return a.Item2 - b.Item2;
+                return string.Compare(a.Item1, b.Item1);
+            });
+            ans[j] = list[k - 1].Item2;
         }
 
         return ans;
