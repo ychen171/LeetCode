@@ -19,8 +19,13 @@ public class Solution
     // Space: O(n)
     public bool HasPathSum(TreeNode root, int targetSum)
     {
-        if (root == null) return false;
-        if (root.left == null && root.right == null && root.val == targetSum) return true;
+        // base case
+        if (root == null)
+            return false;
+        if (root.left == null && root.right == null)
+            return root.val == targetSum;
+
+        // recursive case
         return HasPathSum(root.left, targetSum - root.val) || HasPathSum(root.right, targetSum - root.val);
     }
 
@@ -38,7 +43,7 @@ public class Solution
         {
             var node = nodeStack.Pop();
             var sum = sumStack.Pop();
-            if (node.left == null && node.right == null && sum == 0) 
+            if (node.left == null && node.right == null && sum == 0)
                 return true;
             if (node.left != null)
             {
