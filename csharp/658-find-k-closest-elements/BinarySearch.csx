@@ -1,18 +1,24 @@
 public class Solution
 {
+    // Binary Search
+    // Time: O((log (n - k)) + k)
+    // Space: O(1)
     public IList<int> FindClosestElements(int[] arr, int k, int x)
     {
-        if (arr.Length < k) return null;
+        int n = arr.Length;
+        if (n < k) return null;
         var left = 0;
-        var right = arr.Length - k;
+        var right = n - 1 - k;
 
-        while (left < right)
+        while (left <= right)
         {
             var mid = left + (right - left) / 2;
             if (x - arr[mid] > arr[mid + k] - x)
                 left = mid + 1;
-            else
-                right = mid;
+            else if (x - arr[mid] < arr[mid + k] - x)
+                right = mid - 1;
+            else // ==
+                right = mid - 1;
         }
 
         var result = new List<int>();
@@ -41,6 +47,4 @@ result = s.FindClosestElements(new int[] { 1, 2, 3, 4, 5 }, 4, 3);
 PrintResult(result);
 result = s.FindClosestElements(new int[] { 1, 2, 3, 4, 5 }, 4, -1);
 PrintResult(result);
-
-
 
