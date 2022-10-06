@@ -1,5 +1,6 @@
 public class TimeMap
 {
+    // Dictionary + Sorted List
     // Space: O(n)
     Dictionary<string, SortedList<int, string>> dict;
     public TimeMap()
