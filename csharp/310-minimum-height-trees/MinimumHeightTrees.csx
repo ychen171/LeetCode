@@ -64,4 +64,61 @@ public class Solution
 
         return leafList;
     }
+
+    // BFS | Topological Sort | Adjacency List + Indegree Map
+    // Time: O(V + E)
+    // Space: O(V + E)
+    public IList<int> FindMinHeightTrees1(int n, int[][] edges)
+    {
+        // edge case
+        if (n < 2)
+            return new List<int>() { 0 };
+        // build graph using adjacency list and indegree map
+        var graph = new Dictionary<int, IList<int>>();
+        var indegree = new Dictionary<int, int>();
+        foreach (var edge in edges)
+        {
+            var a = edge[0];
+            var b = edge[1];
+            if (!graph.ContainsKey(a))
+                graph[a] = new List<int>();
+            graph[a].Add(b);
+            if (!graph.ContainsKey(b))
+                graph[b] = new List<int>();
+            graph[b].Add(a);
+
+            indegree[a] = indegree.GetValueOrDefault(a, 0) + 1;
+            indegree[b] = indegree.GetValueOrDefault(b, 0) + 1;
+        }
+        // BFS Topological Sort
+        // starting from indegree[node] == 1
+        var queue = new Queue<int>();
+        foreach (var node in indegree.Keys)
+        {
+            if (indegree[node] == 1)
+            {
+                queue.Enqueue(node);
+            }
+        }
+        // stop when remainingCount <= 2
+        var remainingCount = n;
+        while (queue.Count != 0 && remainingCount > 2)
+        {
+            var levelLen = queue.Count;
+            for (int i = 0; i < levelLen; i++)
+            {
+                var curr = queue.Dequeue();
+                foreach (var nei in graph[curr])
+                {
+                    indegree[nei]--;
+                    if (indegree[nei] == 1)
+                    {
+                        queue.Enqueue(nei);
+                    }
+                }
+            }
+            remainingCount -= levelLen;
+        }
+        return queue.ToList();
+    }
 }
