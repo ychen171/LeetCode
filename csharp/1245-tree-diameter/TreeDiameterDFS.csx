@@ -1,13 +1,17 @@
 public class Solution
 {
+    // DFS
+    // Time: O(n)
+    // Space: O(n)
     int diameter;
     Dictionary<int, List<int>> graph;
-    Dictionary<int, int> indegree;
     public int TreeDiameter(int[][] edges)
     {
-        // build graph and indegree map
+        // edge case
+        if (edges.Length == 0)
+            return 0;
+        // build graph
         graph = new Dictionary<int, List<int>>();
-        indegree = new Dictionary<int, int>();
         foreach (var edge in edges)
         {
             var a = edge[0];
@@ -19,43 +23,40 @@ public class Solution
                 graph[b] = new List<int>();
             graph[b].Add(a);
 
-            indegree[a] = indegree.GetValueOrDefault(a, 0) + 1;
-            indegree[b] = indegree.GetValueOrDefault(b, 0) + 1;
         }
-        // starting from each node a, find the farthest node b, 
-        // then starting from node b, find the farthest node c,
-        // the len between b and c is diamter
-        // find the max diameter
-        foreach (var node in indegree.Keys)
-        {
-            if (indegree[node] == 1) // unused leaf node
-            {
-                var visited = new HashSet<int>();
-                var onPath = new HashSet<int>();
-                DFS(node, visited, onPath);
-            }
-        }
+        // starting from each node a, find every leaf node and its distance, 
+        // add up top 2 distance to find the max diamater
+        DFS(graph.Keys.First(), new HashSet<int>());
         return diameter;
     }
 
-    private void DFS(int node, HashSet<int> visited, HashSet<int> onPath)
+    // return the max distance, starting from the node to its leaf nodes
+    private int DFS(int node, HashSet<int> visited)
     {
         // base case
+        if (!graph.ContainsKey(node))
+            return -1;
         if (visited.Contains(node))
-        {
-            return;
-        }
+            return -1;
         // recursive case
         visited.Add(node);
-        onPath.Add(node);
+        int topDist1 = 0, topDist2 = 0;
+        // topDist1 >= topDist2
         foreach (var nei in graph[node])
         {
-            DFS(nei, visited, onPath);
+            int dist = 0;
+            dist = 1 + DFS(nei, visited);
+            if (dist > topDist1)
+            {
+                topDist2 = topDist1;
+                topDist1 = dist;
+            }
+            else if (dist > topDist2)
+            {
+                topDist2 = dist;
+            }
         }
-        if (indegree[node] == 1)
-        {
-            diameter = Math.Max(diameter, onPath.Count - 1);
-        }
-        onPath.Remove(node);
+        diameter = Math.Max(diameter, topDist1 + topDist2);
+        return topDist1;
     }
 }
