@@ -72,5 +72,5 @@ public class SegmentTree
 var tree = new SegmentTree(16);
 tree.Build();
 tree.Modify(0, 1);
-var result = tree.Query(0, 11);
-Console.WriteLine(result);
+Console.WriteLine(tree.Query(0, 11));
+Console.WriteLine(tree.Query(1, 11));
