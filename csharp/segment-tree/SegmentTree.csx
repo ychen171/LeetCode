@@ -49,7 +49,7 @@ public class SegmentTree
         while (p > 1)
         {
             p >>= 1;
-            tree[p] = Math.Max(tree[2 * p], tree[2 * p + 1]);
+            tree[p] = tree[2 * p] + tree[2 * p + 1];
         }
     }
 
