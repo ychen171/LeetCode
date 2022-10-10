@@ -114,62 +114,62 @@ public class Solution
     // Merge Sort
     // Time: O(n log n)
     // Space: O(n)
-    IList<int> result;
-    public IList<int> CountSmaller2(int[] nums)
+    int n;
+    List<int> counts;
+    KeyValuePair<int, int>[] temp;
+    public IList<int> CountSmaller2(int[] nums) 
     {
-        int n = nums.Length;
-        result = new List<int>();
-        var pairs = new KeyValuePair<int, int>[n];
-        for (int i = 0; i < n; i++)
+        n = nums.Length;
+        counts = new List<int>();
+        temp = new KeyValuePair<int, int>[n];
+        var pairs = new KeyValuePair<int, int>[n]; // index, value pair
+        for (int k = 0; k < n; k++)
         {
-            result.Add(0);
-            pairs[i] = new KeyValuePair<int, int>(i, nums[i]);
+            counts.Add(0);
+            pairs[k] = new KeyValuePair<int, int>(k, nums[k]);
         }
-
-        MergeSort(pairs, 0, n - 1);
-
-        return result;
+        Sort(pairs);
+        return counts;
     }
-
-    public void MergeSort(KeyValuePair<int, int>[] pairs, int lo, int hi)
+    
+    // MergeSort implementation
+    public void Sort(KeyValuePair<int, int>[] pairs)
+    {
+        Sort(pairs, 0, n - 1);
+    }
+    private void Sort(KeyValuePair<int, int>[] pairs, int lo, int hi)
     {
         // base case
-        if (lo >= hi)
-            return;
-
+        if (lo >= hi) return;
         // recursive case
-        int mid = lo + (hi - lo) / 2;
-        MergeSort(pairs, lo, mid);
-        MergeSort(pairs, mid + 1, hi);
+        var mid = lo + (hi - lo) / 2;
+        Sort(pairs, lo, mid);
+        Sort(pairs, mid + 1, hi);
         Merge(pairs, lo, mid, hi);
     }
-
-    public void Merge(KeyValuePair<int, int>[] pairs, int lo, int mid, int hi)
+    private void Merge(KeyValuePair<int, int>[] pairs, int lo, int mid, int hi)
     {
-        int len = hi - lo + 1;
-        var merged = new KeyValuePair<int, int>[len];
-        // [lo, mid] [mid + 1, hi]
-        int i = lo, j = mid + 1;
-        for (int k = 0; k < len; k++)
+        for (int k = lo; k <= hi; k++)
+            temp[k] = pairs[k];
+        
+        int i = lo, j = mid + 1;   
+        for (int k = lo; k <= hi; k++)
         {
             if (i == mid + 1)
-                merged[k] = pairs[j++];
+                pairs[k] = temp[j++];
             else if (j == hi + 1)
             {
-                merged[k] = pairs[i++];
-                result[merged[k].Key] += j - mid - 1;
+                pairs[k] = temp[i++];
+                counts[pairs[k].Key] += j - mid - 1;
             }
-            else if (pairs[i].Value <= pairs[j].Value)
+            else if (temp[i].Value > temp[j].Value)
+                pairs[k] = temp[j++];
+            else // temp[i].Value <= temp[j].Value
             {
-                merged[k] = pairs[i++];
-                result[merged[k].Key] += j - mid - 1;
+                pairs[k] = temp[i++];
+                counts[pairs[k].Key] += j - mid - 1;
             }
-            else
-                merged[k] = pairs[j++];
         }
-
-        for (int k = 0; k < len; k++)
-            pairs[k + lo] = merged[k];
     }
 }
 
