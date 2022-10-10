@@ -59,6 +59,7 @@ public class Solution
         //     }
         // }
 
+        // keep the elements from [start, end) fit into [lower, upper]
         int start = mid + 1, end = mid + 1;
         for (i = lo; i <= mid; i++)
         {
