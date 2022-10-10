@@ -1,57 +1,60 @@
-public class Solution
+public class Solution 
 {
-    int ans;
-    // Time: O(n^2 * log n)
+    // Merge Sort
+    // Time: O(n log n)
     // Space: O(n)
-    public int ReversePairs(int[] nums)
+    int[] temp;
+    int count;
+    public int ReversePairs(int[] nums) 
     {
-        MergeSort(nums, 0, nums.Length - 1);
-        return ans;
+        Sort(nums);
+        return count;
     }
-
-    public void MergeSort(int[] nums, int lo, int hi)
+    
+    public void Sort(int[] nums)
     {
-        if (lo >= hi)
-            return;
-
+        temp = new int[nums.Length];
+        Sort(nums, 0, nums.Length - 1);
+    }
+    
+    private void Sort(int[] nums, int lo, int hi)
+    {
+        // base case
+        if (lo >= hi) return;
+        // recursive case
         int mid = lo + (hi - lo) / 2;
-        MergeSort(nums, lo, mid);
-        MergeSort(nums, mid + 1, hi);
+        Sort(nums, lo, mid);
+        Sort(nums, mid + 1, hi);
         Merge(nums, lo, mid, hi);
     }
-
-    public void Merge(int[] nums, int lo, int mid, int hi)
+    
+    private void Merge(int[] nums, int lo, int mid, int hi)
     {
-        int len = hi - lo + 1;
-        var merged = new int[len];
-
-        // [mid + 1, end)
-        int i = lo;
-        int end = mid + 1;
-
+        // copy over to temp
+        for (int k = lo; k <= hi; k++)
+            temp[k] = nums[k];
+        
+        int i = lo, j = mid + 1;
         for (i = lo; i <= mid; i++)
         {
-            while (end <= hi && (long)nums[i] > 2 * (long)nums[end])
-                end++;
-
-            ans += end - (mid + 1);
+            long long_num_i = nums[i];
+            while (j <= hi && long_num_i > (long) nums[j] * 2)
+                j++;
+            count += j - mid - 1;
         }
-
-        // [lo, mid] [mid + 1, hi]
+        
         i = lo;
-        int j = mid + 1;
-        for (int k = 0; k < len; k++)
+        j = mid + 1;
+        for (int k = lo; k <= hi; k++)
         {
-            if (j == hi + 1)
-                merged[k] = nums[i++];
-            else if (i == mid + 1)
-                merged[k] = nums[j++];
-            else if (nums[i] <= nums[j])
-                merged[k] = nums[i++];
-            else
-                merged[k] = nums[j++];
+            if (i == mid + 1)
+                nums[k] = temp[j++];
+            else if (j == hi + 1)
+                nums[k] = temp[i++];
+            else if (temp[i] > temp[j])
+                nums[k] = temp[j++];
+            else // temp[i] <= temp[j]
+                nums[k] = temp[i++];
         }
-        for (int k = 0; k < len; k++)
-            nums[lo + k] = merged[k];
     }
 }
