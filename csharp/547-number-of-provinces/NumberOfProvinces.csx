@@ -44,7 +44,7 @@ public class UF
             return;
         var rootP = Find(p);
         var rootQ = Find(q);
-        parents[rootP] = parents[rootQ];
+        parents[rootP] = rootQ;
         Count--;
     }
 
