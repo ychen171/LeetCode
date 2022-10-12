@@ -1,25 +1,85 @@
 public class Solution
 {
-    // DP | Tabulation
+    // DP
     // Time: O(n)
     // Space: O(n)
     public int MaxSubArray(int[] nums)
     {
-        int n = nums.Length;
-        if (n == 1)
-            return nums[0];
+        /*
+            states: dp[i]: largest sum from the subarray ending at i, i = [0, n-1]
+            goal: dp.Max()
+            option: add to previous group, start a new group
+            
+            dp[i] = Math.Max(dp[i-1] + nums[i], nums[i])
+            
+            base case:
+            dp[0] = Math.Max(dp[-1] + nums[0], nums[0]) = nums[0]
+        */
 
-        // initialize the table
-        var table = new int[n];
-        // seed the trivial answer into the table
-        table[0] = nums[0];
-        // fill further positions based on current position
-        for (int i = 1; i < n; i++)
+        var n = nums.Length;
+        var dp = new int[n];
+        for (int i = 0; i < n; i++)
         {
-            int num = nums[i];
-            table[i] = Math.Max(table[i-1], 0) + num;
+            if (i == 0)
+            {
+                dp[i] = nums[i];
+                continue;
+            }
+            dp[i] = Math.Max(dp[i - 1] + nums[i], nums[i]);
         }
 
-        return table.Max();
+        return dp.Max();
+    }
+
+    // Sliding Window
+    // Time: O(n)
+    // Space: O(1)
+    public int MaxSubArray1(int[] nums)
+    {
+        int n = nums.Length;
+        var windowSum = 0;
+        var result = int.MinValue;
+        // [left, right)
+        int left = 0, right = 0;
+        while (right < n)
+        {
+            windowSum += nums[right];
+            right++;
+
+            result = Math.Max(result, windowSum);
+
+            while (left <= right && windowSum < 0)
+            {
+                windowSum -= nums[left];
+                left++;
+            }
+        }
+        return result;
+    }
+
+    // Prefix Sum
+    // Time: O(n)
+    // Space: O(n)
+    public int MaxSubArray2(int[] nums)
+    {
+        /*
+            subarraySum[i, j] = preSum[j+1] - preSum[i]
+
+            max sub array ending at index j
+            preSum[j+1] - min(preSum[i]), where i = [0, j]
+        */
+        int n = nums.Length;
+        var preSum = new int[n + 1];
+        for (int i = 0; i < n; i++)
+            preSum[i + 1] = preSum[i] + nums[i];
+
+        int result = int.MinValue;
+        int minPreSum = int.MaxValue;
+        for (int i = 0; i < n; i++)
+        {
+            minPreSum = Math.Min(minPreSum, preSum[i]);
+            result = Math.Max(result, preSum[i + 1] - minPreSum);
+        }
+        return result;
     }
 }
