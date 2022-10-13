@@ -34,22 +34,30 @@ public class Solution
         return ans.ToArray();
     }
 
+    // Max Queue + Sliding Window
+    // Time: O(n)
+    // Space: O(k)
     public int[] MaxSlidingWindow1(int[] nums, int k)
     {
         int n = nums.Length;
         var window = new MonoQueue();
         var ans = new List<int>();
-        for (int i = 0; i < n; i++)
+        // [left, right)
+        int left = 0, right = 0;
+        while (right < n)
         {
-            if (i < k - 1)
+            var num = nums[right];
+            right++;
+            if (right < k)
             {
-                window.Push(nums[i]);
+                window.Push(num);
             }
             else
             {
-                window.Push(nums[i]);
+                window.Push(num);
                 ans.Add(window.Max());
-                window.Pop(nums[i - k + 1]);
+                window.Pop(nums[right - k]);
+                left++;
             }
         }
 
@@ -59,27 +67,33 @@ public class Solution
 
 public class MonoQueue
 {
-    LinkedList<int> queue;
+    LinkedList<int> maxQ;
+    int removeCount;
     public MonoQueue()
     {
-        queue = new LinkedList<int>();
+        removeCount = 0;
+        maxQ = new LinkedList<int>();
     }
 
     public void Push(int num)
     {
-        while (queue.Count != 0 && queue.Last.Value < num)
-            queue.RemoveLast();
-        queue.AddLast(num);
+        int removeCount = 0;
+        while (maxQ.Count != 0 && maxQ.Last.Value < num)
+        {
+            removeCount++;
+            maxQ.RemoveLast();
+        }
+        maxQ.AddLast(num);
     }
 
     public void Pop(int num)
     {
-        if (queue.First.Value == num)
-            queue.RemoveFirst();
+        if (maxQ.First.Value == num)
+            maxQ.RemoveFirst();
     }
 
     public int Max()
     {
-        return queue.First.Value;
+        return maxQ.First.Value;
     }
 }
