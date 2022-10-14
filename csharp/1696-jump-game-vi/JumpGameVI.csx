@@ -8,7 +8,8 @@ public class Solution
     {
         int n = nums.Length;
         var memo = new int[n];
-        Array.Fill(memo, int.MinValue);
+        for (int i = 0; i < n; i++)
+            memo[i] = int.MinValue;
         return Helper(nums, k, n - 1, memo);
     }
 
@@ -38,7 +39,7 @@ public class Solution
         return ans;
     }
 
-    // DP + DeQueue (monotonic queue)
+    // DP + DeQueue | monotonic max queue
     // Time: O(n)
     // Spacee: O(n)
     public int MaxResult1(int[] nums, int k)
@@ -56,7 +57,7 @@ public class Solution
                 dq.RemoveFirst();
             }
             scores[i] = scores[dq.First.Value] + nums[i];
-            // pop teh smaller value
+            // pop the smaller value
             while (dq.Count != 0 && scores[dq.Last.Value] < scores[i])
             {
                 dq.RemoveLast();
