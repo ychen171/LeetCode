@@ -64,4 +64,59 @@ public class Solution
 
         return len == int.MaxValue ? string.Empty : s.Substring(start, len);
     }
+
+    // Sliding Window + Dictionary
+    // Time: O(s + t)
+    // Space: O(s + t)
+    public string MinWindow1(string s, string t)
+    {
+        int n = s.Length;
+        var need = new Dictionary<char, int>();
+        foreach (var c in t)
+            need[c] = need.GetValueOrDefault(c, 0) + 1;
+        var window = new Dictionary<char, int>();
+        // [left, right)
+        int left = 0, right = 0;
+        int start = 0, minLen = int.MaxValue;
+        while (right < n)
+        {
+            char c = s[right];
+            right++;
+            window[c] = window.GetValueOrDefault(c, 0) + 1;
+
+            while (left < right && IsIncluded(window, need))
+            {
+                if (right - left < minLen)
+                {
+                    start = left;
+                    minLen = right - left;
+                }
+
+                char d = s[left];
+                window[d]--;
+                left++;
+            }
+        }
+        return minLen == int.MaxValue ? string.Empty : s.Substring(start, minLen);
+    }
+
+    private bool IsIncluded(Dictionary<char, int> window, Dictionary<char, int> need)
+    {
+        foreach (var c in need.Keys)
+        {
+            if (window.GetValueOrDefault(c, 0) < need[c])
+                return false;
+        }
+        return true;
+    }
 }
+
+/*
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+*/
+var s = "a";
+var t = "aa";
+var sln = new Solution();
+var result = sln.MinWindow1(s, t);
+Console.WriteLine(result);
