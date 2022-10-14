@@ -1,38 +1,36 @@
-public class Solution
+public class Solution 
 {
     // Sliding Window
     // Time: O(n)
     // Space: O(1)
-    public int MaxScore(int[] cardPoints, int k)
+    public int MaxScore(int[] cardPoints, int k) 
     {
-        // sliding window, keep the window size == n - k
-        // find the window with min sum
+        // sliding window to find min subarray sum, where window size == n - k
+        // result = totalSum - minSum
         int n = cardPoints.Length;
-        int windowSize = n - k;
-        // edge case
-        if (windowSize < 0)
-            return -1;
-
-        int left = 0;
-        int right = 0;
+        if (n == k)
+            return cardPoints.Sum();
         int windowSum = 0;
-        while (right < windowSize)
-        {
-            windowSum += cardPoints[right];
-            right++;
-        }
-        int minWindowSum = windowSum;
+        int minSum = int.MaxValue;
+        int totalSum = 0;
+        int left = 0, right = 0;
         // [left, right)
-        // keep the window size, slide the window to right
         while (right < n)
         {
-            windowSum = windowSum - cardPoints[left] + cardPoints[right];
-            minWindowSum = Math.Min(minWindowSum, windowSum);
-            left++;
+            totalSum += cardPoints[right];
+            windowSum += cardPoints[right];
             right++;
+            
+            if (right - left > n - k)
+            {
+                windowSum -= cardPoints[left];
+                left++;
+            }
+            
+            if (right - left == n - k)
+                minSum = Math.Min(minSum, windowSum);
         }
-
-        return cardPoints.Sum() - minWindowSum;
+        return totalSum - minSum;
     }
 }
 
