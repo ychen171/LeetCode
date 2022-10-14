@@ -1,9 +1,42 @@
 public class Solution
 {
+    // Sliding Window
+    // Time: O(n)
+    // Space: O(n)
+    public int MaximumUniqueSubarray(int[] nums) 
+    {
+        int n = nums.Length;
+        var window = new Dictionary<int, int>();
+        int windowSum = 0;
+        int result = int.MinValue;
+        int left = 0, right = 0;
+        while (right < n)
+        {
+            // expand window
+            var c = nums[right];
+            right++;
+            window[c] = window.GetValueOrDefault(c, 0) + 1;
+            windowSum += c;
+            
+            // shrink window
+            while (window[c] > 1)
+            {
+                var d = nums[left];
+                left++;
+                window[d]--;
+                windowSum -= d;
+            }
+            // update result
+            result = Math.Max(result, windowSum);
+        }
+        
+        return result;
+    }
+
     // Sliding Window | Dictionary + Prefix Sum
     // Time: O(n)
     // Space: O(n)
-    public int MaximumUniqueSubarray(int[] nums)
+    public int MaximumUniqueSubarray1(int[] nums)
     {
         // sliding window
         // numIndexDict to maintain the window with unique elments
