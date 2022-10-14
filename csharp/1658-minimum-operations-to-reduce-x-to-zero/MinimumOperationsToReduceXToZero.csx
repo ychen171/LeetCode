@@ -47,4 +47,43 @@ public class Solution
 
         return maxLen == 0 ? -1 : n - maxLen;
     }
+
+    // Sliding Window
+    // Time: O(n)
+    // Space: O(1)
+    public int MinOperations1(int[] nums, int x) 
+    {
+        /*
+            find max len subarray whose sum == totalSum - x
+        */
+        int totalSum = nums.Sum();
+        if (totalSum < x)
+            return -1;
+        
+        int n = nums.Length;
+        // [left, right)
+        int left = 0, right = 0;
+        int windowSum = 0, maxLen = int.MinValue;
+        
+        while (right < n)
+        {
+            // expand window
+            var c = nums[right];
+            right++;
+            windowSum += c;
+            
+            // shrink window
+            while (windowSum > totalSum - x)
+            {
+                // shrink window
+                var d = nums[left];
+                left++;
+                windowSum -= d;
+            }
+            // update result
+            if (windowSum == totalSum - x)
+                maxLen = Math.Max(maxLen, right - left);
+        }
+        return maxLen == int.MinValue ? -1 : n - maxLen;
+    }
 }
