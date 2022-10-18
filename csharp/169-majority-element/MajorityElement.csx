@@ -1,5 +1,8 @@
 public class Solution
 {
+    // Dictionary
+    // Time: O(n)
+    // Space: O(n)
     public int MajorityElement(int[] nums)
     {
         int n = nums.Length;
@@ -15,5 +18,24 @@ public class Solution
         }
 
         return nums.Last();
+    }
+
+    // Boyer-Moore Voting Algo
+    // Time: O(n)
+    // Space: O(1)
+    public int MajorityElement1(int[] nums)
+    {
+        int n = nums.Length;
+        int target = 0, count = 0;
+        foreach (var num in nums)
+        {
+            if (count == 0)
+                target = num;
+            if (num == target)
+                count++;
+            else
+                count--;
+        }
+        return target;
     }
 }
