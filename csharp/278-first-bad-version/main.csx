@@ -9,12 +9,12 @@ public class Solution : VersionControl
         int left = 1;
         int right = n;
 
-        while (left < right)
+        while (left <= right)
         {
             var mid = left + (right - left) / 2;
             var isBad = IsBadVersion(mid);
             if (isBad)
-                right = mid;
+                right = mid - 1;
             else
                 left = mid + 1;
         }
