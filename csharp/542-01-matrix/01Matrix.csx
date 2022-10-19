@@ -140,4 +140,65 @@ public class Solution
 
         return ans;
     }
+    
+    // Starting from all 0 cells
+    // Time: O(m * n)
+    // Space: O(m * n)
+    int m;
+    int n;
+    public int[][] UpdateMatrix2(int[][] mat) 
+    {
+        m = mat.Length;
+        n = mat[0].Length;
+        var visited = new HashSet<int>();
+        var queue = new Queue<int>();
+        
+        for (int r = 0; r < m; r++)
+        {
+            for (int c = 0; c < n; c++)
+            {
+                // add entry points into queue
+                if (mat[r][c] == 0)
+                {
+                    var key = r * n + c;
+                    queue.Enqueue(key);
+                    visited.Add(key);
+                }
+            }
+        }
+        // BFS to update mat
+        BFS(mat, visited, queue);
+        return mat;
+    }
+    
+    private void BFS(int[][] mat, HashSet<int> visited, Queue<int> queue)
+    {
+        int curr, next;
+        int level = 0;
+        while (queue.Count != 0)
+        {
+            int levelLen = queue.Count;
+            for (int i = 0; i < levelLen; i++)
+            {
+                curr = queue.Dequeue();
+                int r = curr / n;
+                int c = curr % n;
+                mat[r][c] = level;
+                foreach (var dir in directions)
+                {
+                    var nr = r + dir[0];
+                    var nc = c + dir[1];
+                    if (nr < 0 || nr >= m || nc < 0 || nc >= n) // invalid
+                        continue;
+                    next = nr * n + nc;
+                    if (visited.Contains(next)) // visited
+                        continue;
+
+                    queue.Enqueue(next);
+                    visited.Add(next);
+                }
+            }
+            level++;
+        }
+    }
 }
