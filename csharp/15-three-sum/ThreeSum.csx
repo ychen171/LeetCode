@@ -73,56 +73,57 @@ public class Solution
     {
         // sort first
         Array.Sort(nums);
-        return NSum(nums, 3, 0, 0);
+        return KSum(nums, 3, 0, 0);
     }
 
-    public IList<IList<int>> NSum(int[] nums, int n, int start, int target)
+    public IList<IList<int>> KSum(int[] nums, int k, int start, int target)
     {
         // nums is sorted
-        int size = nums.Length;
+        int n = nums.Length;
         var result = new List<IList<int>>();
         // base case
-        if (n < 2 || size < n)
+        if (k < 2 || n < k)
             return result;
-        if (n == 2) // 2Sum
+        if (k == 2) // 2Sum
         {
-            int lo = start, hi = size - 1;
-            while (lo < hi)
+            int left = start, right = n - 1;
+            while (left < right)
             {
-                var left = nums[lo];
-                var right = nums[hi];
-                var sum = left + right;
+                var lo = nums[left];
+                var hi = nums[right];
+                var sum = lo + hi;
                 if (sum < target)
                 {
-                    while (lo < hi && nums[lo] == left)
-                        lo++;
+                    while (left < right && nums[left] == lo)
+                        left++;
                 }
                 else if (sum > target)
                 {
-                    while (lo < hi && nums[hi] == right)
-                        hi--;
+                    while (left < right && nums[right] == hi)
+                        right--;
                 }
                 else // ==
                 {
-                    result.Add(new List<int> { left, right });
-                    while (lo < hi && nums[lo] == left)
-                        lo++;
-                    while (lo < hi && nums[hi] == right)
-                        hi--;
+                    result.Add(new List<int> { lo, hi });
+                    while (left < right && nums[left] == lo)
+                        left++;
+                    while (left < right && nums[right] == hi)
+                        right--;
                 }
             }
             return result;
         }
         // recursive case
-        for (int i = 0; i < size; i++)
+        for (int i = start; i < n; i++)
         {
-            var subResult = NSum(nums, n - 1, i + 1, target - nums[i]);
-            foreach (var list in subResult)
+            int num = nums[i];
+            var subResult = KSum(nums, k - 1, i + 1, target - num);
+            foreach (var subList in subResult)
             {
-                list.Add(nums[i]);
-                result.Add(list);
+                subList.Add(num);
+                result.Add(subList);
             }
-            while (i < size - 1 && nums[i] == nums[i + 1])
+            while (i < n - 1 && nums[i] == nums[i + 1])
                 i++;
         }
         return result;
