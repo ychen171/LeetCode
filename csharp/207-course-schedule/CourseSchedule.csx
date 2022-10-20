@@ -5,27 +5,26 @@ public class Solution
     // Space: O(V + E)
     public bool CanFinish(int numCourses, int[][] prerequisites)
     {
-        // [[1,0]]
-        // 0 ---> 1     acyclic
+        /*  
+            [[1,0]]
+            0 ---> 1     acyclic
 
-        // [[1,0],[0,1]]
-        // 0 ---> 1
-        //   <---         cyclic
-
+            [[1,0],[0,1]]
+            0 ---> 1
+            <---         cyclic
+        */
         // build graph and indegree count for each node
         var graph = new Dictionary<int, List<int>>();
         var indegree = new Dictionary<int, int>();
         foreach (var pair in prerequisites)
         {
-            var des = pair[0];
+            var dst = pair[0];
             var src = pair[1];
             if (!graph.ContainsKey(src))
                 graph[src] = new List<int>();
-            graph[src].Add(des);
-
-            indegree[des] = indegree.GetValueOrDefault(des, 0) + 1;
+            graph[src].Add(dst);
+            indegree[dst] = indegree.GetValueOrDefault(dst, 0) + 1;
         }
-
         // add all entry nodes into queue
         var queue = new Queue<int>();
         for (int i = 0; i < numCourses; i++)
@@ -34,12 +33,12 @@ public class Solution
                 continue;
             queue.Enqueue(i);
         }
-
         // BFS to traverse all nodes and add to list/ count
         int finishedCount = 0;
+        int curr;
         while (queue.Count != 0)
         {
-            var curr = queue.Dequeue();
+            curr = queue.Dequeue();
             finishedCount++;
             if (!graph.ContainsKey(curr)) // curr is not a prerequisite
                 continue;
@@ -47,12 +46,9 @@ public class Solution
             {
                 indegree[nei]--; // curr is finished, decrease the incoming count for nei
                 if (indegree[nei] == 0) // all prerequisites are finished
-                {
                     queue.Enqueue(nei);
-                }
             }
         }
-
         return finishedCount == numCourses;
     }
 
@@ -78,7 +74,6 @@ public class Solution
             if (!DFS(prereqDict, visited, i))
                 return false;
         }
-
         return true;
     }
 
@@ -115,7 +110,6 @@ public class Solution
                 graph[curr] = new List<int>();
             graph[curr].Add(pre);
         }
-
         // DFS
         var visited = new HashSet<int>();
         for (int course = 0; course < numCourses; course++)
@@ -138,9 +132,7 @@ public class Solution
         if (graph.ContainsKey(course))
         {
             foreach (var pre in graph[course])
-            {
                 DFS(graph, visited, onPath, pre);
-            }
         }
         onPath.Remove(course);
     }
