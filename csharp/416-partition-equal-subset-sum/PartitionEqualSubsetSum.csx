@@ -72,4 +72,57 @@ public class Solution
 
         return table[n][target];
     }
+
+    // DP | Memoization Recursion | Subset
+    // Time: O(m * n)
+    // Space: O(m * n)
+    Dictionary<string, bool> memo;
+    public bool CanPartition2(int[] nums) 
+    {
+        /*
+            find subsequence/subset whose sum == 0.5 * totalSum == target
+            
+            subset, order doesn't matter
+            input has dups, output has dups
+            number cannot be reused
+            unique 
+        */
+        int n = nums.Length;
+        if (n == 1) return false;
+        var totalSum = nums.Sum();
+        if (totalSum % 2 != 0) return false;
+        
+        memo = new Dictionary<string, bool>();
+        var target = totalSum / 2;
+        return Helper(nums, target, 0);
+    }
+    
+    private bool Helper(int[] nums, int target, int nextStart)
+    {
+        int n = nums.Length;
+        // base case
+        if (target == 0)
+            return true;
+        if (target < 0 || nextStart == n)
+            return false;
+        
+        var key = $"{target},{nextStart}";
+        if (memo.ContainsKey(key))
+            return memo[key];
+        
+        // recursive case
+        bool result = false;
+        for (int i = nextStart; i < n; i++)
+        {
+            if (i > nextStart && nums[i] == nums[i-1])
+                continue;
+            if (Helper(nums, target - nums[i], i + 1))
+            {
+                result = true;
+                break;
+            }
+        }
+        memo[key] = result;
+        return result;
+    }
 }
