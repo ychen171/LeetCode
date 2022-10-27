@@ -5,7 +5,6 @@ public class Solution
     // Space: O(1)
     public int MyAtoi(string s)
     {
-        var sb = new StringBuilder();
         int sign = 1;
         int number = 0;
         int i = 0;
