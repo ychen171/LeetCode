@@ -24,4 +24,37 @@ public class Solution
 
         return table[m - 1, n - 1];
     }
+    
+    // DP | Memoization Recursion
+    // Time: O(m * n)
+    // Space: O(m * n)
+    int m;
+    int n;
+    int[][] memo;
+    public int UniquePathsMemo(int m, int n) 
+    {
+        this.m = m;
+        this.n = n;
+        memo = new int[m][];
+        for (int r = 0; r < m; r++)
+            memo[r] = new int[n];
+        
+        return Helper(m - 1, n - 1);
+    }
+    
+    private int Helper(int r, int c)
+    {
+        // base case
+        if (r == 0 && c == 0)
+            return 1;
+        if (r < 0 || c < 0)
+            return 0;
+        if (memo[r][c] != 0)
+            return memo[r][c];
+        
+        // recursive case
+        var result = Helper(r - 1, c) + Helper(r, c - 1);
+        memo[r][c] = result;
+        return result;
+    }
 }
