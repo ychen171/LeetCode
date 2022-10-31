@@ -1,5 +1,8 @@
 public class Solution
 {
+    // Matrix
+    // Time: O(m * n)
+    // Space: O(1)
     public bool IsToeplitzMatrix(int[][] matrix)
     {
         int m = matrix.Length;
