@@ -79,63 +79,50 @@ public class Codec
 
 public class CodecR
 {
-    // Inorder Traversal | Recursion
+    // Preorder Traversal | Recursion
     // Time: O(n)
     // Space: O(h)
-    public string serialize(TreeNode root)
+    // Encodes a tree to a single string.
+    public string serialize(TreeNode root) 
     {
+        // DFS preorder traversal
         var sb = new StringBuilder();
-        SerializeInorder(root, sb);
+        SerPreorder(root, sb);
         return sb.ToString();
     }
-
-    public void SerializeInorder(TreeNode root, StringBuilder sb)
+    
+    private void SerPreorder(TreeNode node, StringBuilder sb)
     {
         // base case
-        if (root == null)
+        if (node == null)
         {
-            sb.Append(-1001);
-            sb.Append(',');
+            sb.Append("#,");
             return;
         }
-
         // recursive case
-        sb.Append(root.val);
-        sb.Append(',');
-        SerializeInorder(root.left, sb);
-        SerializeInorder(root.right, sb);
+        sb.Append(node.val).Append(',');
+        SerPreorder(node.left, sb);
+        SerPreorder(node.right, sb);
     }
 
     // Inorder Traversal | Recursion + Queue
     // Time: O(n)
     // Space: O(n)
-    public TreeNode deserialize(string data)
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(string data) 
     {
-        if (string.IsNullOrEmpty(data))
-            return null;
-
-        string[] items = data.Split(',');
-        var queue = new Queue<string>();
-        foreach (var item in items)
-            queue.Enqueue(item);
-
-        return DeserializeInorder(queue);
+        var strs = data.Split(',');
+        var queue = new Queue<string>(strs);
+        return DesPreorder(queue);
     }
-
-    public TreeNode DeserializeInorder(Queue<string> queue)
+    
+    private TreeNode DesPreorder(Queue<string> queue)
     {
-        // base case
-        if (queue.Count == 0)
-            return null;
-
-        // recursive case
-        var rootVal = int.Parse(queue.Dequeue());
-        if (rootVal == -1001)
-            return null;
-        var root = new TreeNode(rootVal);
-        root.left = DeserializeInorder(queue);
-        root.right = DeserializeInorder(queue);
-
+        var str = queue.Dequeue();
+        if (str == "#") return null;
+        var root = new TreeNode(int.Parse(str));
+        root.left = DesPreorder(queue);
+        root.right = DesPreorder(queue);
         return root;
     }
 }
