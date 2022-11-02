@@ -5,19 +5,33 @@ public class Solution
     // Space: O(n)
     public int Calculate(string s)
     {
+        var q = new Queue<char>();
+        foreach (var c in s)
+        {
+            if (c == ' ')
+                continue;
+            q.Enqueue(c);
+        }
+        return Cal(q);
+    }
+
+    private int Cal(Queue<char> q)
+    {
         var stack = new Stack<int>();
         int num = 0;
         char sign = '+';
-        for (int i = 0; i < s.Length; i++)
+        while (q.Count != 0)
         {
-            char c = s[i];
-            // construct integer
+            char c = q.Dequeue();
+            // create num
             if (char.IsDigit(c))
                 num = 10 * num + (c - '0');
-
-            // push the complete integer into stack
-            // only when c in [+, -, *, /] or c is the last char
-            if ((!char.IsDigit(c) && c != ' ') || i == s.Length - 1)
+            // start recursion
+            if (c == '(')
+                num = Cal(q);
+            // push the completed num into stack
+            // c = [+, -, *, /, )]
+            if ((c != ' ' && !char.IsDigit(c)) || q.Count == 0)
             {
                 switch (sign)
                 {
@@ -34,14 +48,15 @@ public class Solution
                         stack.Push(stack.Pop() / num);
                         break;
                 }
-
-                // reset integer and sign
+                // reset num and sign
                 num = 0;
-                sign = c;
+                sign = c; // assign the next sign
             }
+            // if the next sign is not a sign, which can only be ')', stop current recursive call
+            if (c == ')')
+                break;
         }
-
-        // sum up
+        // sum up 
         int ans = 0;
         while (stack.Count != 0)
             ans += stack.Pop();
@@ -49,7 +64,3 @@ public class Solution
         return ans;
     }
 }
-
-var sln = new Solution();
-var s = "+ 1 - 12 + 3";
-Console.WriteLine(sln.Calculate(s));
