@@ -1,16 +1,16 @@
 public class Solution
 {
-    public IList<IList<int>> NSum(int[] nums, int n, int start, int target)
+    public IList<IList<int>> NSum(int[] nums, int k, int start, int target)
     {
         // nums is sorted
-        int size = nums.Length;
+        int n = nums.Length;
         var result = new List<IList<int>>();
         // base case
-        if (n < 2 || size < n)
+        if (k < 2 || n < k)
             return result;
-        if (n == 2) // 2Sum
+        if (k == 2) // 2Sum
         {
-            int lo = start, hi = size - 1;
+            int lo = start, hi = n - 1;
             while (lo < hi)
             {
                 var left = nums[lo];
@@ -38,15 +38,15 @@ public class Solution
             return result;
         }
         // recursive case
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < n; i++)
         {
-            var subResult = NSum(nums, n - 1, i + 1, target - nums[i]);
+            var subResult = NSum(nums, k - 1, i + 1, target - nums[i]);
             foreach (var list in subResult)
             {
                 list.Add(nums[i]);
                 result.Add(list);
             }
-            while (i < size - 1 && nums[i] == nums[i + 1])
+            while (i < n - 1 && nums[i] == nums[i + 1]) // reach the last duplicate num so that the next iteration will have a new number
                 i++;
         }
         return result;
