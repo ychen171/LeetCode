@@ -48,4 +48,25 @@ public class Solution
 
         return sb.ToString();
     }
+
+    // Stack + StringBuilder
+    // Time: O(n)
+    // Space: O(n - d)
+    public string RemoveDuplicates2(string s) 
+    {
+        var stack = new Stack<char>();
+        int n = s.Length;
+        for (int i = n - 1; i >= 0; i--)
+        {
+            var c = s[i];
+            if (stack.Count != 0 && stack.Peek() == c)
+                stack.Pop();
+            else
+                stack.Push(c);
+        }
+        var sb = new StringBuilder();
+        while (stack.Count != 0)
+            sb.Append(stack.Pop());
+        return sb.ToString();
+    }
 }
