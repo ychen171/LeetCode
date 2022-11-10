@@ -37,4 +37,35 @@ public class Solution
 
         return sb.ToString();
     }
+
+    public string RemoveDuplicates1(string s, int k) 
+    {
+        var stack = new Stack<KeyValuePair<char, int>>(); // key: char, value: count
+        int n = s.Length;
+        for (int i = n - 1; i >= 0; i--)
+        {
+            var c = s[i];
+            if (stack.Count != 0)
+            {
+                if (stack.Peek().Key == c)
+                {
+                    if (stack.Peek().Value + 1 == k)
+                    {
+                        while (stack.Count != 0 && stack.Peek().Key == c)
+                            stack.Pop();
+                    }
+                    else
+                        stack.Push(new KeyValuePair<char, int>(c, stack.Peek().Value + 1));
+                }
+                else
+                    stack.Push(new KeyValuePair<char, int>(c, 1));
+            }
+            else
+                stack.Push(new KeyValuePair<char, int>(c, 1));
+        }
+        var sb = new StringBuilder();
+        while (stack.Count != 0)
+            sb.Append(stack.Pop().Key);
+        return sb.ToString();
+    }
 }
