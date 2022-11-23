@@ -38,7 +38,6 @@ public class Solution
                     return false;
                 if (!colDict[c].Add(digit))
                     return false;
-                // int boxKey = GetBoxKey(r, c);
                 int boxKey = r / 3 * 3 + c / 3;
                 if (!boxDict[boxKey].Add(digit))
                     return false;
@@ -46,36 +45,5 @@ public class Solution
         }
 
         return true;
-    }
-
-    private int GetBoxKey(int r, int c)
-    {
-        if (r < 3)
-        {
-            if (c < 3)
-                return 0;
-            else if (c < 6)
-                return 1;
-            else
-                return 2;
-        }
-        else if (r < 6)
-        {
-            if (c < 3)
-                return 3;
-            else if (c < 6)
-                return 4;
-            else
-                return 5;
-        }
-        else
-        {
-            if (c < 3)
-                return 6;
-            else if (c < 6)
-                return 7;
-            else
-                return 8;
-        }
     }
 }
