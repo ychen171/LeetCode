@@ -21,8 +21,8 @@ public class Quicksort
     private static int Partition(int[] nums, int lo, int hi)
     {
         int pivot = nums[lo];
-        // lo, [lo + 1, hi]
-        // [lo + 1, i) <= lo < (j, hi]
+        // nums[lo], nums[lo + 1...hi]
+        // nums[lo + 1...j] <= nums[lo] < nums[i...hi]
         int i = lo + 1, j = hi;
         while (i <= j)
         {
@@ -36,6 +36,7 @@ public class Quicksort
             Swap(nums, i, j);
         }
         Swap(nums, lo, j);
+        // nums[lo...j - 1] <= nums[j] < nums[i...hi]
         return j;
     }
 
